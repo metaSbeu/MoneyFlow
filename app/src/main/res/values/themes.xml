@@ -5,5 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="Theme.MoneyFlow.AuthScreen" parent="Base.Theme.MoneyFlow">
+        <item name="colorPrimary">#FFFFFF</item>
+    </style>
+
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
 </resources>

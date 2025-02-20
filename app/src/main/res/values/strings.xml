@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Money Flow</string>
+    <string name="exit">Выйти</string>
 </resources>

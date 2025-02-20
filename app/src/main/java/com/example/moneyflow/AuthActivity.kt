@@ -17,4 +17,5 @@ class AuthActivity : AppCompatActivity() {
             insets
         }
     }
+
 }

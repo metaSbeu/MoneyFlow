@@ -5,7 +5,21 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".AuthActivity">
+
+    <!-- Индикатор ввода пароля -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/avatar"
+        app:layout_constraintBottom_toTopOf="@+id/textViewUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textViewUsername"
@@ -16,22 +30,59 @@
         android:text="Username"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/password_indicator"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <LinearLayout
+        android:id="@+id/password_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayoutNumberPad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUsername">
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/circle_indicator" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/circle_indicator" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/circle_indicator" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/circle_indicator" />
+    </LinearLayout>
 
     <GridLayout
         android:id="@+id/gridLayoutNumberPad"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:columnCount="3"
         android:padding="16dp"
         android:rowCount="4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUsername">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             style="@style/NumberButtonStyle"
@@ -69,10 +120,13 @@
             style="@style/NumberButtonStyle"
             android:text="9" />
 
-        <!-- Пустая ячейка -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp" />
+        <Button
+            style="@style/NumberButtonStyle"
+            android:layout_margin="10dp"
+            android:layout_marginTop="-14dp"
+            android:text="@string/exit"
+            android:textAllCaps="true"
+            android:textSize="12sp" />
 
         <!-- Кнопка 0 -->
         <Button
@@ -80,9 +134,10 @@
             android:text="0" />
 
         <!-- Кнопка удаления -->
-        <Button
+        <ImageView
             style="@style/NumberButtonStyle"
-            android:text="r"
+            android:padding="20dp"
+            android:src="@drawable/delete"
             android:textColor="#FF0000" />
     </GridLayout>
 
