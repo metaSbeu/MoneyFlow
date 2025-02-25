@@ -1,6 +1,8 @@
 package com.example.moneyflow
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,6 +19,21 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
 
+        // Найдём кнопку "0" по её ID и установим обработчик нажатия
+        val linearLayout = findViewById<LinearLayout>(R.id.linearLayout3)
+        linearLayout.setOnClickListener {
+            // Запускаем MainActivity
+            val intent = Intent(this, TransactionListActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Найдём кнопку "0" по её ID и установим обработчик нажатия
+        val linearLayout2 = findViewById<LinearLayout>(R.id.linearLayout7)
+        linearLayout2.setOnClickListener {
+            // Запускаем MainActivity
+            val intent = Intent(this, TransactionAddActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }
