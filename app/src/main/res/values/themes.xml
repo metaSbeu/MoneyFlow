@@ -9,5 +9,9 @@
         <item name="colorPrimary">#FFFFFF</item>
     </style>
 
+    <style name="Theme.MoneyFlow.TransactionAdd" parent="Base.Theme.MoneyFlow">
+        <item name="colorPrimary">@color/light_blue</item>
+    </style>
+
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
 </resources>

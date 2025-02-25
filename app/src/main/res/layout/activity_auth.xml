@@ -103,7 +103,7 @@
             android:textAllCaps="true"
             android:textSize="12sp" />
 
-        <Button style="@style/NumberButtonStyle" android:text="@string/_0" />
+        <Button style="@style/NumberButtonStyle" android:text="@string/_0" android:id="@+id/buttonZero"/>
 
         <FrameLayout>
             <ImageView

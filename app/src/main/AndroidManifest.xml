@@ -15,7 +15,19 @@
 
         <activity
             android:name=".TransactionAddActivity"
-            android:exported="true">
+            android:exported="false"
+            android:theme="@style/Theme.MoneyFlow.TransactionAdd">
+
+        </activity>
+
+        <activity
+            android:name=".TransactionListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AuthActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MoneyFlow.AuthScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,17 +36,8 @@
         </activity>
 
         <activity
-            android:name=".TransactionListActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".AuthActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MoneyFlow.AuthScreen" />
-
-        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="false">
 
         </activity>
     </application>
