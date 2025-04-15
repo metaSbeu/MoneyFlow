@@ -41,6 +41,7 @@
         android:id="@+id/linearLayoutPasswordIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/gridLayoutNumberPad"
@@ -49,29 +50,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewUsername">
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:background="@drawable/circle_indicator" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="8dp"
+            android:src="@drawable/circle_indicator_gray"/>
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/circle_indicator" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="8dp"
+            android:src="@drawable/circle_indicator_gray"/>
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/circle_indicator" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="8dp"
+            android:src="@drawable/circle_indicator_gray"/>
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/circle_indicator" />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="8dp"
+            android:src="@drawable/circle_indicator_gray"/>
+
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayoutNumberPad"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPasswordIndicator" />
 
     <GridLayout
         android:id="@+id/gridLayoutNumberPad"
@@ -85,17 +98,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button style="@style/NumberButtonStyle" android:text="@string/_1" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_2" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_3" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_4" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_5" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_6" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_7" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_8" />
-        <Button style="@style/NumberButtonStyle" android:text="@string/_9" />
+        <Button android:id="@+id/button1" style="@style/NumberButtonStyle" android:text="@string/_1" />
+        <Button android:id="@+id/button2" style="@style/NumberButtonStyle" android:text="@string/_2" />
+        <Button android:id="@+id/button3" style="@style/NumberButtonStyle" android:text="@string/_3" />
+        <Button android:id="@+id/button4" style="@style/NumberButtonStyle" android:text="@string/_4" />
+        <Button android:id="@+id/button5" style="@style/NumberButtonStyle" android:text="@string/_5" />
+        <Button android:id="@+id/button6" style="@style/NumberButtonStyle" android:text="@string/_6" />
+        <Button android:id="@+id/button7" style="@style/NumberButtonStyle" android:text="@string/_7" />
+        <Button android:id="@+id/button8" style="@style/NumberButtonStyle" android:text="@string/_8" />
+        <Button android:id="@+id/button9" style="@style/NumberButtonStyle" android:text="@string/_9" />
 
         <Button
+            android:id="@+id/buttonExit"
             style="@style/NumberButtonStyle"
             android:layout_margin="10dp"
             android:layout_marginTop="-14dp"
@@ -103,7 +117,7 @@
             android:textAllCaps="true"
             android:textSize="12sp" />
 
-        <Button style="@style/NumberButtonStyle" android:text="@string/_0" android:id="@+id/buttonZero"/>
+        <Button android:id="@+id/button0" style="@style/NumberButtonStyle" android:text="@string/_0" />
 
         <FrameLayout>
             <ImageView
@@ -120,7 +134,7 @@
                 android:contentDescription="@string/erase_button"
                 android:padding="20dp"
                 android:src="@drawable/delete"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </FrameLayout>
     </GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
