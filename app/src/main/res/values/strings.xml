@@ -14,6 +14,18 @@
     <string name="_0">0</string>
     <string name="erase_button">erase button</string>
     <string name="fingerprint_button">fingerprint button</string>
+    <string name="authentication_error_message">Authentication error: %1$s</string>
+    <string name="authentication_succeeded_message">Authentication succeeded!</string>
+    <string name="authentication_failed_message">Authentication failed</string>
+    <string name="auth_title">Вход в Money Flow</string>
+    <string name="auth_negative_button_text">Ввести пароль</string>
+    <string name="username">Username</string>
+    <string name="wallet">Счет: %s</string>
+    <string name="balance">Баланс: %d</string>
+    <string name="all_expenses">Все траты</string>
+    <string name="current_month">В %s</string>
+    <string name="sum_currency">%d %s</string>
+    <string name="all_incomes">Все пополнения</string>
 
     <string-array name="themes">
         <item>Светлая</item>
