@@ -13,7 +13,7 @@
     <string name="_9">9</string>
     <string name="_0">0</string>
     <string name="erase_button">erase button</string>
-    <string name="fingerprint_button">fingerprint button</string>
+    <string name="fingerprint_button">fingerprint</string>
     <string name="authentication_error_message">Authentication error: %1$s</string>
     <string name="authentication_succeeded_message">Authentication succeeded!</string>
     <string name="authentication_failed_message">Authentication failed</string>

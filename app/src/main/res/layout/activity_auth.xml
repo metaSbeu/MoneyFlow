@@ -53,26 +53,34 @@
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:contentDescription="@null"
             android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"/>
+            android:src="@drawable/circle_indicator_gray"
+            tools:ignore="ImageContrastCheck" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:contentDescription="@null"
             android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"/>
+            android:src="@drawable/circle_indicator_gray"
+            tools:ignore="ImageContrastCheck" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:contentDescription="@null"
             android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"/>
+            android:src="@drawable/circle_indicator_gray"
+            tools:ignore="ImageContrastCheck" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:contentDescription="@null"
             android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"/>
+            android:src="@drawable/circle_indicator_gray"
+            tools:ignore="ImageContrastCheck" />
 
     </LinearLayout>
 
@@ -111,14 +119,17 @@
         <Button
             android:id="@+id/buttonExit"
             style="@style/NumberButtonStyle"
-            android:text="@string/exit"
             android:layout_marginTop="-8dp"
+            android:text="@string/exit"
             android:textAllCaps="true"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="TextSizeCheck" />
 
         <Button android:id="@+id/button0" style="@style/NumberButtonStyle" android:text="@string/_0" />
 
-        <FrameLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/buttonFingerprint"
                 style="@style/NumberButtonStyle"
