@@ -22,13 +22,16 @@
     <string name="username">Username</string>
     <string name="wallet">Счет: %s</string>
     <string name="balance">Баланс: %d</string>
-    <string name="all_expenses">Все траты</string>
+    <string name="all_expenses">Траты</string>
     <string name="current_month">В %s</string>
     <string name="sum_currency">%d %s</string>
-    <string name="all_incomes">Все пополнения</string>
+    <string name="all_incomes">Пополнения</string>
     <string name="add_transaction">Добавить транзакцию</string>
     <string name="available_wallets">Доступные счета</string>
     <string name="wallet_icon">Wallet icon</string>
+    <string name="home">Home</string>
+    <string name="planning">Planning</string>
+    <string name="settings">Settings</string>
 
     <string-array name="themes">
         <item>Светлая</item>
