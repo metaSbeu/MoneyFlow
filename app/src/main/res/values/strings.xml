@@ -26,6 +26,9 @@
     <string name="current_month">В %s</string>
     <string name="sum_currency">%d %s</string>
     <string name="all_incomes">Все пополнения</string>
+    <string name="add_transaction">Добавить транзакцию</string>
+    <string name="available_wallets">Доступные счета</string>
+    <string name="wallet_icon">Wallet icon</string>
 
     <string-array name="themes">
         <item>Светлая</item>

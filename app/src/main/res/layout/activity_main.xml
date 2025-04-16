@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/textViewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/username"
@@ -118,7 +118,7 @@
                 tools:text="В апреле" />
 
             <TextView
-                android:id="@+id/textViewExpensesCurrentMonth"
+                android:id="@+id/textViewExpenses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sum_currency"
@@ -127,8 +127,6 @@
                 tools:text="10 000 Р" />
 
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
 
@@ -168,7 +166,7 @@
                 tools:text="В апреле" />
 
             <TextView
-                android:id="@+id/textViewIncomesCurrentMonth"
+                android:id="@+id/textViewIncomes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sum_currency"
@@ -190,7 +188,6 @@
         app:layout_constraintTop_toBottomOf="@+id/cardViewExpenses">
 
         <LinearLayout
-            android:id="@+id/linearLayout7"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_corners"
@@ -203,15 +200,15 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="16dp"
+                android:contentDescription="@string/add_transaction"
                 android:src="@drawable/add" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Добавить транзакцию"
+                android:text="@string/add_transaction"
                 android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textSize="24sp"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -221,7 +218,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Доступные счета"
+        android:text="@string/available_wallets"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -324,8 +321,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-
     </ScrollView>
 
 
@@ -339,37 +334,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
-    <!--    <Button-->
-    <!--        android:id="@+id/buttonMain"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Глав"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/buttonPlanning"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/buttonPlanning"-->
-    <!--        app:layout_constraintHorizontal_bias="0.5"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+<!--        <Button-->
+<!--            android:id="@+id/buttonMain"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Глав"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/buttonPlanning"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/buttonPlanning"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent" />-->
 
 
-    <!--    <Button-->
-    <!--        android:id="@+id/buttonPlanning"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="План"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/buttonSettings"-->
-    <!--        app:layout_constraintHorizontal_bias="0.5"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/buttonMain"-->
-    <!--        app:layout_constraintVertical_bias="0.79" />-->
+<!--        <Button-->
+<!--            android:id="@+id/buttonPlanning"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="План"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/buttonSettings"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/buttonMain"-->
+<!--            app:layout_constraintVertical_bias="0.79" />-->
 
-    <!--    <Button-->
-    <!--        android:id="@+id/buttonSettings"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Настр"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/buttonPlanning"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.5"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/buttonPlanning" />-->
+<!--        <Button-->
+<!--            android:id="@+id/buttonSettings"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Настр"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/buttonPlanning"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/buttonPlanning" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
