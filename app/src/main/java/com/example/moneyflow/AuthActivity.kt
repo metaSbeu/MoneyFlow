@@ -1,13 +1,22 @@
 package com.example.moneyflow
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -24,7 +33,6 @@ class AuthActivity : AppCompatActivity() {
     private var indicatorRes = R.drawable.circle_indicator_blue
     private lateinit var indicators: List<ImageView>
 
-
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
@@ -39,6 +47,7 @@ class AuthActivity : AppCompatActivity() {
         setUpNumberPadClickListeners()
 
         binding.buttonErase.setOnClickListener {
+            vibrate()
             if (!password.isEmpty()) {
                 password.removeAt(password.size - 1)
                 switchFingerprintAndEraseButtons()
@@ -46,10 +55,28 @@ class AuthActivity : AppCompatActivity() {
             clearLastIndicator()
         }
         binding.buttonExit.setOnClickListener {
+            vibrate()
             finish()
         }
         fingerprintAuth()
         biometricPrompt.authenticate(promptInfo)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("ServiceCast")
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    fun Context.vibrate(duration: Long = 50) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(VibratorManager::class.java)
+            vibratorManager?.defaultVibrator?.vibrate(
+                VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
+            )
+        } else {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
+            )
+        }
     }
 
     fun animateIndicators(view: View) {
@@ -125,10 +152,12 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setUpNumberPadClickListeners() {
         val buttons = getNumberPadButtons()
         for (button in buttons) {
             button.setOnClickListener {
+                vibrate()
                 if (password.size != 4) {
                     password.add(button.text.toString().toInt())
                     switchFingerprintAndEraseButtons()
@@ -139,6 +168,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fingerprintAuth() {
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(
@@ -168,8 +198,8 @@ class AuthActivity : AppCompatActivity() {
             .setNegativeButtonText(getString(R.string.auth_negative_button_text))
             .build()
 
-        val biometricLoginButton = binding.buttonFingerprint
-        biometricLoginButton.setOnClickListener {
+        binding.buttonFingerprint.setOnClickListener {
+            vibrate()
             biometricPrompt.authenticate(promptInfo)
         }
     }
