@@ -72,7 +72,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewTransactionHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -87,7 +87,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView">
+            app:layout_constraintTop_toBottomOf="@id/textViewTransactionHistory">
 
             <LinearLayout
                 android:id="@+id/linearLayout11"
@@ -101,7 +101,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewUserAvatar">
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDiagram">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewUserAvatar">
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDiagram">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewUserAvatar">
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDiagram">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -205,7 +205,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewUserAvatar">
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDiagram">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -239,7 +239,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewUserAvatar">
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDiagram">
 
                 <ImageView
                     android:layout_width="28dp"

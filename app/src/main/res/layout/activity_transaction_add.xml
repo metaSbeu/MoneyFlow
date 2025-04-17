@@ -8,64 +8,43 @@
     android:background="#EFEFEF"
     tools:context=".TransactionAddActivity">
 
-
-    <LinearLayout
-        android:id="@+id/linearLayout112"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggleGroup"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="56dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_corners"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:selectionRequired="true"
+        app:singleSelection="true">
 
-
-        <RadioGroup
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonExpense"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:backgroundTint="@color/toggle_selector"
+            android:checkable="true"
+            android:checked="true"
+            android:text="@string/expense"
+            android:textColor="@color/toggle_text_selector"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_corners_left_element">
-
-                <RadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:button="@null"
-                    android:text="Расход"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="24sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <RadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:button="@null"
-                    android:text="Доход"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-
-        </RadioGroup>
-
-    </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonIncome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/toggle_selector"
+            android:checkable="true"
+            android:text="@string/income"
+            android:textColor="@color/toggle_text_selector"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <GridLayout
         android:id="@+id/gridLayoutCategories"
@@ -77,7 +56,7 @@
         android:rowCount="7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout112">
+        app:layout_constraintTop_toBottomOf="@+id/toggleGroup">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -147,7 +126,7 @@
                 android:background="@drawable/rounded_button"
                 android:contentDescription="@null"
                 android:padding="16dp"
-                android:src="@drawable/home" />
+                android:src="@drawable/ic_home" />
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -297,27 +276,42 @@
 
     </GridLayout>
 
-    <EditText
-        android:id="@+id/editText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldSum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Введите сумму"
+        android:layout_marginHorizontal="16dp"
+        android:hint="@string/sum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayoutCategories" />
+        app:layout_constraintTop_toBottomOf="@+id/gridLayoutCategories">
 
-    <EditText
-        android:id="@+id/editText2"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Комментарий"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="@string/comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/textFieldSum">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -325,7 +319,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageButton"
         app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/textFieldComment" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -337,14 +331,13 @@
         android:scaleType="fitCenter"
         android:src="@drawable/calendar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/textFieldComment" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="Сохранить"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

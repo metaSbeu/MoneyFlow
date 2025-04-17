@@ -32,6 +32,12 @@
     <string name="home">Home</string>
     <string name="planning">Planning</string>
     <string name="settings">Settings</string>
+    <string name="expense">Расход</string>
+    <string name="income">Доход</string>
+    <string name="sum">Сумма</string>
+    <string name="comment">Комментарий</string>
+    <string name="period">Период:</string>
+    <string name="transaction_history">История транзакций</string>
 
     <string-array name="themes">
         <item>Светлая</item>

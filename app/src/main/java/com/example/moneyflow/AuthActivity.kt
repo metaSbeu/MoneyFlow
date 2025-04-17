@@ -1,9 +1,7 @@
 package com.example.moneyflow
 
-import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -16,38 +14,36 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.children
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import java.util.concurrent.Executor
 
 class AuthActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAuthBinding
     private val password = mutableListOf<Int>()
-    private var indicatorRes = R.drawable.circle_indicator_blue
-    private lateinit var indicators: List<ImageView>
 
+    private lateinit var binding: ActivityAuthBinding
+    private lateinit var indicators: List<ImageView>
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpInsets()
-        indicators = binding.linearLayoutPasswordIndicator.children.map { it as ImageView }.toList()
+        setUpIndicators()
         setUpNumberPadClickListeners()
 
         binding.buttonErase.setOnClickListener {
-            vibrate()
+            vibrate(50)
             if (!password.isEmpty()) {
                 password.removeAt(password.size - 1)
                 switchFingerprintAndEraseButtons()
@@ -55,7 +51,7 @@ class AuthActivity : AppCompatActivity() {
             clearLastIndicator()
         }
         binding.buttonExit.setOnClickListener {
-            vibrate()
+            vibrate(50)
             finish()
         }
         fingerprintAuth()
@@ -63,9 +59,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("ServiceCast")
-    @RequiresPermission(Manifest.permission.VIBRATE)
-    fun Context.vibrate(duration: Long = 50) {
+    fun vibrate(duration: Long) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager = getSystemService(VibratorManager::class.java)
             vibratorManager?.defaultVibrator?.vibrate(
@@ -79,7 +73,45 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    fun animateIndicators(view: View) {
+    fun setUpIndicators() {
+        indicators = listOf(
+            binding.imageViewIndicator1,
+            binding.imageViewIndicator2,
+            binding.imageViewIndicator3,
+            binding.imageViewIndicator4
+        )
+    }
+
+    fun animateIndicatorsFail(view: View) {
+        val scaleUpX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f)
+        val scaleUpY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f)
+        val scaleDownX = ObjectAnimator.ofFloat(view, "scaleX", 1.5f, 1f)
+        val scaleDownY = ObjectAnimator.ofFloat(view, "scaleY", 1.5f, 1f)
+
+        scaleUpX.duration = 100
+        scaleUpY.duration = 100
+        scaleDownX.duration = 500
+        scaleDownY.duration = 500
+
+        val shake = ObjectAnimator.ofFloat(
+            view, "translationX",
+            0f, 15f, -15f, 10f, -10f, 5f, -5f, 0f
+        )
+        shake.duration = 600
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(scaleUpX, scaleUpY, scaleDownX, scaleDownY, shake)
+        disableNumberPadButtons()
+        animatorSet.addListener(object : android.animation.AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: android.animation.Animator) {
+                clearAllIndicators()
+                enableNumberPadButtons()
+            }
+        })
+        animatorSet.start()
+    }
+
+    fun animateIndicatorsScale(view: View) {
         val scaleUpX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f)
         val scaleUpY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f)
 
@@ -96,12 +128,30 @@ class AuthActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
+    fun disableNumberPadButtons() {
+        getNumberPadButtons().forEach {
+            it.isClickable = false
+        }
+    }
+
+    fun enableNumberPadButtons() {
+        getNumberPadButtons().forEach {
+            it.isClickable = true
+        }
+    }
+
     fun refreshIndicator() {
         val length = password.size
         if (length in 1..4) {
             val view = indicators[length - 1]
-            view.setImageResource(indicatorRes)
-            animateIndicators(view)
+            view.setImageResource(R.drawable.circle_indicator_blue)
+            animateIndicatorsScale(view)
+        }
+    }
+
+    fun switchIndicatorToRed() {
+        for (indicator in indicators) {
+            indicator.setImageResource(R.drawable.circle_indicator_red)
         }
     }
 
@@ -111,6 +161,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun checkPassword() {
         if (password.size == 4) {
             if (password.joinToString("") == KEY_PASSWORD) {
@@ -121,7 +172,11 @@ class AuthActivity : AppCompatActivity() {
                 startActivity(MainActivity.newIntent(this))
                 finish()
             } else {
-                clearAllIndicators()
+                repeat(4) {
+                    animateIndicatorsFail(indicators[it])
+                }
+                vibrate(200)
+                switchIndicatorToRed()
                 password.clear()
                 switchFingerprintAndEraseButtons()
                 Toast.makeText(this, "INCORRECT PASSWORD", Toast.LENGTH_SHORT).show()
@@ -157,7 +212,7 @@ class AuthActivity : AppCompatActivity() {
         val buttons = getNumberPadButtons()
         for (button in buttons) {
             button.setOnClickListener {
-                vibrate()
+                vibrate(50)
                 if (password.size != 4) {
                     password.add(button.text.toString().toInt())
                     switchFingerprintAndEraseButtons()
@@ -199,7 +254,7 @@ class AuthActivity : AppCompatActivity() {
             .build()
 
         binding.buttonFingerprint.setOnClickListener {
-            vibrate()
+            vibrate(50)
             biometricPrompt.authenticate(promptInfo)
         }
     }

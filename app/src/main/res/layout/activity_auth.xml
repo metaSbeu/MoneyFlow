@@ -8,8 +8,9 @@
     android:background="@color/main_bg"
     tools:context=".AuthActivity">
 
+
     <ImageView
-        android:id="@+id/imageViewUserAvatar"
+        android:id="@+id/imageViewDiagram"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:contentDescription="@string/user_avatar"
@@ -30,69 +31,76 @@
         android:text="Username"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutPasswordIndicator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewUserAvatar"
-        tools:ignore="HardcodedText" />
-
-    <LinearLayout
-        android:id="@+id/linearLayoutPasswordIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/gridLayoutNumberPad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUsername">
+        app:layout_constraintTop_toBottomOf="@+id/imageViewDiagram"
+        tools:ignore="HardcodedText" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="@null"
-            android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"
-            tools:ignore="ImageContrastCheck" />
+    <ImageView
+        android:id="@+id/imageViewIndicator1"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        android:src="@drawable/circle_indicator_gray"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewIndicator2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewUsername"
+        tools:ignore="ImageContrastCheck"
+        tools:layout_editor_absoluteY="288dp" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="@null"
-            android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"
-            tools:ignore="ImageContrastCheck" />
+    <ImageView
+        android:id="@+id/imageViewIndicator2"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        android:src="@drawable/circle_indicator_gray"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewIndicator3"
+        app:layout_constraintStart_toEndOf="@+id/imageViewIndicator1"
+        app:layout_constraintTop_toTopOf="@id/imageViewIndicator1"
+        tools:ignore="ImageContrastCheck"
+        tools:layout_editor_absoluteY="288dp" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="@null"
-            android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"
-            tools:ignore="ImageContrastCheck" />
+    <ImageView
+        android:id="@+id/imageViewIndicator3"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        android:src="@drawable/circle_indicator_gray"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewIndicator4"
+        app:layout_constraintStart_toEndOf="@+id/imageViewIndicator2"
+        app:layout_constraintTop_toTopOf="@id/imageViewIndicator1"
+        tools:ignore="ImageContrastCheck"
+        tools:layout_editor_absoluteY="288dp" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:contentDescription="@null"
-            android:padding="8dp"
-            android:src="@drawable/circle_indicator_gray"
-            tools:ignore="ImageContrastCheck" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageViewIndicator4"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        android:src="@drawable/circle_indicator_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewIndicator3"
+        app:layout_constraintTop_toTopOf="@id/imageViewIndicator1"
+        tools:ignore="ImageContrastCheck"
+        tools:layout_editor_absoluteY="288dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/gridLayoutNumberPad"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPasswordIndicator" />
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <GridLayout
         android:id="@+id/gridLayoutNumberPad"
@@ -106,15 +114,50 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button android:id="@+id/button1" style="@style/NumberButtonStyle" android:text="@string/_1" />
-        <Button android:id="@+id/button2" style="@style/NumberButtonStyle" android:text="@string/_2" />
-        <Button android:id="@+id/button3" style="@style/NumberButtonStyle" android:text="@string/_3" />
-        <Button android:id="@+id/button4" style="@style/NumberButtonStyle" android:text="@string/_4" />
-        <Button android:id="@+id/button5" style="@style/NumberButtonStyle" android:text="@string/_5" />
-        <Button android:id="@+id/button6" style="@style/NumberButtonStyle" android:text="@string/_6" />
-        <Button android:id="@+id/button7" style="@style/NumberButtonStyle" android:text="@string/_7" />
-        <Button android:id="@+id/button8" style="@style/NumberButtonStyle" android:text="@string/_8" />
-        <Button android:id="@+id/button9" style="@style/NumberButtonStyle" android:text="@string/_9" />
+        <Button
+            android:id="@+id/button1"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_1" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_2" />
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_3" />
+
+        <Button
+            android:id="@+id/button4"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_4" />
+
+        <Button
+            android:id="@+id/button5"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_5" />
+
+        <Button
+            android:id="@+id/button6"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_6" />
+
+        <Button
+            android:id="@+id/button7"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_7" />
+
+        <Button
+            android:id="@+id/button8"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_8" />
+
+        <Button
+            android:id="@+id/button9"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_9" />
 
         <Button
             android:id="@+id/buttonExit"
@@ -125,24 +168,32 @@
             android:textSize="12sp"
             tools:ignore="TextSizeCheck" />
 
-        <Button android:id="@+id/button0" style="@style/NumberButtonStyle" android:text="@string/_0" />
+        <Button
+            android:id="@+id/button0"
+            style="@style/NumberButtonStyle"
+            android:text="@string/_0" />
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/buttonFingerprint"
                 style="@style/NumberButtonStyle"
                 android:contentDescription="@string/fingerprint_button"
                 android:padding="20dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 android:src="@drawable/fingerprint"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/buttonErase"
                 style="@style/NumberButtonStyle"
                 android:contentDescription="@string/erase_button"
                 android:padding="20dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 android:src="@drawable/delete"
                 android:visibility="gone" />
         </FrameLayout>
