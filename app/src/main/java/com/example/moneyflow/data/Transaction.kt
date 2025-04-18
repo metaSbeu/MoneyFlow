@@ -1,4 +1,4 @@
-package com.example.moneyflow
+package com.example.moneyflow.data
 
 data class Transaction(
     val category: String,

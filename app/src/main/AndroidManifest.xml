@@ -15,14 +15,14 @@
         android:theme="@style/Theme.MoneyFlow"
         tools:targetApi="31">
         <activity
-            android:name=".TransactionAddActivity"
+            android:name=".ui.activities.TransactionAddActivity"
             android:exported="false"
             android:theme="@style/Theme.MoneyFlow.TransactionAdd" />
         <activity
-            android:name=".TransactionListActivity"
+            android:name=".ui.activities.TransactionListActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".ui.activities.AuthActivity"
             android:exported="false"
             android:theme="@style/Theme.MoneyFlow.AuthScreen">
 <!--            <intent-filter>-->
@@ -32,7 +32,7 @@
 <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

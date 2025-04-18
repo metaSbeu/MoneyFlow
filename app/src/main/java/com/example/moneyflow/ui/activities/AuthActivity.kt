@@ -1,8 +1,9 @@
-package com.example.moneyflow
+package com.example.moneyflow.ui.activities
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -19,6 +20,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.moneyflow.R
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import java.util.concurrent.Executor
 
@@ -66,7 +68,7 @@ class AuthActivity : AppCompatActivity() {
                 VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
             )
         } else {
-            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(
                 VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
             )
@@ -102,8 +104,8 @@ class AuthActivity : AppCompatActivity() {
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(scaleUpX, scaleUpY, scaleDownX, scaleDownY, shake)
         disableNumberPadButtons()
-        animatorSet.addListener(object : android.animation.AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: android.animation.Animator) {
+        animatorSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
                 clearAllIndicators()
                 enableNumberPadButtons()
             }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg"
-    tools:context=".AuthActivity">
+    tools:context=".ui.activities.AuthActivity">
 
     <ImageView
         android:id="@+id/imageViewAvatar"

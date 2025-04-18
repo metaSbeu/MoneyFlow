@@ -1,4 +1,4 @@
-package com.example.moneyflow
+package com.example.moneyflow.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moneyflow.R
+import com.example.moneyflow.data.Wallet
 
 class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 

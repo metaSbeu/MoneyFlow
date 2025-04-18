@@ -1,4 +1,4 @@
-package com.example.moneyflow
+package com.example.moneyflow.ui.fragments.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.moneyflow.HomeFragment"
+        android:name="com.example.moneyflow.ui.fragments.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home"/>
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.moneyflow.SettingsFragment"
+        android:name="com.example.moneyflow.ui.fragments.settings.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings"/>
 
     <fragment
         android:id="@+id/planningFragment"
-        android:name="com.example.moneyflow.PlanningFragment"
+        android:name="com.example.moneyflow.ui.fragments.planning.PlanningFragment"
         android:label="PlanningFragment"
         tools:layout="@layout/fragment_planning">
     </fragment>

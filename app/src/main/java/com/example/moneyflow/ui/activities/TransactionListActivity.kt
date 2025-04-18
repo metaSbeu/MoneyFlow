@@ -1,4 +1,4 @@
-package com.example.moneyflow
+package com.example.moneyflow.ui.activities
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.moneyflow.R
+import com.example.moneyflow.ui.adapters.TransactionAdapter
+import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
 import kotlin.random.Random
 
@@ -24,7 +27,13 @@ class TransactionListActivity : AppCompatActivity() {
 
         val transactions = mutableListOf<Transaction>()
         repeat(200) {
-            transactions.add(Transaction("Category ${Random.nextInt(7)}", Random.nextInt(50000), Random.nextBoolean()))
+            transactions.add(
+                Transaction(
+                    "Category ${Random.nextInt(7)}",
+                    Random.nextInt(50000),
+                    Random.nextBoolean()
+                )
+            )
         }
 
         adapter = TransactionAdapter()
