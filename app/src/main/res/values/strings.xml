@@ -38,6 +38,10 @@
     <string name="comment">Комментарий</string>
     <string name="period">Период:</string>
     <string name="transaction_history">История транзакций</string>
+    <string name="Theme">Тема</string>
+    <string name="currency">Валюта</string>
+    <string name="change_pin">Изменить ПИН</string>
+    <string name="notifications_settings">Настройки уведомлений</string>
 
     <string-array name="themes">
         <item>Светлая</item>
