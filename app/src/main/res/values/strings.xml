@@ -42,6 +42,7 @@
     <string name="currency">Валюта</string>
     <string name="change_pin">Изменить ПИН</string>
     <string name="notifications_settings">Настройки уведомлений</string>
+    <string name="change_wallet">Change wallet</string>
 
     <string-array name="themes">
         <item>Светлая</item>
