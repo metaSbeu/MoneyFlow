@@ -14,19 +14,20 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import com.example.moneyflow.R
 import com.example.moneyflow.databinding.ActivityAuthBinding
+import com.example.moneyflow.ui.viewmodels.AuthViewModel
 import java.util.concurrent.Executor
 
 class AuthActivity : AppCompatActivity() {
-
-    private val password = mutableListOf<Int>()
 
     private lateinit var binding: ActivityAuthBinding
     private lateinit var indicators: List<ImageView>
@@ -34,30 +35,86 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    private val viewModel: AuthViewModel by viewModels()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setUpInsets()
         setUpIndicators()
         setUpNumberPadClickListeners()
+        setupObservers()
 
         binding.buttonErase.setOnClickListener {
             vibrate(50)
-            if (!password.isEmpty()) {
-                password.removeAt(password.size - 1)
-                switchFingerprintAndEraseButtons()
-            }
-            clearLastIndicator()
+            viewModel.removeLastDigit()
+            updateEraseButtonVisibility()
         }
+
         binding.buttonExit.setOnClickListener {
             vibrate(50)
             finish()
         }
+
         fingerprintAuth()
-        biometricPrompt.authenticate(promptInfo)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupObservers() {
+        viewModel.passwordState.observe(this, Observer { state ->
+            when (state) {
+                AuthViewModel.PasswordState.EMPTY -> clearAllIndicators()
+                AuthViewModel.PasswordState.IN_PROGRESS -> {
+                    refreshIndicators(true)
+                    updateEraseButtonVisibility()
+                }
+                AuthViewModel.PasswordState.COMPLETE -> viewModel.checkPassword()
+                AuthViewModel.PasswordState.CORRECT -> handleCorrectPassword()
+                AuthViewModel.PasswordState.INCORRECT -> handleIncorrectPassword()
+                AuthViewModel.PasswordState.ERASED_LAST_DIGIT -> refreshIndicators(false)
+            }
+        })
+
+        viewModel.navigateToMain.observe(this, Observer { shouldNavigate ->
+            if (shouldNavigate) {
+                startActivity(MainActivity.newIntent(this))
+                viewModel.onNavigationComplete()
+                finish()
+            }
+        })
+
+        viewModel.showError.observe(this, Observer { showError ->
+            if (showError) {
+                Toast.makeText(this, "INCORRECT PASSWORD", Toast.LENGTH_SHORT).show()
+                viewModel.onErrorShown()
+            }
+        })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun handleCorrectPassword() {
+        switchIndicatorToGreen()
+        vibrate(100)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun handleIncorrectPassword() {
+        switchIndicatorToRed()
+        vibrate(200)
+        indicators.forEach { animateIndicatorsFail(it) }
+    }
+
+    private fun updateEraseButtonVisibility() {
+        binding.buttonErase.visibility = if (viewModel.password.value?.isNotEmpty() == true) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -75,7 +132,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    fun setUpIndicators() {
+    private fun setUpIndicators() {
         indicators = listOf(
             binding.imageViewIndicator1,
             binding.imageViewIndicator2,
@@ -84,7 +141,7 @@ class AuthActivity : AppCompatActivity() {
         )
     }
 
-    fun animateIndicatorsFail(view: View) {
+    private fun animateIndicatorsFail(view: View) {
         val scaleUpX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f)
         val scaleUpY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f)
         val scaleDownX = ObjectAnimator.ofFloat(view, "scaleX", 1.5f, 1f)
@@ -106,14 +163,14 @@ class AuthActivity : AppCompatActivity() {
         disableNumberPadButtons()
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
-                clearAllIndicators()
+                viewModel.clearPassword()
                 enableNumberPadButtons()
             }
         })
         animatorSet.start()
     }
 
-    fun animateIndicatorsScale(view: View) {
+    private fun animateIndicatorsScale(view: View) {
         val scaleUpX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f)
         val scaleUpY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f)
 
@@ -130,111 +187,64 @@ class AuthActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
-    fun disableNumberPadButtons() {
+    private fun disableNumberPadButtons() {
         getNumberPadButtons().forEach {
             it.isClickable = false
         }
     }
 
-    fun enableNumberPadButtons() {
+    private fun enableNumberPadButtons() {
         getNumberPadButtons().forEach {
             it.isClickable = true
         }
     }
 
-    fun refreshIndicator() {
-        val length = password.size
-        if (length in 1..4) {
-            val view = indicators[length - 1]
-            view.setImageResource(R.drawable.circle_indicator_blue)
-            animateIndicatorsScale(view)
-        }
-    }
-
-    fun switchIndicatorToRed() {
-        for (indicator in indicators) {
-            indicator.setImageResource(R.drawable.circle_indicator_red)
-        }
-    }
-
-    fun switchIndicatorToGreen() {
-        for (indicator in indicators) {
-            indicator.setImageResource(R.drawable.circle_indicator_green)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun checkPassword() {
-        if (password.size == 4) {
-            if (password.joinToString("") == KEY_PASSWORD) {
-                switchIndicatorToGreen()
-//                binding.progressBar.visibility = View.VISIBLE
-                password.clear()
-                switchFingerprintAndEraseButtons()
-                startActivity(MainActivity.newIntent(this))
-                finish()
-            } else {
-                repeat(4) {
-                    animateIndicatorsFail(indicators[it])
-                }
-                vibrate(200)
-                switchIndicatorToRed()
-                password.clear()
-                switchFingerprintAndEraseButtons()
-                Toast.makeText(this, "INCORRECT PASSWORD", Toast.LENGTH_SHORT).show()
+    private fun refreshIndicators(shouldAnimate: Boolean) {
+        clearAllIndicators()
+        val length = viewModel.password.value?.length ?: 0
+        for (i in 0 until length) {
+            indicators[i].setImageResource(R.drawable.circle_indicator_blue)
+            if (shouldAnimate) {
+                animateIndicatorsScale(indicators[length - 1])
             }
         }
     }
 
-    fun clearLastIndicator() {
-        val length = password.size
-        if (length in 0..3) {
-            indicators[length].setImageResource(R.drawable.circle_indicator_gray)
+    private fun switchIndicatorToRed() {
+        indicators.forEach {
+            it.setImageResource(R.drawable.circle_indicator_red)
         }
     }
 
-    fun clearAllIndicators() {
-        for (indicator in indicators) {
-            indicator.setImageResource(R.drawable.circle_indicator_gray)
+    private fun switchIndicatorToGreen() {
+        indicators.forEach {
+            it.setImageResource(R.drawable.circle_indicator_green)
         }
     }
 
-    fun switchFingerprintAndEraseButtons() {
-        if (password.isEmpty()) {
-            binding.buttonFingerprint.visibility = View.VISIBLE
-            binding.buttonErase.visibility = View.GONE
-        } else {
-            binding.buttonFingerprint.visibility = View.GONE
-            binding.buttonErase.visibility = View.VISIBLE
+    private fun clearAllIndicators() {
+        indicators.forEach {
+            it.setImageResource(R.drawable.circle_indicator_gray)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setUpNumberPadClickListeners() {
-        val buttons = getNumberPadButtons()
-        for (button in buttons) {
+    private fun setUpNumberPadClickListeners() {
+        getNumberPadButtons().forEach { button ->
             button.setOnClickListener {
                 vibrate(50)
-                if (password.size != 4) {
-                    password.add(button.text.toString().toInt())
-                    switchFingerprintAndEraseButtons()
-                    refreshIndicator()
-                    checkPassword()
-                }
+                viewModel.addDigit(button.text.toString().toInt())
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun fingerprintAuth() {
+    private fun fingerprintAuth() {
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(
             this, executor,
             object : BiometricPrompt.AuthenticationCallback() {
-
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     switchIndicatorToGreen()
                     startActivity(MainActivity.newIntent(this@AuthActivity))
@@ -245,7 +255,8 @@ class AuthActivity : AppCompatActivity() {
                     super.onAuthenticationFailed()
                     Toast.makeText(
                         applicationContext,
-                        getString(R.string.authentication_failed_message), Toast.LENGTH_SHORT
+                        getString(R.string.authentication_failed_message),
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             })
@@ -261,8 +272,8 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    fun getNumberPadButtons(): List<Button> {
-        return listOf<Button>(
+    private fun getNumberPadButtons(): List<Button> {
+        return listOf(
             binding.button0,
             binding.button1,
             binding.button2,
@@ -282,10 +293,5 @@ class AuthActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
-
-    companion object {
-        const val TAG = "AuthActivity"
-        const val KEY_PASSWORD = "0000"
     }
 }

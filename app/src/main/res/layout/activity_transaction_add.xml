@@ -50,7 +50,6 @@
         android:id="@+id/recyclerViewCategories"
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingTop="16dp"
         android:scrollbars="vertical"
@@ -59,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggleGroup"
         app:spanCount="4"
-        tools:itemCount="12"
+        tools:itemCount="5"
         tools:listitem="@layout/category_item" />
 
     <TextView
@@ -89,7 +88,6 @@
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="12dp">
@@ -136,7 +134,7 @@
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldSum"
+        android:id="@+id/textFieldCategoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -163,7 +161,7 @@
         android:hint="@string/comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldSum">
+        app:layout_constraintTop_toBottomOf="@+id/textFieldCategoryName">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextComment"

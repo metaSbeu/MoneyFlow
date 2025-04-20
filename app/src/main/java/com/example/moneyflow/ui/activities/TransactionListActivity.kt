@@ -29,6 +29,7 @@ class TransactionListActivity : AppCompatActivity() {
         repeat(200) {
             transactions.add(
                 Transaction(
+                    it,
                     "Category ${Random.nextInt(7)}",
                     Random.nextInt(50000),
                     Random.nextBoolean()

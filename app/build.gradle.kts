@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,9 +41,17 @@ android {
 
 dependencies {
 
-    implementation ("io.github.chaosleung:pinview:1.4.4")
-    implementation ("androidx.biometric:biometric-ktx:1.4.0-alpha02")
+    // Room
+    val room_version = "2.7.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-rxjava3:$room_version")
 
+    // RxJava
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.2")
+    implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
+
+    implementation ("androidx.biometric:biometric-ktx:1.4.0-alpha02")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
