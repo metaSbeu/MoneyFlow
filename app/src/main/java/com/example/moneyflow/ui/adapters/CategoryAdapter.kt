@@ -11,7 +11,8 @@ import com.example.moneyflow.data.Category
 
 class CategoryAdapter(
     private val onItemClick: (Category) -> Unit,
-    private val onAddClick: () -> Unit
+    private val onAddClick: () -> Unit,
+    private val showAddButton: Boolean = true
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_CATEGORY = 0
@@ -28,7 +29,7 @@ class CategoryAdapter(
         return if (position < categories.size) TYPE_CATEGORY else TYPE_ADD_BUTTON
     }
 
-    override fun getItemCount(): Int = categories.size + 1
+    override fun getItemCount(): Int = categories.size + if (showAddButton) 1 else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,7 +47,13 @@ class CategoryAdapter(
         if (holder is CategoryViewHolder) {
             val category = categories[position]
             holder.textViewName.text = category.name
-            holder.icon.setImageResource(R.drawable.ic_home)
+
+            val iconResId = holder.itemView.context.resources.getIdentifier(
+                category.icon,
+                "drawable",
+                holder.itemView.context.packageName
+            )
+            holder.icon.setImageResource(iconResId)
 
             if (position == selectedPosition) {
                 holder.icon.setBackgroundResource(R.drawable.circle_indicator_blue)
@@ -63,7 +70,7 @@ class CategoryAdapter(
             }
         } else if (holder is AddButtonViewHolder) {
             holder.textViewName.text = "Создать"
-            holder.icon.setImageResource(R.drawable.ic_add) // иконка "+"
+            holder.icon.setImageResource(R.drawable.ic_add_white) // иконка "+"
             holder.icon.setBackgroundResource(R.drawable.circle_indicator_gray)
 
             holder.itemView.setOnClickListener {

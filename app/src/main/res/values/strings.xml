@@ -43,6 +43,8 @@
     <string name="change_pin">Изменить ПИН</string>
     <string name="notifications_settings">Настройки уведомлений</string>
     <string name="change_wallet">Change wallet</string>
+    <string name="name">Название</string>
+    <string name="category_create_title">Создание категории расходов</string>
 
     <string-array name="themes">
         <item>Светлая</item>

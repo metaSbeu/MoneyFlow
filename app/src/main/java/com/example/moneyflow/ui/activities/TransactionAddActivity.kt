@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +35,7 @@ class TransactionAddActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         setupInsets()
-        toggleGroup()
+        setupToggleGroup()
         setTodayDate()
 
         val testCategories = mutableListOf<Category>()
@@ -51,29 +52,47 @@ class TransactionAddActivity : AppCompatActivity() {
         adapter.categories = database.categoryDao().getCategories()
 
         binding.buttonDate.setOnClickListener {
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .build()
-            datePicker.show(supportFragmentManager, "tag")
-
-            datePicker.addOnPositiveButtonClickListener { selection ->
-                val calendar = Calendar.getInstance()
-                calendar.timeInMillis = selection
-
-                val locale = resources.configuration.locales[0]
-                val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
-                val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
-
-                binding.textViewDate.text = formattedDate
-            }
+            datePicker()
         }
-        var id = 0
+
         binding.buttonSave.setOnClickListener {
 
-            val category = Category(id, "Category $id")
-            database.categoryDao().insert(category)
-            id++
+        }
+        initializeDefaultCategories()
+    }
+
+    fun datePicker() {
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .build()
+        datePicker.show(supportFragmentManager, "tag")
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = selection
+
+            val locale = resources.configuration.locales[0]
+            val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
+            val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
+
+            binding.textViewDate.text = formattedDate
+        }
+    }
+
+    fun initializeDefaultCategories() {
+        val defaultCategories = listOf(
+            Category(name = "Здоровье", icon = "ic_health"),
+            Category(name = "Досуг", icon = "ic_leisure"),
+            Category(name = "Дом", icon = "ic_home"),
+            Category(name = "Кафе", icon = "ic_cafe"),
+            Category(name = "Образование", icon = "ic_education"),
+            Category(name = "Подарки", icon = "ic_gift"),
+            Category(name = "Продукты", icon = "ic_grocery")
+        )
+        val count = database.categoryDao().getCount()
+        if (count == 0) {
+            database.categoryDao().insertAll(defaultCategories)
         }
     }
 
@@ -90,15 +109,7 @@ class TransactionAddActivity : AppCompatActivity() {
         binding.textViewDate.text = formattedDate
     }
 
-    private fun generateCategories(): MutableList<Category> {
-        val categories = mutableListOf<Category>()
-        repeat(160) {
-            categories.add(Category(it, "Category $it"))
-        }
-        return categories
-    }
-
-    fun toggleGroup() {
+    fun setupToggleGroup() {
         val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggleGroup)
         toggleGroup.check(R.id.buttonExpense)
     }

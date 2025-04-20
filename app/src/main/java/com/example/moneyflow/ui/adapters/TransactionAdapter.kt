@@ -32,7 +32,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
     ) {
         val transaction = transactions[position]
 
-        holder.imageViewIcon.setImageResource(R.drawable.cafe)
+        holder.imageViewIcon.setImageResource(R.drawable.ic_cafe)
         holder.textViewCategory.text = transaction.category
         holder.textViewAmount.text = transaction.amount.toString()
 
