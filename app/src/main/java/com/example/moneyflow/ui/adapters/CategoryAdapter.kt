@@ -10,47 +10,74 @@ import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 
 class CategoryAdapter(
-    private val onItemClick: (Category) -> Unit
-) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+    private val onItemClick: (Category) -> Unit,
+    private val onAddClick: () -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val TYPE_CATEGORY = 0
+    private val TYPE_ADD_BUTTON = 1
 
     private var selectedPosition = RecyclerView.NO_POSITION
-    var categories = mutableListOf<Category>()
+    var categories = listOf<Category>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.category_item, parent, false)
-        return CategoryViewHolder(view)
+    override fun getItemViewType(position: Int): Int {
+        return if (position < categories.size) TYPE_CATEGORY else TYPE_ADD_BUTTON
     }
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = categories[position]
-        holder.textViewName.text = category.name
-        holder.icon.setImageResource(R.drawable.ic_home) // или category.iconResId
+    override fun getItemCount(): Int = categories.size + 1
 
-        // Изменяем фон в зависимости от выбранности
-        if (position == selectedPosition) {
-            holder.icon.setBackgroundResource(R.drawable.circle_indicator_blue) // фоновый drawable для выбранного
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+
+        return if (viewType == TYPE_CATEGORY) {
+            val view = inflater.inflate(R.layout.category_item, parent, false)
+            CategoryViewHolder(view)
         } else {
-            holder.icon.setBackgroundResource(R.drawable.circle_indicator_gray) // для невыбранного
-        }
-
-        holder.itemView.setOnClickListener {
-            val previousSelected = selectedPosition
-            selectedPosition = holder.adapterPosition
-            notifyItemChanged(previousSelected)
-            notifyItemChanged(selectedPosition)
-
-            onItemClick(category)
+            val view = inflater.inflate(R.layout.category_item, parent, false)
+            AddButtonViewHolder(view)
         }
     }
 
-    override fun getItemCount(): Int = categories.size
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is CategoryViewHolder) {
+            val category = categories[position]
+            holder.textViewName.text = category.name
+            holder.icon.setImageResource(R.drawable.ic_home)
+
+            if (position == selectedPosition) {
+                holder.icon.setBackgroundResource(R.drawable.circle_indicator_blue)
+            } else {
+                holder.icon.setBackgroundResource(R.drawable.circle_indicator_gray)
+            }
+
+            holder.itemView.setOnClickListener {
+                val prev = selectedPosition
+                selectedPosition = holder.adapterPosition
+                notifyItemChanged(prev)
+                notifyItemChanged(selectedPosition)
+                onItemClick(category)
+            }
+        } else if (holder is AddButtonViewHolder) {
+            holder.textViewName.text = "Создать"
+            holder.icon.setImageResource(R.drawable.ic_add) // иконка "+"
+            holder.icon.setBackgroundResource(R.drawable.circle_indicator_gray)
+
+            holder.itemView.setOnClickListener {
+                onAddClick()
+            }
+        }
+    }
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textViewName: TextView = itemView.findViewById(R.id.textViewCategory)
+        val icon: ImageView = itemView.findViewById(R.id.imageViewCategoryIcon)
+    }
+
+    class AddButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewName: TextView = itemView.findViewById(R.id.textViewCategory)
         val icon: ImageView = itemView.findViewById(R.id.imageViewCategoryIcon)
     }

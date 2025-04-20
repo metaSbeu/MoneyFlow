@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     fun testWallets(): List<Wallet> {
         val wallets = mutableListOf<Wallet>()
         repeat(1000) {
-            val wallet = Wallet("Wallet ${it + 1}: ", it * 1000)
+            val wallet = Wallet(it,"Wallet ${it + 1}: ", it * 1000)
             wallets.add(wallet)
         }
         return wallets
