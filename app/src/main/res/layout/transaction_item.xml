@@ -14,7 +14,7 @@
         android:padding="12dp">
 
         <ImageView
-            android:id="@+id/imageViewIcon"
+            android:id="@+id/imageViewIBankIcon"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:contentDescription="@null"
@@ -33,7 +33,7 @@
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageViewIBankIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

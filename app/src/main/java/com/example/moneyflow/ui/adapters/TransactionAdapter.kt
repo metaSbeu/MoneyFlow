@@ -49,7 +49,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
     }
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageViewIcon = itemView.findViewById<ImageView>(R.id.imageViewIcon)
+        val imageViewIcon = itemView.findViewById<ImageView>(R.id.imageViewIBankIcon)
         val textViewCategory = itemView.findViewById<TextView>(R.id.textViewCategory)
         val textViewAmount = itemView.findViewById<TextView>(R.id.textViewAmount)
     }

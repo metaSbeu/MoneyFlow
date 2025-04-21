@@ -5,35 +5,35 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.AddCategoryActivity">
+    tools:context=".ui.activities.AddWalletActivity">
 
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/category_create_title"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="40sp"
         android:textAlignment="center"
-        android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="32dp"
+        android:text="Создание нового счета" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCategories"
+        android:id="@+id/recyclerViewWalletIcons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:paddingHorizontal="16dp"
+        android:paddingStart="16dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewTitle"
         app:spanCount="4"
-        tools:itemCount="20"
-        tools:listitem="@layout/category_item" />
+        tools:itemCount="12"
+        tools:listitem="@layout/icon_item" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldCategoryName"
+        android:id="@+id/textFieldName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -41,7 +41,7 @@
         android:hint="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCategories">
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewWalletIcons">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextName"
@@ -51,15 +51,30 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/buttonSave"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldBalance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="72dp"
-        android:layout_marginBottom="16dp"
-        android:text="Добавить"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="Баланс"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldName">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextBalance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Save"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

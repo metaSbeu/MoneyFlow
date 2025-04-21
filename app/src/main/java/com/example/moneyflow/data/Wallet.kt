@@ -10,4 +10,5 @@ data class Wallet(
     val id: Int = 0,
     val name: String,
     val balance: Int,
+    val icon: String
 )
