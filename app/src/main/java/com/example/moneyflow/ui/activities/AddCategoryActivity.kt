@@ -16,7 +16,7 @@ import com.example.moneyflow.ui.adapters.CategoryAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class CategoryAddActivity : AppCompatActivity() {
+class AddCategoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCategoryAddBinding
     private lateinit var database: MainDatabase
@@ -104,7 +104,7 @@ class CategoryAddActivity : AppCompatActivity() {
 
     companion object {
         fun newIntent(context: Context): Intent {
-            return Intent(context, CategoryAddActivity::class.java)
+            return Intent(context, AddCategoryActivity::class.java)
         }
     }
 }

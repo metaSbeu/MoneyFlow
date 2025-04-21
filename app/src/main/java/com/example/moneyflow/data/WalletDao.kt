@@ -9,11 +9,11 @@ import androidx.room.Query
 interface WalletDao {
 
     @Query("SELECT * FROM wallets")
-    suspend fun getWallets(): List<Wallet>
+    fun getWallets(): List<Wallet>
 
     @Insert(onConflict = REPLACE)
-    suspend fun insert(wallet: Wallet)
+    fun insert(wallet: Wallet)
 
     @Query("DELETE FROM wallets WHERE id = :id")
-    suspend fun delete(id: Int)
+    fun delete(id: Int)
 }
