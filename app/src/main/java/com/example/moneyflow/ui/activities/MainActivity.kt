@@ -21,7 +21,6 @@ import com.example.moneyflow.ui.fragments.settings.SettingsFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: WalletAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +28,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpInsets()
-//        adapter = WalletAdapter({}, {
-//            Toast.makeText(this, "SPERMA", Toast.LENGTH_SHORT).show()
-//        })
-//        binding.recyclerViewWallets.adapter = adapter
-//        adapter.wallets = testWallets()
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
@@ -60,15 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-//    fun testWallets(): List<Wallet> {
-//        val wallets = mutableListOf<Wallet>()
-//        repeat(1000) {
-//            val wallet = Wallet(it, "Wallet ${it + 1}: ", it * 1000)
-//            wallets.add(wallet)
-//        }
-//        return wallets
-//    }
 
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -29,13 +29,15 @@ class AddCategoryActivity : AppCompatActivity() {
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         database = MainDatabase.getDb(application)
 
         var selectedCategory: Category? = null
-        adapter = CategoryAdapter({
-            selectedCategory = it
-        }, {}, showAddButton = false)
+        adapter = CategoryAdapter(
+            {
+                selectedCategory = it
+            },
+            {}, showAddButton = false
+        )
 
         adapter.categories = icons()
         binding.recyclerViewCategories.adapter = adapter
@@ -56,7 +58,7 @@ class AddCategoryActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val category = Category(name = name, icon = icon)
+            val category = Category(name = name, icon = icon, isIncome = false)
 
             database.categoryDao().insert(category)
                 .subscribeOn(Schedulers.io())
@@ -70,26 +72,26 @@ class AddCategoryActivity : AppCompatActivity() {
 
     fun icons(): List<Category> {
         val categories = listOf<Category>(
-            Category(name = "", icon = "ic_movie"),
-            Category(name = "", icon = "ic_game"),
-            Category(name = "", icon = "ic_sport"),
-            Category(name = "", icon = "ic_food"),
-            Category(name = "", icon = "ic_pet"),
-            Category(name = "", icon = "ic_fruit"),
-            Category(name = "", icon = "ic_clothes"),
-            Category(name = "", icon = "ic_shoe"),
-            Category(name = "", icon = "ic_diamond"),
-            Category(name = "", icon = "ic_furniture"),
-            Category(name = "", icon = "ic_music"),
-            Category(name = "", icon = "ic_computer"),
-            Category(name = "", icon = "ic_bicycle"),
-            Category(name = "", icon = "ic_wifi"),
-            Category(name = "", icon = "ic_car"),
-            Category(name = "", icon = "ic_plane"),
-            Category(name = "", icon = "ic_tooth"),
-            Category(name = "", icon = "ic_finance"),
-            Category(name = "", icon = "ic_family"),
-            Category(name = "", icon = "ic_train_bus"),
+            Category(name = "", icon = "ic_movie", isIncome = false),
+            Category(name = "", icon = "ic_game", isIncome = false),
+            Category(name = "", icon = "ic_sport", isIncome = false),
+            Category(name = "", icon = "ic_food", isIncome = false),
+            Category(name = "", icon = "ic_pet", isIncome = false),
+            Category(name = "", icon = "ic_fruit", isIncome = false),
+            Category(name = "", icon = "ic_clothes", isIncome = false),
+            Category(name = "", icon = "ic_shoe", isIncome = false),
+            Category(name = "", icon = "ic_diamond", isIncome = false),
+            Category(name = "", icon = "ic_furniture", isIncome = false),
+            Category(name = "", icon = "ic_music", isIncome = false),
+            Category(name = "", icon = "ic_computer", isIncome = false),
+            Category(name = "", icon = "ic_bicycle", isIncome = false),
+            Category(name = "", icon = "ic_wifi", isIncome = false),
+            Category(name = "", icon = "ic_car", isIncome = false),
+            Category(name = "", icon = "ic_plane", isIncome = false),
+            Category(name = "", icon = "ic_tooth", isIncome = false),
+            Category(name = "", icon = "ic_finance", isIncome = false),
+            Category(name = "", icon = "ic_family", isIncome = false),
+            Category(name = "", icon = "ic_train_bus", isIncome = false),
         )
         return categories
     }

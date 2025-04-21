@@ -80,13 +80,13 @@ class TransactionAddActivity : AppCompatActivity() {
 
     fun initializeDefaultCategories() {
         val defaultCategories = listOf(
-            Category(name = "Здоровье", icon = "ic_health"),
-            Category(name = "Досуг", icon = "ic_leisure"),
-            Category(name = "Дом", icon = "ic_home"),
-            Category(name = "Кафе", icon = "ic_cafe"),
-            Category(name = "Образование", icon = "ic_education"),
-            Category(name = "Подарки", icon = "ic_gift"),
-            Category(name = "Продукты", icon = "ic_grocery")
+            Category(name = "Здоровье", icon = "ic_health", isIncome = false),
+            Category(name = "Досуг", icon = "ic_leisure", isIncome = false),
+            Category(name = "Дом", icon = "ic_home", isIncome = false),
+            Category(name = "Кафе", icon = "ic_cafe", isIncome = false),
+            Category(name = "Образование", icon = "ic_education", isIncome = false),
+            Category(name = "Подарки", icon = "ic_gift", isIncome = false),
+            Category(name = "Продукты", icon = "ic_grocery", isIncome = false)
         )
         val count = database.categoryDao().getCount()
         if (count == 0) {
