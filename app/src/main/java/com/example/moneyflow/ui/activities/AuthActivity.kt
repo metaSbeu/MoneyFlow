@@ -23,6 +23,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import com.example.moneyflow.R
+import com.example.moneyflow.data.PreferenceManager
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import com.example.moneyflow.ui.viewmodels.AuthViewModel
 import java.util.concurrent.Executor
@@ -49,6 +50,7 @@ class AuthActivity : AppCompatActivity() {
         setUpIndicators()
         setUpNumberPadClickListeners()
         setupObservers()
+        insertDefaultCategories()
 
         binding.buttonErase.setOnClickListener {
             vibrate(50)
@@ -62,6 +64,13 @@ class AuthActivity : AppCompatActivity() {
         }
 
         fingerprintAuth()
+    }
+
+    fun insertDefaultCategories() {
+        if (!PreferenceManager.areDefaultCategoriesAdded(this)) {
+            viewModel.insertDefaultCategories()
+            PreferenceManager.setDefaultCategories(this)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

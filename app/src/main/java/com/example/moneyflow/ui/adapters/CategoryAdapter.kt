@@ -48,12 +48,7 @@ class CategoryAdapter(
             val category = categories[position]
             holder.textViewName.text = category.name
 
-            val iconResId = holder.itemView.context.resources.getIdentifier(
-                category.icon,
-                "drawable",
-                holder.itemView.context.packageName
-            )
-            holder.icon.setImageResource(iconResId)
+            holder.icon.setImageResource(category.iconResId)
 
             if (position == selectedPosition) {
                 holder.icon.setBackgroundResource(R.drawable.circle_indicator_blue)

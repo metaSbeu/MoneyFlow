@@ -28,7 +28,7 @@ data class Transaction(
     val categoryId: Int,
     val walletId: Int,
 
-    val sum: Int,
+    val sum: Double,
     val isIncome: Boolean,
 
     val note: String?,

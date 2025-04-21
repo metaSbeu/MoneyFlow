@@ -4,59 +4,96 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.MainDatabase
+import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.databinding.ActivityTransactionAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
+import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
+import kotlin.random.Random
 
 class TransactionAddActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransactionAddBinding
     private lateinit var adapter: CategoryAdapter
-
-    private lateinit var database: MainDatabase
+    private lateinit var viewModel: TransactionAddViewModel
+    private var selectedCategory: Category? = null
+    private var isIncomeSelected = false
+    private var selectedDateInMillis = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         binding = ActivityTransactionAddBinding.inflate(layoutInflater)
-        database = MainDatabase.getDb(application)
-
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this)[TransactionAddViewModel::class.java]
         setupInsets()
         setupToggleGroup()
         setTodayDate()
 
-        val testCategories = mutableListOf<Category>()
-
         adapter = CategoryAdapter(
             {
-
+                selectedCategory = it
             },
             {
-                startActivity(AddCategoryActivity.newIntent(this))
+                startActivity(CategoryAddActivity.newIntent(this))
             })
 
         binding.recyclerViewCategories.adapter = adapter
-        adapter.categories = database.categoryDao().getCategories()
+
+        observeViewModel()
 
         binding.buttonDate.setOnClickListener {
             datePicker()
         }
 
         binding.buttonSave.setOnClickListener {
+            val category = selectedCategory
+            if (category == null) {
+                Toast.makeText(this, "Выберите категорию", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
+            val sumText = binding.editTextSum.text.toString()
+            if (sumText.isBlank()) {
+                Toast.makeText(this, "Введите сумму", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val transaction = Transaction(
+                id = 0,
+                categoryId = selectedCategory!!.id,
+                walletId = 1,
+                sum = sumText.toDouble(),
+                isIncome = isIncomeSelected,
+                note = binding.editTextComment.text.toString(),
+                createdAt = selectedDateInMillis
+            )
+            viewModel.saveTransaction(transaction)
         }
-        initializeDefaultCategories()
+    }
+
+    fun observeViewModel() {
+        viewModel.categories.observe(this) {
+            adapter.categories = it
+        }
+
+        viewModel.shouldCloseScreen.observe(this) { shouldCloseScreen ->
+            if (shouldCloseScreen) {
+                finish()
+            }
+        }
     }
 
     fun datePicker() {
@@ -69,6 +106,7 @@ class TransactionAddActivity : AppCompatActivity() {
         datePicker.addOnPositiveButtonClickListener { selection ->
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = selection
+            selectedDateInMillis = selection
 
             val locale = resources.configuration.locales[0]
             val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
@@ -76,27 +114,6 @@ class TransactionAddActivity : AppCompatActivity() {
 
             binding.textViewDate.text = formattedDate
         }
-    }
-
-    fun initializeDefaultCategories() {
-        val defaultCategories = listOf(
-            Category(name = "Здоровье", icon = "ic_health", isIncome = false),
-            Category(name = "Досуг", icon = "ic_leisure", isIncome = false),
-            Category(name = "Дом", icon = "ic_home", isIncome = false),
-            Category(name = "Кафе", icon = "ic_cafe", isIncome = false),
-            Category(name = "Образование", icon = "ic_education", isIncome = false),
-            Category(name = "Подарки", icon = "ic_gift", isIncome = false),
-            Category(name = "Продукты", icon = "ic_grocery", isIncome = false)
-        )
-        val count = database.categoryDao().getCount()
-        if (count == 0) {
-            database.categoryDao().insertAll(defaultCategories)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        adapter.categories = database.categoryDao().getCategories()
     }
 
     fun setTodayDate() {
@@ -110,6 +127,12 @@ class TransactionAddActivity : AppCompatActivity() {
     fun setupToggleGroup() {
         val toggleGroup = findViewById<MaterialButtonToggleGroup>(R.id.toggleGroup)
         toggleGroup.check(R.id.buttonExpense)
+
+        toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                isIncomeSelected = checkedId == R.id.buttonIncome
+            }
+        }
     }
 
     fun setupInsets() {

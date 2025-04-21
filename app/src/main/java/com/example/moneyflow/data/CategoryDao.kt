@@ -1,5 +1,6 @@
 package com.example.moneyflow.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,7 +12,7 @@ import io.reactivex.rxjava3.core.Completable
 interface CategoryDao {
 
     @Query("SELECT * FROM categories")
-    fun getCategories(): List<Category>
+    fun getCategories(): LiveData<List<Category>>
 
     @Insert(onConflict = REPLACE)
     fun insert(category: Category): Completable
@@ -23,5 +24,5 @@ interface CategoryDao {
     fun getCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(categories: List<Category>)
+    fun insertAll(categories: List<Category>): Completable
 }

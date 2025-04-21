@@ -6,6 +6,7 @@
     android:layout_height="62dp"
     android:layout_marginHorizontal="16dp"
     android:layout_marginTop="12dp"
+    android:layout_marginBottom="4dp"
     app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +15,7 @@
         android:padding="12dp">
 
         <ImageView
-            android:id="@+id/imageViewIBankIcon"
+            android:id="@+id/imageViewCategoryIcon"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:contentDescription="@null"
@@ -24,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewCategory"
+            android:id="@+id/textViewCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -33,11 +34,11 @@
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageViewIBankIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageViewCategoryIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewAmount"
+            android:id="@+id/textViewSum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
