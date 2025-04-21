@@ -44,7 +44,7 @@ class AddWalletActivity : AppCompatActivity() {
         binding.buttonAdd.setOnClickListener {
             val name = binding.editTextName.text.toString().trim()
             val balance = binding.editTextBalance.text.toString().trim().toInt()
-            val wallet = Wallet(name = name, balance = balance, icon = selectedIcon!!)
+            val wallet = Wallet(name = name, balance = balance, icon = selectedIcon!!, type = "Cash")
 
             database.walletDao().insert(wallet)
             finish()

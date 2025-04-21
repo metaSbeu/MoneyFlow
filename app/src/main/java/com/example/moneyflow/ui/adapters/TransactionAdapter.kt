@@ -33,8 +33,8 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
         val transaction = transactions[position]
 
         holder.imageViewIcon.setImageResource(R.drawable.ic_cafe)
-        holder.textViewCategory.text = transaction.category
-        holder.textViewAmount.text = transaction.amount.toString()
+        holder.textViewCategory.text = transaction.categoryId.toString()
+        holder.textViewAmount.text = transaction.sum.toString()
 
         val colorResId = when(transaction.isIncome) {
             true -> R.color.light_green

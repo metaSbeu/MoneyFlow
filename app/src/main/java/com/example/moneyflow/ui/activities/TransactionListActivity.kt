@@ -29,10 +29,12 @@ class TransactionListActivity : AppCompatActivity() {
         repeat(200) {
             transactions.add(
                 Transaction(
-                    it,
-                    "Category ${Random.nextInt(7)}",
-                    Random.nextInt(50000),
-                    Random.nextBoolean()
+                    categoryId = TODO(),
+                    walletId = TODO(),
+                    sum = (it * 1000) + 1000,
+                    isIncome = Random.nextBoolean(),
+                    note = "Note $it",
+                    createdAt = System.currentTimeMillis()
                 )
             )
         }
