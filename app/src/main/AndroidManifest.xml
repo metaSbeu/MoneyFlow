@@ -18,7 +18,7 @@
             android:name=".ui.activities.AddWalletActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.AddCategoryActivity"
+            android:name=".ui.activities.CategoryAddActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.TransactionAddActivity"
@@ -31,22 +31,16 @@
             android:name=".ui.activities.AuthActivity"
             android:exported="true"
             android:theme="@style/Theme.MoneyFlow.AuthScreen">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".ui.activities.MainActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:exported="false">
         </activity>
     </application>
 

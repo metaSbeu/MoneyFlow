@@ -7,41 +7,40 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
+import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
+import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
 import kotlin.random.Random
 
 class TransactionListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransactionListBinding
     private lateinit var adapter: TransactionAdapter
+    private lateinit var viewModel: TransactionListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         binding = ActivityTransactionListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setUpInsets()
 
-        val transactions = mutableListOf<Transaction>()
-        repeat(200) {
-            transactions.add(
-                Transaction(
-                    categoryId = TODO(),
-                    walletId = TODO(),
-                    sum = (it * 1000) + 1000,
-                    isIncome = Random.nextBoolean(),
-                    note = "Note $it",
-                    createdAt = System.currentTimeMillis()
-                )
-            )
-        }
-
+        viewModel = ViewModelProvider(this)[TransactionListViewModel::class.java]
         adapter = TransactionAdapter()
-        adapter.transactions = transactions
+        observeViewModels()
         binding.recyclerViewTransactions.adapter = adapter
+
+        setUpInsets()
+    }
+
+    fun observeViewModels() {
+        viewModel.transactions.observe(this) { transactions ->
+            adapter.transactions = transactions
+        }
     }
 
     fun setUpInsets() {

@@ -9,10 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Transaction
+import com.example.moneyflow.data.TransactionWithCategory
+import kotlin.time.Duration.Companion.nanoseconds
 
 class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
-    var transactions = mutableListOf<Transaction>()
+    var transactions = listOf<TransactionWithCategory>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -30,10 +32,12 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
         holder: TransactionViewHolder,
         position: Int
     ) {
-        val transaction = transactions[position]
+        val transactionWithCategory = transactions[position]
+        val transaction = transactionWithCategory.transaction
+        val category = transactionWithCategory.category
 
-        holder.imageViewIcon.setImageResource(R.drawable.ic_cafe)
-        holder.textViewCategory.text = transaction.categoryId.toString()
+        holder.imageViewIcon.setImageResource(category.iconResId)
+        holder.textViewCategory.text = category.name
         holder.textViewAmount.text = transaction.sum.toString()
 
         val colorResId = when(transaction.isIncome) {
@@ -49,8 +53,8 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
     }
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageViewIcon = itemView.findViewById<ImageView>(R.id.imageViewIBankIcon)
-        val textViewCategory = itemView.findViewById<TextView>(R.id.textViewCategory)
-        val textViewAmount = itemView.findViewById<TextView>(R.id.textViewAmount)
+        val imageViewIcon = itemView.findViewById<ImageView>(R.id.imageViewCategoryIcon)
+        val textViewCategory = itemView.findViewById<TextView>(R.id.textViewCategoryName)
+        val textViewAmount = itemView.findViewById<TextView>(R.id.textViewSum)
     }
 }

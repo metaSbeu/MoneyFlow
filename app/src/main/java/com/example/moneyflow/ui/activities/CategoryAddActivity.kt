@@ -16,7 +16,7 @@ import com.example.moneyflow.ui.adapters.CategoryAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class AddCategoryActivity : AppCompatActivity() {
+class CategoryAddActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCategoryAddBinding
     private lateinit var database: MainDatabase
@@ -52,13 +52,13 @@ class AddCategoryActivity : AppCompatActivity() {
             }
 
             // Проверка на отсутствие выбранной иконки
-            val icon = selectedCategory?.icon
+            val icon = selectedCategory?.iconResId
             if (icon == null) {
                 Toast.makeText(this, "Выберите иконку категории", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val category = Category(name = name, icon = icon, isIncome = false)
+            val category = Category(name = name, iconResId = icon, isIncome = false)
 
             database.categoryDao().insert(category)
                 .subscribeOn(Schedulers.io())
@@ -72,26 +72,26 @@ class AddCategoryActivity : AppCompatActivity() {
 
     fun icons(): List<Category> {
         val categories = listOf<Category>(
-            Category(name = "", icon = "ic_movie", isIncome = false),
-            Category(name = "", icon = "ic_game", isIncome = false),
-            Category(name = "", icon = "ic_sport", isIncome = false),
-            Category(name = "", icon = "ic_food", isIncome = false),
-            Category(name = "", icon = "ic_pet", isIncome = false),
-            Category(name = "", icon = "ic_fruit", isIncome = false),
-            Category(name = "", icon = "ic_clothes", isIncome = false),
-            Category(name = "", icon = "ic_shoe", isIncome = false),
-            Category(name = "", icon = "ic_diamond", isIncome = false),
-            Category(name = "", icon = "ic_furniture", isIncome = false),
-            Category(name = "", icon = "ic_music", isIncome = false),
-            Category(name = "", icon = "ic_computer", isIncome = false),
-            Category(name = "", icon = "ic_bicycle", isIncome = false),
-            Category(name = "", icon = "ic_wifi", isIncome = false),
-            Category(name = "", icon = "ic_car", isIncome = false),
-            Category(name = "", icon = "ic_plane", isIncome = false),
-            Category(name = "", icon = "ic_tooth", isIncome = false),
-            Category(name = "", icon = "ic_finance", isIncome = false),
-            Category(name = "", icon = "ic_family", isIncome = false),
-            Category(name = "", icon = "ic_train_bus", isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_movie, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_game, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_sport, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_food, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_pet, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_fruit, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_clothes, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_shoe, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_diamond, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_furniture, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_music, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_computer, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_bicycle, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_wifi, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_car, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_plane, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_tooth, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_finance, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_family, isIncome = false),
+            Category(name = "", iconResId = R.drawable.ic_train_bus, isIncome = false),
         )
         return categories
     }
@@ -106,7 +106,7 @@ class AddCategoryActivity : AppCompatActivity() {
 
     companion object {
         fun newIntent(context: Context): Intent {
-            return Intent(context, AddCategoryActivity::class.java)
+            return Intent(context, CategoryAddActivity::class.java)
         }
     }
 }

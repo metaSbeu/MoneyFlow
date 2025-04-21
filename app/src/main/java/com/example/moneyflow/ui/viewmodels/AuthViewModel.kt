@@ -1,9 +1,17 @@
 package com.example.moneyflow.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.moneyflow.R
+import com.example.moneyflow.data.Category
+import com.example.moneyflow.data.MainDatabase
+import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel.Companion.TAG
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -11,6 +19,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         const val CORRECT_PASSWORD = "0000"
         const val PASSWORD_LENGTH = 4
     }
+
+    private val database = MainDatabase.getDb(application)
+    private val compositeDisposable = CompositeDisposable()
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> get() = _password
@@ -76,6 +87,37 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             PASSWORD_LENGTH -> PasswordState.COMPLETE
             else -> PasswordState.IN_PROGRESS
         }
+    }
+
+    fun insertDefaultCategories() {
+        val defaultCategories = listOf(
+            Category(name = "Здоровье", iconResId = R.drawable.ic_health, isIncome = false),
+            Category(name = "Развлечения", iconResId = R.drawable.ic_leisure, isIncome = false),
+            Category(name = "Дом", iconResId = R.drawable.ic_home, isIncome = false),
+            Category(name = "Кафе", iconResId = R.drawable.ic_cafe, isIncome = false),
+            Category(name = "Образование", iconResId = R.drawable.ic_education, isIncome = false),
+            Category(name = "Подарки", iconResId = R.drawable.ic_gift, isIncome = false),
+            Category(name = "Продукты", iconResId = R.drawable.ic_grocery, isIncome = false)
+        )
+        val count = database.categoryDao().getCount()
+        if (count == 0) {
+            val disposable = database.categoryDao().insertAll(defaultCategories)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+
+                    },
+                    {
+                        Log.d(TAG, it.toString())
+                    })
+            compositeDisposable.add(disposable)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 
     enum class PasswordState {
