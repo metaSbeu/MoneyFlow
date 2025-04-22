@@ -20,6 +20,7 @@ class CategoryAddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCategoryAddBinding
     private lateinit var adapter: CategoryAdapter
     private lateinit var viewModel: CategoryAddViewModel
+    private lateinit var selectedCategory: Category
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +29,7 @@ class CategoryAddActivity : AppCompatActivity() {
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var selectedCategory: Category? = null
+
         adapter = CategoryAdapter(
             {
                 selectedCategory = it
@@ -41,6 +42,7 @@ class CategoryAddActivity : AppCompatActivity() {
         viewModel.defaultIcons.observe(this) {
             adapter.categories = viewModel.getUpDefaultCategoryIcons()
         }
+
         binding.recyclerViewCategories.adapter = adapter
 
         binding.buttonSave.setOnClickListener {

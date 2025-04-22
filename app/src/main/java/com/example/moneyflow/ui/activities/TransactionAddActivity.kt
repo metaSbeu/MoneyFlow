@@ -27,7 +27,8 @@ class TransactionAddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransactionAddBinding
     private lateinit var adapter: CategoryAdapter
     private lateinit var viewModel: TransactionAddViewModel
-    private var selectedCategory: Category? = null
+//    private var selectedCategory: Category? = null
+    private lateinit var selectedCategory: Category
     private var isIncomeSelected = false
     private var selectedDateInMillis = System.currentTimeMillis()
 
@@ -73,7 +74,7 @@ class TransactionAddActivity : AppCompatActivity() {
 
             val transaction = Transaction(
                 id = 0,
-                categoryId = selectedCategory!!.id,
+                categoryId = selectedCategory.id,
                 walletId = 1,
                 sum = sumText.toDouble(),
                 isIncome = isIncomeSelected,
@@ -81,6 +82,11 @@ class TransactionAddActivity : AppCompatActivity() {
                 createdAt = selectedDateInMillis
             )
             viewModel.saveTransaction(transaction)
+        }
+
+        binding.textViewEditCategory.setOnClickListener {
+            val intent = EditCategoryActivity.newIntent(this, selectedCategory)
+            startActivity(intent)
         }
     }
 
