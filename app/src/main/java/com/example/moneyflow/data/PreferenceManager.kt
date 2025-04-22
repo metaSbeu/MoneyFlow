@@ -1,6 +1,7 @@
 package com.example.moneyflow.data
 
 import android.content.Context
+import androidx.core.content.edit
 
 object PreferenceManager {
 
@@ -14,6 +15,6 @@ object PreferenceManager {
 
     fun setDefaultCategories(context: Context) {
         val prefs = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putBoolean(KEY_DEFAULT_CATEGORIES_ADD, true).apply()
+        prefs.edit { putBoolean(KEY_DEFAULT_CATEGORIES_ADD, true) }
     }
 }

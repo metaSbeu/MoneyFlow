@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Single
 interface TransactionDao {
 
     @Query("SELECT * FROM transactions")
-    fun getTransaction(): LiveData<List<Transaction>>
+    fun getTransaction(): Single<List<Transaction>>
 
     @Insert(onConflict = REPLACE)
     fun insert(transaction: Transaction): Completable
@@ -21,5 +21,5 @@ interface TransactionDao {
     fun remove(id: Int): Completable
 
     @Query("SELECT * FROM transactions")
-    fun getAllWithCategory(): LiveData<List<TransactionWithCategory>>
+    fun getAllWithCategory(): Single<List<TransactionWithCategory>>
 }

@@ -1,5 +1,6 @@
 package com.example.moneyflow.data
 
+import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -10,7 +11,8 @@ data class Wallet(
     val id: Int = 0,
     val name: String,
     val balance: Int,
-    val icon: String,
+
+    @DrawableRes val iconResId: Int,
 
     val currency: String = "RUB",
     val type: String

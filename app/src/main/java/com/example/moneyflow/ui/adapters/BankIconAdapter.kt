@@ -9,8 +9,8 @@ import com.example.moneyflow.R
 import com.example.moneyflow.ui.adapters.BankIconAdapter.BankIconViewHolder
 
 class BankIconAdapter(
-    private val icons: List<String>, // список названий иконок, например: ["ic_sber", "ic_tinkoff"]
-    private val onIconClick: (String) -> Unit
+    private val icons: List<Int>,
+    private val onIconClick: (Int) -> Unit
 ): RecyclerView.Adapter<BankIconViewHolder>() {
 
     private var selectedPosition = RecyclerView.NO_POSITION
@@ -27,9 +27,8 @@ class BankIconAdapter(
         holder: BankIconViewHolder,
         position: Int
     ) {
-        val iconName = icons[position]
-        val context = holder.itemView.context
-        val iconResId = context.resources.getIdentifier(iconName, "drawable", context.packageName)
+
+        val iconResId = icons[position]
 
         holder.icon.setImageResource(iconResId)
 
@@ -45,7 +44,7 @@ class BankIconAdapter(
             notifyItemChanged(previous)
             notifyItemChanged(selectedPosition)
 
-            onIconClick(iconName)
+            onIconClick(iconResId)
         }
     }
 

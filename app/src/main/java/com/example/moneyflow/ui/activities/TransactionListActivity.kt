@@ -9,12 +9,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
-import com.example.moneyflow.data.MainDatabase
-import com.example.moneyflow.ui.adapters.TransactionAdapter
-import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
+import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
-import kotlin.random.Random
 
 class TransactionListActivity : AppCompatActivity() {
 
@@ -35,6 +32,11 @@ class TransactionListActivity : AppCompatActivity() {
         binding.recyclerViewTransactions.adapter = adapter
 
         setUpInsets()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshTransactions()
     }
 
     fun observeViewModels() {

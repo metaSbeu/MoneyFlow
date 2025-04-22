@@ -8,19 +8,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
-import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.databinding.ActivityCategoryAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.example.moneyflow.ui.viewmodels.CategoryAddViewModel
 
 class CategoryAddActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCategoryAddBinding
-    private lateinit var database: MainDatabase
     private lateinit var adapter: CategoryAdapter
+    private lateinit var viewModel: CategoryAddViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +27,6 @@ class CategoryAddActivity : AppCompatActivity() {
 
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        database = MainDatabase.getDb(application)
 
         var selectedCategory: Category? = null
         adapter = CategoryAdapter(
@@ -39,19 +36,21 @@ class CategoryAddActivity : AppCompatActivity() {
             {}, showAddButton = false
         )
 
-        adapter.categories = icons()
+        viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
+
+        viewModel.defaultIcons.observe(this) {
+            adapter.categories = viewModel.getUpDefaultCategoryIcons()
+        }
         binding.recyclerViewCategories.adapter = adapter
 
         binding.buttonSave.setOnClickListener {
             val name = binding.editTextName.text.toString().trim()
 
-            // Проверка на пустое имя
             if (name.isBlank()) {
                 Toast.makeText(this, "Введите название категории", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Проверка на отсутствие выбранной иконки
             val icon = selectedCategory?.iconResId
             if (icon == null) {
                 Toast.makeText(this, "Выберите иконку категории", Toast.LENGTH_SHORT).show()
@@ -60,41 +59,18 @@ class CategoryAddActivity : AppCompatActivity() {
 
             val category = Category(name = name, iconResId = icon, isIncome = false)
 
-            database.categoryDao().insert(category)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+            viewModel.addCategory(category)
 
-            finish()
+        }
+        viewModel.shouldCloseScreen.observe(this) { shouldCloseScreen ->
+            if (shouldCloseScreen) {
+                finish()
+            }
         }
         setupInsets()
     }
 
-    fun icons(): List<Category> {
-        val categories = listOf<Category>(
-            Category(name = "", iconResId = R.drawable.ic_movie, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_game, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_sport, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_food, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_pet, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_fruit, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_clothes, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_shoe, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_diamond, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_furniture, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_music, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_computer, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_bicycle, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_wifi, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_car, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_plane, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_tooth, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_finance, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_family, isIncome = false),
-            Category(name = "", iconResId = R.drawable.ic_train_bus, isIncome = false),
-        )
-        return categories
-    }
+
 
     fun setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
