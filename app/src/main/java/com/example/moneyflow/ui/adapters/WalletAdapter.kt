@@ -46,18 +46,9 @@ class WalletAdapter(
             holder.textViewWalletName.text = wallet.name
             holder.textViewWalletBalance.text = wallet.balance.toString()
 
-            // Получаем ID ресурса для иконки из имени, которое хранится в базе данных
-            val iconResId = holder.itemView.context.resources.getIdentifier(
-                wallet.icon, // имя ресурса, например "logo_sber"
-                "drawable", // тип ресурса
-                holder.itemView.context.packageName // имя пакета
-            )
-
-            // Устанавливаем иконку
-            if (iconResId != 0) { // Проверяем, что иконка найдена
-                holder.imageViewIcon.setImageResource(iconResId)
+            if (wallet.iconResId != 0) {
+                holder.imageViewIcon.setImageResource(wallet.iconResId)
             } else {
-                // Если иконка не найдена, можно установить дефолтную
                 holder.imageViewIcon.setImageResource(R.drawable.ic_bank)
             }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.Wallet
@@ -17,20 +18,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var adapter: WalletAdapter
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var database: MainDatabase
+    private lateinit var viewmodel: HomeViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        database = MainDatabase.getDb(requireActivity().application)
-
+        viewmodel = ViewModelProvider(this)[HomeViewModel::class.java]
         adapter = WalletAdapter(
             {},
             {
                 startActivity(AddWalletActivity.newIntent(requireContext()))
             })
-        adapter.wallets = database.walletDao().getWallets()
+
+        viewmodel.wallets.observe(viewLifecycleOwner) {
+            adapter.wallets = it
+        }
+
         binding.recyclerViewWallets.adapter = adapter
 
         clickListeners()
@@ -38,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onResume() {
         super.onResume()
-        adapter.wallets = database.walletDao().getWallets()
+        viewmodel.refreshList()
     }
 
     fun clickListeners() {
@@ -53,12 +57,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-//    private fun testWallets(): List<Wallet> {
-//        val wallets = mutableListOf<Wallet>()
-//        repeat(10) {
-//            val wallet = Wallet(it, "Wallet ${it + 1}: ", it * 1000)
-//            wallets.add(wallet)
-//        }
-//        return wallets
-//    }
 }

@@ -84,6 +84,11 @@ class TransactionAddActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshCategories()
+    }
+
     fun observeViewModel() {
         viewModel.categories.observe(this) {
             adapter.categories = it

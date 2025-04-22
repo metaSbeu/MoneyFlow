@@ -10,6 +10,7 @@ import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel.Companion.TAG
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -99,20 +100,18 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             Category(name = "Подарки", iconResId = R.drawable.ic_gift, isIncome = false),
             Category(name = "Продукты", iconResId = R.drawable.ic_grocery, isIncome = false)
         )
-        val count = database.categoryDao().getCount()
-        if (count == 0) {
-            val disposable = database.categoryDao().insertAll(defaultCategories)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-
-                    },
-                    {
-                        Log.d(TAG, it.toString())
-                    })
-            compositeDisposable.add(disposable)
-        }
+        val disposable = database.categoryDao().getCount()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapCompletable { count ->
+                if (count == 0) {
+                    database.categoryDao().insertAll(defaultCategories)
+                } else {
+                    Completable.complete()
+                }
+            }
+            .subscribe()
+        compositeDisposable.add(disposable)
     }
 
     override fun onCleared() {

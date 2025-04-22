@@ -10,6 +10,7 @@ data class Category(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
+
     @DrawableRes val iconResId: Int,
 
     val isIncome: Boolean
