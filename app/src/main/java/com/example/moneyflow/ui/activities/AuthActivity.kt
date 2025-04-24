@@ -50,7 +50,7 @@ class AuthActivity : AppCompatActivity() {
         setUpIndicators()
         setUpNumberPadClickListeners()
         setupObservers()
-        insertDefaultCategories()
+        insertDefaultDbData()
 
         binding.buttonErase.setOnClickListener {
             vibrate(50)
@@ -66,9 +66,10 @@ class AuthActivity : AppCompatActivity() {
         fingerprintAuth()
     }
 
-    fun insertDefaultCategories() {
+    fun insertDefaultDbData() {
         if (!PreferenceManager.areDefaultCategoriesAdded(this)) {
             viewModel.insertDefaultCategories()
+            viewModel.insertDefaultWallets()
             PreferenceManager.setDefaultCategories(this)
         }
     }

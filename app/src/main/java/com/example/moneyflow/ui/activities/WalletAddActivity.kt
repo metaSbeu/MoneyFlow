@@ -9,20 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moneyflow.R
-import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.Wallet
-import com.example.moneyflow.databinding.ActivityAddWalletBinding
+import com.example.moneyflow.databinding.ActivityWalletAddBinding
 import com.example.moneyflow.ui.adapters.BankIconAdapter
-import com.example.moneyflow.ui.adapters.CategoryAdapter
-import com.example.moneyflow.ui.adapters.WalletAdapter
-import com.example.moneyflow.ui.viewmodels.AddWalletViewModel
+import com.example.moneyflow.ui.viewmodels.WalletAddViewModel
 
-class AddWalletActivity : AppCompatActivity() {
+class WalletAddActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddWalletBinding
-    private lateinit var viewModel: AddWalletViewModel
+    private lateinit var binding: ActivityWalletAddBinding
+    private lateinit var viewModel: WalletAddViewModel
 
     private var selectedIconResId: Int? = null
 
@@ -30,11 +26,11 @@ class AddWalletActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityAddWalletBinding.inflate(layoutInflater)
+        binding = ActivityWalletAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupInsets()
 
-        viewModel = ViewModelProvider(this)[AddWalletViewModel::class.java]
+        viewModel = ViewModelProvider(this)[WalletAddViewModel::class.java]
 
         val adapter = BankIconAdapter(
             icons = listOf(R.drawable.logo_sber, R.drawable.logo_alfa, R.drawable.logo_t_bank),
@@ -60,9 +56,8 @@ class AddWalletActivity : AppCompatActivity() {
 
             val wallet = Wallet(
                 name = name,
-                balance = balanceText.toInt(),
-                iconResId = selectedIconResId!!,
-                type = "Cash"
+                balance = balanceText.toDouble(),
+                iconResId = selectedIconResId!!
             )
 
             viewModel.addWallet(wallet)
@@ -84,7 +79,7 @@ class AddWalletActivity : AppCompatActivity() {
 
     companion object {
         fun newIntent(context: Context): Intent {
-            val intent = Intent(context, AddWalletActivity::class.java)
+            val intent = Intent(context, WalletAddActivity::class.java)
             return intent
         }
     }

@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class AddWalletViewModel(application: Application) : AndroidViewModel(application) {
+class WalletAddViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = MainDatabase.getDb(application)
     private val compositeDisposable = CompositeDisposable()

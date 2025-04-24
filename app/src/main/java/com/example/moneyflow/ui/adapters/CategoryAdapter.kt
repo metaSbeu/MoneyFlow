@@ -12,7 +12,9 @@ import com.example.moneyflow.data.Category
 class CategoryAdapter(
     private val onItemClick: (Category) -> Unit,
     private val onAddClick: () -> Unit,
-    private val showAddButton: Boolean = true
+    private val showAddButton: Boolean = true,
+    private val isIncome: Boolean,
+    private val onFirstCategorySelected: ((Category) -> Unit)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_CATEGORY = 0
@@ -22,6 +24,12 @@ class CategoryAdapter(
     var categories = listOf<Category>()
         set(value) {
             field = value
+            if (value.isNotEmpty()) {
+                selectedPosition = 0
+                onFirstCategorySelected?.invoke(value[0]) // 👈 сообщаем в активити
+            } else {
+                selectedPosition = RecyclerView.NO_POSITION
+            }
             notifyDataSetChanged()
         }
 

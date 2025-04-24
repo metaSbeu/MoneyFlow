@@ -1,8 +1,8 @@
 package com.example.moneyflow.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import io.reactivex.rxjava3.core.Completable
@@ -19,4 +19,16 @@ interface WalletDao {
 
     @Query("DELETE FROM wallets WHERE id = :id")
     fun delete(id: Int): Completable
+
+    @Query("SELECT COUNT(*) FROM wallets")
+    fun getCount(): Single<Int>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertAll(wallet: List<Wallet>): Completable
+
+    @Query("SELECT * FROM wallets WHERE id = :walletId LIMIT 1")
+    fun getWalletById(walletId: Int): Single<Wallet>
+
+    @androidx.room.Update
+    fun update(wallet: Wallet): Completable
 }

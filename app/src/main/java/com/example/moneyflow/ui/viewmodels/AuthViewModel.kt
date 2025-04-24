@@ -1,14 +1,12 @@
 package com.example.moneyflow.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.moneyflow.R
-import com.example.moneyflow.data.Category
+import com.example.moneyflow.data.DefaultCategories
+import com.example.moneyflow.data.DefaultWallets
 import com.example.moneyflow.data.MainDatabase
-import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel.Companion.TAG
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -91,21 +89,33 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun insertDefaultCategories() {
-        val defaultCategories = listOf(
-            Category(name = "Здоровье", iconResId = R.drawable.ic_health, isIncome = false),
-            Category(name = "Развлечения", iconResId = R.drawable.ic_leisure, isIncome = false),
-            Category(name = "Дом", iconResId = R.drawable.ic_home, isIncome = false),
-            Category(name = "Кафе", iconResId = R.drawable.ic_cafe, isIncome = false),
-            Category(name = "Образование", iconResId = R.drawable.ic_education, isIncome = false),
-            Category(name = "Подарки", iconResId = R.drawable.ic_gift, isIncome = false),
-            Category(name = "Продукты", iconResId = R.drawable.ic_grocery, isIncome = false)
-        )
+        val defaultExpenseCategories = DefaultCategories.defaultExpenseCategories
+        val defaultIncomeCategories = DefaultCategories.defaultIncomeCategories
+        val default = defaultExpenseCategories + defaultIncomeCategories
+
         val disposable = database.categoryDao().getCount()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapCompletable { count ->
                 if (count == 0) {
-                    database.categoryDao().insertAll(defaultCategories)
+                    database.categoryDao().insertAll(default)
+                } else {
+                    Completable.complete()
+                }
+            }
+            .subscribe()
+        compositeDisposable.add(disposable)
+    }
+
+    fun insertDefaultWallets() {
+        val defaultWallets = DefaultWallets.defaultWallets
+
+        val disposable = database.walletDao().getCount()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapCompletable { count ->
+                if (count == 0) {
+                    database.walletDao().insertAll(defaultWallets)
                 } else {
                     Completable.complete()
                 }

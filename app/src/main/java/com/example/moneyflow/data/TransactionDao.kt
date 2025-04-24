@@ -22,4 +22,10 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions")
     fun getAllWithCategory(): Single<List<TransactionWithCategory>>
+
+    @androidx.room.Update
+    fun update(transaction: Transaction): Completable
+
+    @Query("SELECT * FROM transactions WHERE id = :transactionId LIMIT 1")
+    fun getTransactionById(transactionId: Int): Single<Transaction>
 }

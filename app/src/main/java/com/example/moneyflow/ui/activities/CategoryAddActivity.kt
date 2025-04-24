@@ -20,6 +20,8 @@ class CategoryAddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCategoryAddBinding
     private lateinit var adapter: CategoryAdapter
     private lateinit var viewModel: CategoryAddViewModel
+    private lateinit var selectedCategory: Category
+    private var isIncome: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +30,14 @@ class CategoryAddActivity : AppCompatActivity() {
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var selectedCategory: Category? = null
+        isIncome = intent.getBooleanExtra(EXTRA_IS_INCOME_CATEGORY, false)
+
         adapter = CategoryAdapter(
             {
                 selectedCategory = it
             },
             {}, showAddButton = false
+            , isIncome = isIncome!!
         )
 
         viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
@@ -41,6 +45,7 @@ class CategoryAddActivity : AppCompatActivity() {
         viewModel.defaultIcons.observe(this) {
             adapter.categories = viewModel.getUpDefaultCategoryIcons()
         }
+
         binding.recyclerViewCategories.adapter = adapter
 
         binding.buttonSave.setOnClickListener {
@@ -57,7 +62,7 @@ class CategoryAddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val category = Category(name = name, iconResId = icon, isIncome = false)
+            val category = Category(name = name, iconResId = icon, isIncome = isIncome ?: false)
 
             viewModel.addCategory(category)
 
@@ -70,8 +75,6 @@ class CategoryAddActivity : AppCompatActivity() {
         setupInsets()
     }
 
-
-
     fun setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -81,8 +84,12 @@ class CategoryAddActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, CategoryAddActivity::class.java)
+        const val EXTRA_IS_INCOME_CATEGORY = "isIncome"
+
+        fun newIntent(context: Context, isIncome: Boolean): Intent {
+            val intent = Intent(context, CategoryAddActivity::class.java)
+            intent.putExtra(EXTRA_IS_INCOME_CATEGORY, isIncome)
+            return intent
         }
     }
 }
