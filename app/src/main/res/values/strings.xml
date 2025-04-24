@@ -21,7 +21,7 @@
     <string name="auth_negative_button_text">Ввести пароль</string>
     <string name="username">Username</string>
     <string name="wallet">Счет: %s</string>
-    <string name="balance">Баланс: %d</string>
+    <string name="balance">Баланс: %s ₽</string>
     <string name="all_expenses">Траты</string>
     <string name="current_month">В %s</string>
     <string name="sum_currency">%d %s</string>
@@ -55,6 +55,12 @@
     <string name="removal">Удаление</string>
     <string name="remove">Удалить</string>
     <string name="cancel">Отмена</string>
+    <string name="current_wallet">Выбранный счет</string>
+    <string name="all_wallets">Все счета</string>
+    <string name="wallet_main_info">%s: %s ₽</string>
+    <string name="wallet_edit_title">Редактирование счета</string>
+    <string name="transaction_edit_title">Редактирование транзакции</string>
+    <string name="wallet_name_wallet_balance">%s: %s</string>
 
     <string-array name="themes">
         <item>Светлая</item>

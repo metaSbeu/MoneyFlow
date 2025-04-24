@@ -12,7 +12,9 @@ import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.TransactionWithCategory
 import kotlin.time.Duration.Companion.nanoseconds
 
-class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(
+    private val onItemClick: (Transaction) -> Unit
+): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     var transactions = listOf<TransactionWithCategory>()
         set(value) {
@@ -46,6 +48,10 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
         }
         val color = ContextCompat.getColor(holder.itemView.context, colorResId)
         holder.textViewAmount.setTextColor(color)
+
+        holder.itemView.setOnClickListener {
+            onItemClick(transaction)
+        }
     }
 
     override fun getItemCount(): Int {

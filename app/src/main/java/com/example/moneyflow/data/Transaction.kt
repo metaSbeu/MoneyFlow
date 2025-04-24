@@ -1,6 +1,7 @@
 package com.example.moneyflow.data
 
 import androidx.room.*
+import java.io.Serializable
 
 @Entity(
     tableName = "transactions",
@@ -33,4 +34,4 @@ data class Transaction(
 
     val note: String?,
     val createdAt: Long = System.currentTimeMillis()
-)
+) : Serializable

@@ -16,10 +16,16 @@
         android:theme="@style/Theme.MoneyFlow"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.EditCategoryActivity"
+            android:name=".ui.activities.TransactionEditActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.AddWalletActivity"
+            android:name=".ui.activities.WalletEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.CategoryEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.WalletAddActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.CategoryAddActivity"
@@ -43,7 +49,7 @@
         </activity>
         <activity
             android:name=".ui.activities.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

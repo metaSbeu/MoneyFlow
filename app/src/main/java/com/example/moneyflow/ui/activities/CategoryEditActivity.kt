@@ -12,26 +12,26 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.IconsManager
-import com.example.moneyflow.databinding.ActivityEditCategoryBinding
+import com.example.moneyflow.databinding.ActivityCategoryEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
-import com.example.moneyflow.ui.viewmodels.EditCategoryViewModel
+import com.example.moneyflow.ui.viewmodels.CategoryEditViewModel
 
-class EditCategoryActivity : AppCompatActivity() {
+class CategoryEditActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEditCategoryBinding
+    private lateinit var binding: ActivityCategoryEditBinding
     private lateinit var adapter: CategoryAdapter
     private lateinit var selectedCategory: Category
-    private lateinit var viewModel: EditCategoryViewModel
+    private lateinit var viewModel: CategoryEditViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityEditCategoryBinding.inflate(layoutInflater)
+        binding = ActivityCategoryEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupInsets()
 
-        viewModel = ViewModelProvider(this)[EditCategoryViewModel::class.java]
+        viewModel = ViewModelProvider(this)[CategoryEditViewModel::class.java]
 
         val categoryFromIntent = intent.getSerializableExtra(EXTRA_CATEGORY) as? Category
         if (categoryFromIntent != null) {
@@ -48,7 +48,8 @@ class EditCategoryActivity : AppCompatActivity() {
 //                adapter.notifyDataSetChanged()
             },
             {},
-            showAddButton = false
+            showAddButton = false,
+            isIncome = false
         )
 
         adapter.categories = IconsManager.getAllCategoryExpenseIcons()
@@ -101,7 +102,7 @@ class EditCategoryActivity : AppCompatActivity() {
         const val EXTRA_CATEGORY = "category"
 
         fun newIntent(context: Context, category: Category): Intent {
-            val intent = Intent(context, EditCategoryActivity::class.java)
+            val intent = Intent(context, CategoryEditActivity::class.java)
             intent.putExtra(EXTRA_CATEGORY, category)
             return intent
         }

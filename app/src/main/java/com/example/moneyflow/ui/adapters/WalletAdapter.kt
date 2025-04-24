@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Wallet
@@ -43,8 +44,8 @@ class WalletAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is WalletViewHolder) {
             val wallet = wallets[position]
-            holder.textViewWalletName.text = wallet.name
-            holder.textViewWalletBalance.text = wallet.balance.toString()
+            val rounded = String.format("%.2f", wallet.balance)
+            holder.textViewWalletNameAndBalance.text = holder.itemView.context.getString(R.string.wallet_main_info, wallet.name, rounded)
 
             if (wallet.iconResId != 0) {
                 holder.imageViewIcon.setImageResource(wallet.iconResId)
@@ -52,9 +53,27 @@ class WalletAdapter(
                 holder.imageViewIcon.setImageResource(R.drawable.ic_bank)
             }
 
+            // Установка выделенного фона
+            holder.cardRoot.setBackgroundResource(
+                if (holder.adapterPosition == selectedPosition) R.drawable.bg_wallet_selected
+                else R.drawable.bg_wallet_normal
+            )
+
+            // Обработка нажатия
+            holder.itemView.setOnClickListener {
+                val previousPosition = selectedPosition
+                selectedPosition = holder.adapterPosition
+                notifyItemChanged(previousPosition)
+                notifyItemChanged(selectedPosition)
+
+                onItemClick(wallet)
+            }
+
         } else if (holder is AddButtonViewHolder) {
             holder.textViewName.text = "Создать новый счет"
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
+
+            holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
 
             holder.itemView.setOnClickListener {
                 onAddClick()
@@ -67,9 +86,9 @@ class WalletAdapter(
     }
 
     class WalletViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageViewIcon: ImageView = itemView.findViewById<ImageView>(R.id.imageViewWalletIcon)
-        val textViewWalletName: TextView = itemView.findViewById<TextView>(R.id.textViewWalletName)
-        val textViewWalletBalance: TextView = itemView.findViewById<TextView>(R.id.textViewWalletBalance)
+        val cardRoot: CardView = itemView.findViewById(R.id.cardRoot)
+        val imageViewIcon: ImageView = itemView.findViewById(R.id.imageViewWalletIcon)
+        val textViewWalletNameAndBalance: TextView = itemView.findViewById(R.id.textViewWalletName)
     }
 
     class AddButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
