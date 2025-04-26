@@ -40,8 +40,10 @@ class TransactionAddActivity : AppCompatActivity() {
 
         binding = ActivityTransactionAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this)[TransactionAddViewModel::class.java]
         setupInsets()
+
+        viewModel = ViewModelProvider(this)[TransactionAddViewModel::class.java]
+
         setupToggleGroup()
         setTodayDate()
 
@@ -49,7 +51,6 @@ class TransactionAddActivity : AppCompatActivity() {
         viewModel.getWalletById(walletId)
 
         setupAdapters()
-
         binding.recyclerViewExpenseCategories.adapter = expenseAdapter
         binding.recyclerViewIncomeCategories.adapter = incomeAdapter
 
@@ -145,11 +146,9 @@ class TransactionAddActivity : AppCompatActivity() {
             expenseAdapter.categories = expenseCategories
             incomeAdapter.categories = incomeCategories
 
-            // Установка категории по умолчанию
             val defaultCategory = if (isIncomeSelected) incomeCategories.firstOrNull() else expenseCategories.firstOrNull()
             if (defaultCategory != null) {
                 selectedCategory = defaultCategory
-                // Можно вызвать notifyDataSetChanged(), если хочешь выделить её визуально
             }
         }
 

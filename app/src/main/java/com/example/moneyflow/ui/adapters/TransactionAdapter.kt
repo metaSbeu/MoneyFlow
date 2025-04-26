@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.TransactionWithCategory
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.time.Duration.Companion.nanoseconds
 
 class TransactionAdapter(
@@ -41,6 +43,17 @@ class TransactionAdapter(
         holder.imageViewIcon.setImageResource(category.iconResId)
         holder.textViewCategory.text = category.name
         holder.textViewAmount.text = transaction.sum.toString()
+        val note = transaction.note
+        holder.textViewComment.text = if (note.isNullOrBlank()) {
+            "<пусто>"
+        } else {
+            note
+        }
+
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) // Пример формата
+        val formattedDate = dateFormat.format(transaction.createdAt) // Преобразование временной метки в строку
+
+        holder.textViewDate.text = formattedDate
 
         val colorResId = when(transaction.isIncome) {
             true -> R.color.light_green
@@ -62,5 +75,7 @@ class TransactionAdapter(
         val imageViewIcon = itemView.findViewById<ImageView>(R.id.imageViewCategoryIcon)
         val textViewCategory = itemView.findViewById<TextView>(R.id.textViewCategoryName)
         val textViewAmount = itemView.findViewById<TextView>(R.id.textViewSum)
+        val textViewComment = itemView.findViewById<TextView>(R.id.textViewComment)
+        val textViewDate = itemView.findViewById<TextView>(R.id.textViewDate)
     }
 }

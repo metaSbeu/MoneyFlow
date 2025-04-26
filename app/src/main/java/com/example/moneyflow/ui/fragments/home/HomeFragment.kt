@@ -41,35 +41,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 startActivity(WalletAddActivity.newIntent(requireContext()))
             }
         )
+        setupItemTouchHelper()
+        viewmodel.wallets.observe(viewLifecycleOwner) {
+            adapter.wallets = it
+        }
+        viewmodel.overallBalance.observe(viewLifecycleOwner) {
+            val rounded = String.format("%.2f", it)
+            binding.textViewBalance.text = getString(R.string.balance, rounded)
+        }
+        binding.recyclerViewWallets.adapter = adapter
+        binding.textViewCurrentMonthExpenses.text = getString(R.string.current_month, getCurrentMonth())
+        binding.textViewCurrentMonthIncomes.text = getString(R.string.current_month, getCurrentMonth())
+        setupClickListeners()
+    }
 
-        // Свайп для удаления и редактирования
+    fun setupItemTouchHelper() {
         val itemTouchHelper = ItemTouchHelper(SwipeCallback(
             { position ->
-                // Действие при свайпе влево (удаление)
                 viewmodel.deleteWallet(adapter.wallets[position])
             },
             { position ->
-                // Действие при свайпе вправо (редактирование)
                 val wallet = adapter.wallets[position]
                 startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
             }
         ))
 
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
-
-        viewmodel.wallets.observe(viewLifecycleOwner) {
-            adapter.wallets = it
-        }
-
-        viewmodel.overallBalance.observe(viewLifecycleOwner) {
-            val rounded = String.format("%.2f", it)
-            binding.textViewBalance.text = getString(R.string.balance, rounded)
-        }
-
-        binding.recyclerViewWallets.adapter = adapter
-        binding.textViewCurrentMonthExpenses.text = getString(R.string.current_month, getCurrentMonth())
-        binding.textViewCurrentMonthIncomes.text = getString(R.string.current_month, getCurrentMonth())
-        clickListeners()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -96,10 +93,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewmodel.refreshWalletsList()
     }
 
-    fun clickListeners() {
+    fun setupClickListeners() {
         binding.cardViewAddTransaction.setOnClickListener {
             if (selectedWallet == null) {
-                // Показываем предупреждение, если не выбран кошелек
                 Toast.makeText(requireContext(), "Сначала выберите счет", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = TransactionAddActivity.newIntent(requireContext(), selectedWallet!!.id)

@@ -3,21 +3,38 @@ package com.example.moneyflow.ui.activities
 import android.os.Bundle
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Category
+import com.example.moneyflow.data.Transaction
+import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityTransactionEditBinding
+import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionEditViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TransactionEditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransactionEditBinding
     private lateinit var viewModel: TransactionEditViewModel
     private var transactionId: Int = 0
+
+    private lateinit var expenseAdapter: CategoryAdapter
+    private lateinit var incomeAdapter: CategoryAdapter
+
+    private var isIncomeSelected = false
+
+    private lateinit var selectedCategory: Category
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +54,10 @@ class TransactionEditActivity : AppCompatActivity() {
         // Наблюдаем за данными
         observeViewModel()
 
+        setupAdapters()
+        binding.recyclerViewExpenseCategories.adapter = expenseAdapter
+        binding.recyclerViewIncomeCategories.adapter = incomeAdapter
+
         // Сохраняем изменения
         binding.buttonSave.setOnClickListener {
             val sumText = binding.editTextNewSum.text.toString()
@@ -45,23 +66,137 @@ class TransactionEditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val updatedTransaction = viewModel.transaction.value?.copy(
+            // Получаем текущую транзакцию
+            val currentTransaction = viewModel.transaction.value ?: return@setOnClickListener
+
+            // Создаем обновленную транзакцию с новыми данными
+            val updatedTransaction = currentTransaction.copy(
                 sum = sumText.toDouble(),
-                note = binding.editTextNewComment.text.toString()
+                note = binding.editTextNewComment.text.toString(),
+                categoryId = selectedCategory.id // Добавляем обновленную категорию
             )
 
-            updatedTransaction?.let {
-                viewModel.updateTransaction(it)
-            }
+            viewModel.updateTransaction(updatedTransaction)
         }
+        binding.buttonDelete.setOnClickListener {
+            viewModel.deleteTransaction(transactionId)
+        }
+
+        binding.imageViewChangeWallet.setOnClickListener {
+            showWalletSelectionDialog()
+        }
+    }
+
+    private fun showWalletSelectionDialog() {
+        viewModel.getAllWallets { wallets ->
+            val walletNames = wallets.map { it.name }
+            val currentWalletId = viewModel.transaction.value?.walletId ?: 0
+
+            AlertDialog.Builder(this)
+                .setTitle("Выберите кошелек")
+                .setSingleChoiceItems(
+                    walletNames.toTypedArray(),
+                    wallets.indexOfFirst { it.id == currentWalletId }
+                ) { dialog, which ->
+                    val selectedWallet = wallets[which]
+                    updateWalletInTransaction(selectedWallet)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Отмена", null)
+                .show()
+        }
+    }
+
+    private fun updateWalletInTransaction(wallet: Wallet) {
+        val currentTransaction = viewModel.transaction.value ?: return
+        val updatedTransaction = currentTransaction.copy(walletId = wallet.id)
+        viewModel.updateTransactionWallet(updatedTransaction, wallet)
+
+        // Обновляем отображение кошелька
+        binding.imageViewWalletIcon.setImageResource(wallet.iconResId)
+        binding.textViewWalletName.text = wallet.name
+        binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
+    }
+
+    fun setupAdapters() {
+        expenseAdapter = CategoryAdapter(
+            onItemClick = {
+                selectedCategory = it
+            },
+            onAddClick = {
+                startActivity(CategoryAddActivity.newIntent(this, false))
+            },
+            showAddButton = true,
+            isIncome = false,
+            onFirstCategorySelected = {
+                selectedCategory = it
+            }
+        )
+
+        incomeAdapter = CategoryAdapter(
+            onItemClick = {
+                selectedCategory = it
+            },
+            onAddClick = {
+                startActivity(CategoryAddActivity.newIntent(this, true))
+            },
+            showAddButton = true,
+            isIncome = true,
+            onFirstCategorySelected = {
+                selectedCategory = it
+            }
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshCategories()
     }
 
     private fun observeViewModel() {
         viewModel.transaction.observe(this) { transaction ->
-            if (transaction != null) {
-                binding.editTextNewSum.setText(transaction.sum.toString())
-                binding.editTextNewComment.setText(transaction.note)
-                // Устанавливаем категорию или другие данные
+            // Заполняем поля для редактирования
+            binding.editTextNewSum.setText(transaction.sum.toString())
+            binding.editTextNewComment.setText(transaction.note)
+
+            // Определяем тип транзакции (доход/расход)
+            isIncomeSelected = transaction.isIncome
+
+            if (transaction.isIncome) {
+                binding.recyclerViewIncomeCategories.visibility = View.VISIBLE
+                binding.recyclerViewExpenseCategories.visibility = View.GONE
+            } else {
+                binding.recyclerViewIncomeCategories.visibility = View.GONE
+                binding.recyclerViewExpenseCategories.visibility = View.VISIBLE
+            }
+
+            // Загружаем категорию транзакции
+            viewModel.getCategoryById(transaction.categoryId) { category ->
+                category?.let {
+                    // Загружаем кошелек транзакции
+                    viewModel.getWalletById(transaction.walletId) { wallet ->
+                        wallet?.let {
+                            setupOldTransaction(transaction, it, category)
+                        }
+                    }
+                }
+            }
+        }
+
+        viewModel.categories.observe(this) { categories ->
+            val expenseCategories = categories.filter { !it.isIncome }
+            val incomeCategories = categories.filter { it.isIncome }
+
+            expenseAdapter.categories = expenseCategories
+            incomeAdapter.categories = incomeCategories
+
+            // Устанавливаем выбранную категорию на основе текущей транзакции
+            viewModel.transaction.value?.let { transaction ->
+                val targetCategories =
+                    if (transaction.isIncome) incomeCategories else expenseCategories
+                selectedCategory = targetCategories.find { it.id == transaction.categoryId }
+                    ?: targetCategories.firstOrNull()
+                            ?: return@let
             }
         }
 
@@ -71,6 +206,35 @@ class TransactionEditActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setupOldTransaction(transaction: Transaction, wallet: Wallet, category: Category) {
+        // Устанавливаем сумму с правильным знаком и цветом
+        val sumText = if (transaction.isIncome) "+${transaction.sum} ₽" else "-${transaction.sum} ₽"
+        binding.textViewOldSum.text = sumText
+        binding.textViewOldSum.setTextColor(
+            ContextCompat.getColor(
+                this,
+                if (transaction.isIncome) R.color.light_green else R.color.light_red
+            )
+        )
+
+        // Устанавливаем дату в формате "dd.MM.yyyy"
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        binding.textViewOldDate.text = "Дата: ${dateFormat.format(Date(transaction.createdAt))}"
+
+        // Устанавливаем комментарий
+        binding.textViewOldComment.text = "Комментарий: ${transaction.note ?: "нет"}"
+
+        // Устанавливаем данные категории
+        binding.textViewOldCategoryName.text = category.name
+        binding.imageViewCategoryOldIcon.setImageResource(category.iconResId)
+
+        // Устанавливаем данные кошелька
+        binding.imageViewWalletIcon.setImageResource(wallet.iconResId)
+        binding.textViewWalletName.text = wallet.name
+        binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
+    }
+
 
     private fun setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -90,3 +254,4 @@ class TransactionEditActivity : AppCompatActivity() {
         }
     }
 }
+
