@@ -1,6 +1,5 @@
 package com.example.moneyflow.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
@@ -12,7 +11,7 @@ import io.reactivex.rxjava3.core.Single
 interface TransactionDao {
 
     @Query("SELECT * FROM transactions")
-    fun getTransaction(): Single<List<Transaction>>
+    fun getTransactions(): Single<List<Transaction>>
 
     @Insert(onConflict = REPLACE)
     fun insert(transaction: Transaction): Completable
