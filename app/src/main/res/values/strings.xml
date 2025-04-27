@@ -36,7 +36,7 @@
     <string name="income">Доход</string>
     <string name="sum">Сумма</string>
     <string name="comment">Комментарий</string>
-    <string name="period">Период:</string>
+    <string name="period">Период: %s - %s</string>
     <string name="transaction_history">История транзакций</string>
     <string name="Theme">Тема</string>
     <string name="currency">Валюта</string>

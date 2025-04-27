@@ -27,4 +27,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions WHERE id = :transactionId LIMIT 1")
     fun getTransactionById(transactionId: Int): Single<Transaction>
+
+    @Query("SELECT * FROM transactions WHERE walletId = :walletId")
+    fun getTransactionsByWalletIdWithCategory(walletId: Int): Single<List<TransactionWithCategory>>
 }

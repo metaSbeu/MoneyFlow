@@ -9,6 +9,9 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Wallet
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class WalletAdapter(
     private val onItemClick: (Wallet) -> Unit,
@@ -72,9 +75,13 @@ class WalletAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is WalletViewHolder) {
             val wallet = wallets[position]
-            val rounded = String.format("%.2f", wallet.balance)
+            val formatted = wallet.balance.formatWithSpaces()
             holder.textViewWalletNameAndBalance.text =
-                holder.itemView.context.getString(R.string.wallet_main_info, wallet.name, rounded)
+                holder.itemView.context.getString(
+                    R.string.wallet_main_info,
+                    wallet.name,
+                    formatted
+                )
 
             if (wallet.iconResId != 0) {
                 holder.imageViewIcon.setImageResource(wallet.iconResId)
@@ -110,6 +117,14 @@ class WalletAdapter(
                 onAddClick()
             }
         }
+    }
+
+    private fun Double.formatWithSpaces(): String {
+        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
+            groupingSize = 3
+            isDecimalSeparatorAlwaysShown = false
+        }
+        return formatter.format(this)
     }
 
     override fun getItemCount(): Int {

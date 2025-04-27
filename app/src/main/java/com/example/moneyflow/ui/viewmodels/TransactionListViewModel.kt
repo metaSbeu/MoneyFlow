@@ -21,21 +21,45 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
 
     private val compositeDisposable = CompositeDisposable()
 
-    fun refreshTransactions() {
-        val disposable = database.transactionDao().getAllWithCategory()
+    private var allTransactions: List<TransactionWithCategory> = emptyList()
+
+    private val _categories = MutableLiveData<List<String>>()
+    val categories: LiveData<List<String>> get() = _categories
+
+    fun loadTransactions(walletId: Int? = null) {
+        val disposable = if (walletId == null) {
+            database.transactionDao().getAllWithCategory()
+        } else {
+            database.transactionDao().getTransactionsByWalletIdWithCategory(walletId)
+        }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    _transactions.value = it
-                    Log.d(TAG, "refreshCategories: success")
+                { transactions ->
+                    allTransactions = transactions
+                    _transactions.value = transactions
+
+                    // Заполняем категории
+                    val uniqueCategories = transactions.mapNotNull { it.category.name }.distinct()
+                    _categories.value = uniqueCategories
+
+                    Log.d(TAG, "loadTransactions: success, count = ${transactions.size}")
                 },
-                {
-                    Log.d(TAG, it.toString())
+                { error ->
+                    Log.e(TAG, "loadTransactions error: ${error.message}")
                 }
             )
         compositeDisposable.add(disposable)
     }
+
+    fun filterTransactionsByCategory(category: String) {
+        if (category == "Все категории") {
+            _transactions.value = allTransactions
+        } else {
+            _transactions.value = allTransactions.filter { it.category.name == category }
+        }
+    }
+
 
     override fun onCleared() {
         super.onCleared()
