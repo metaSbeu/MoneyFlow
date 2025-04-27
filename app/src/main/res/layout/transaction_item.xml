@@ -55,7 +55,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@+id/textViewCategoryName"
             app:layout_constraintTop_toBottomOf="@+id/textViewCategoryName"
-            android:text="Комментарий: %s" />
+            android:text="@string/comment_s" />
 
         <TextView
             android:id="@+id/textViewDate"

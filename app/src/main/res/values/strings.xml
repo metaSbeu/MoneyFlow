@@ -62,6 +62,10 @@
     <string name="transaction_edit_title">Редактирование транзакции</string>
     <string name="wallet_name_wallet_balance">%s: %s</string>
     <string name="choose_all">Выбрать все</string>
+    <string name="expenses_sum">%s ₽</string>
+    <string name="expenses">Расходы</string>
+    <string name="incomes">Доходы</string>
+    <string name="comment_s">Комментарий: %s</string>
 
     <string-array name="themes">
         <item>Светлая</item>

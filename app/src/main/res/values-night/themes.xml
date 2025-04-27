@@ -1,7 +1,27 @@
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
+<!--    <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your dark theme here. &ndash;&gt;-->
+<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_dark_primary</item> &ndash;&gt;-->
+<!--        <item name="android:windowBackground">@color/black</item>-->
+<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+<!--        <item name="colorPrimary">@color/light_blue</item>-->
+<!--        <item name="android:textColorPrimary">@color/white</item>-->
+<!--        <item name="android:textColorSecondary">@color/white</item>-->
+<!--        <item name="colorOnPrimary">@color/white</item>-->
+<!--    </style>-->
+<!--</resources>-->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Тема приложения, которая автоматически переключается между светлой и темной -->
     <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Настройки для темной темы -->
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:navigationBarColor">@color/gray</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="colorPrimary">@color/light_blue</item> <!-- Основной цвет -->
+        <item name="android:textColorPrimary">@color/white</item> <!-- Цвет основного текста -->
+        <item name="android:textColorSecondary">@color/white</item> <!-- Цвет вторичного текста -->
+        <item name="colorOnPrimary">@color/white</item> <!-- Цвет текста на фоне colorPrimary -->
     </style>
 </resources>

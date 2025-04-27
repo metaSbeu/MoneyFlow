@@ -88,18 +88,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/all_expenses"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:text="@string/expenses"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewExpenses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    tools:text="20 000 ₽" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -127,18 +118,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/all_incomes"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:text="@string/incomes"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewIncomes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    tools:text="20 000 ₽" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -162,16 +144,17 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingHorizontal="8dp"
-            android:paddingVertical="11dp"
+            android:paddingVertical="8dp"
             app:layout_constraintEnd_toStartOf="@id/buttonDate"
             app:layout_constraintTop_toBottomOf="@+id/textViewTransactionHistory"
             app:layout_constraintStart_toStartOf="@id/cardViewBalance"
             tools:ignore="RtlSymmetry">
 
             <TextView
+                android:id="@+id/textViewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/period"
+                android:text="Период не выбран"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 

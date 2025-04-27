@@ -45,10 +45,11 @@ class TransactionAdapter(
         holder.textViewAmount.text = transaction.sum.toString()
         val note = transaction.note
         holder.textViewComment.text = if (note.isNullOrBlank()) {
-            "<пусто>"
+            holder.itemView.context.getString(R.string.comment_s, "<пусто>") // Default string from resources
         } else {
-            note
+            holder.itemView.context.getString(R.string.comment_s, note)
         }
+
 
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) // Пример формата
         val formattedDate = dateFormat.format(transaction.createdAt) // Преобразование временной метки в строку
