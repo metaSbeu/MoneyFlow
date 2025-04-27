@@ -15,8 +15,10 @@ class WalletAdapter(
     private val onAddClick: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val TYPE_WALLET = 0
-    private val TYPE_ADD_BUTTON = 1
+    companion object{
+        private val TYPE_WALLET = 0
+        internal val TYPE_ADD_BUTTON = 1
+    }
 
     private var selectedPosition = RecyclerView.NO_POSITION
     var wallets: List<Wallet> = listOf<Wallet>()
@@ -24,6 +26,32 @@ class WalletAdapter(
             field = value
             notifyDataSetChanged()
         }
+
+    private var isAllSelected = false
+
+    fun selectAll() {
+        isAllSelected = true
+        selectedPosition = RecyclerView.NO_POSITION
+        notifyDataSetChanged()
+    }
+
+    fun selectWallet(wallet: Wallet) {
+        val position = wallets.indexOfFirst { it.id == wallet.id }
+        if (position != -1) {
+            isAllSelected = false
+            val prevSelected = selectedPosition
+            selectedPosition = position
+            if (prevSelected != RecyclerView.NO_POSITION) {
+                notifyItemChanged(prevSelected)
+            }
+            notifyItemChanged(selectedPosition)
+        }
+    }
+
+    fun deselectAll() {
+        isAllSelected = false
+        notifyDataSetChanged()
+    }
 
     override fun getItemViewType(position: Int): Int {
         return if (position < wallets.size) TYPE_WALLET else TYPE_ADD_BUTTON
@@ -45,7 +73,8 @@ class WalletAdapter(
         if (holder is WalletViewHolder) {
             val wallet = wallets[position]
             val rounded = String.format("%.2f", wallet.balance)
-            holder.textViewWalletNameAndBalance.text = holder.itemView.context.getString(R.string.wallet_main_info, wallet.name, rounded)
+            holder.textViewWalletNameAndBalance.text =
+                holder.itemView.context.getString(R.string.wallet_main_info, wallet.name, rounded)
 
             if (wallet.iconResId != 0) {
                 holder.imageViewIcon.setImageResource(wallet.iconResId)
@@ -55,17 +84,19 @@ class WalletAdapter(
 
             // Установка выделенного фона
             holder.cardRoot.setBackgroundResource(
-                if (holder.adapterPosition == selectedPosition) R.drawable.bg_wallet_selected
-                else R.drawable.bg_wallet_normal
+                when {
+                    isAllSelected -> R.drawable.bg_wallet_selected
+                    position == selectedPosition -> R.drawable.bg_wallet_selected
+                    else -> R.drawable.bg_wallet_normal
+                }
             )
 
-            // Обработка нажатия
             holder.itemView.setOnClickListener {
-                val previousPosition = selectedPosition
-                selectedPosition = holder.adapterPosition
-                notifyItemChanged(previousPosition)
+                isAllSelected = false
+                val prevSelected = selectedPosition
+                selectedPosition = position
+                notifyItemChanged(prevSelected)
                 notifyItemChanged(selectedPosition)
-
                 onItemClick(wallet)
             }
 

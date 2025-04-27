@@ -26,7 +26,7 @@ class CategoryAdapter(
             field = value
             if (value.isNotEmpty()) {
                 selectedPosition = 0
-                onFirstCategorySelected?.invoke(value[0]) // 👈 сообщаем в активити
+                onFirstCategorySelected?.invoke(value[0])
             } else {
                 selectedPosition = RecyclerView.NO_POSITION
             }

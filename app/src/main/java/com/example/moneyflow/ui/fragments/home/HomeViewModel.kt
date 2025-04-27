@@ -1,6 +1,7 @@
 package com.example.moneyflow.ui.fragments.home
 
 import android.app.Application
+import android.icu.util.Calendar
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -22,28 +23,75 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _overallBalance = MutableLiveData<Double>()
     val overallBalance: LiveData<Double> get() = _overallBalance
 
+    private val _monthExpenses = MutableLiveData<Double>()
+    val monthExpenses: LiveData<Double> get() = _monthExpenses
+
+    private val _monthIncomes = MutableLiveData<Double>()
+    val monthIncomes: LiveData<Double> get() = _monthIncomes
+
+    fun getMonthBalance() {
+        val disposable = database.transactionDao().getTransactions().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({ transactions ->
+                var expSum = 0.0
+                var incSum = 0.0
+                for (transaction in transactions) {
+                    if (isInCurrentMonth(transaction.createdAt)) {
+                        when (transaction.isIncome) {
+                            true -> incSum += transaction.sum
+                            false -> expSum += transaction.sum
+                        }
+                    }
+                }
+                _monthExpenses.value = expSum
+                _monthIncomes.value = incSum
+            })
+        compositeDisposable.add(disposable)
+    }
+
+    fun isInCurrentMonth(createdAt: Long): Boolean {
+        val calendar = Calendar.getInstance()
+
+        // Начало месяца
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfMonth = calendar.timeInMillis
+
+        // Конец месяца
+        calendar.add(Calendar.MONTH, 1) // Перейти на следующий месяц
+        calendar.set(Calendar.DAY_OF_MONTH, 1) // Первый день следующего месяца
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfNextMonth = calendar.timeInMillis
+        return createdAt in startOfMonth until startOfNextMonth
+    }
+
     fun refreshWalletsList() {
         val disposable = database.walletDao().getWallets()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ wallets ->
                 _wallets.value = wallets
-                var sum = .0
+                var sum = 0.0
                 for (wallet in wallets) {
                     sum += wallet.balance
                 }
                 _overallBalance.value = sum
-            },{
+
+                getMonthBalance()
+            }, {
                 Log.d("HomeViewModel", "refreshWalletsList: error")
             })
         compositeDisposable.add(disposable)
     }
 
     fun deleteWallet(wallet: Wallet) {
-        val disposable = database.walletDao().delete(wallet.id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+        val disposable = database.walletDao().delete(wallet.id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({
                 refreshWalletsList()
             })
         compositeDisposable.add(disposable)

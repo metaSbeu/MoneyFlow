@@ -15,6 +15,9 @@ interface CategoryDao {
     @Query("SELECT * FROM categories")
     fun getCategories(): Single<List<Category>>
 
+    @Query("SELECT * FROM categories WHERE isIncome = :isIncome")
+    fun getCategoriesByType(isIncome: Boolean): Single<List<Category>>
+
     @Insert(onConflict = REPLACE)
     fun insert(category: Category): Completable
 
@@ -30,4 +33,6 @@ interface CategoryDao {
     @Update
     fun update(category: Category): Completable
 
+    @Query("SELECT * FROM categories WHERE id = :categoryId")
+    fun getCategoryById(categoryId: Int): Single<Category>
 }

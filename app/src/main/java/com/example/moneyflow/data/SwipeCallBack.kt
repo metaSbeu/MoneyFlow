@@ -6,53 +6,99 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
+import com.example.moneyflow.ui.adapters.WalletAdapter
 
-class SwipeCallback(private val onSwipeLeft: (Int) -> Unit, private val onSwipeRight: (Int) -> Unit) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+class SwipeCallback(
+    private val adapter: WalletAdapter,
+    private val onSwipeLeft: (Int) -> Unit,
+    private val onSwipeRight: (Int) -> Unit
+) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
     private var iconDelete: Drawable? = null
     private var iconEdit: Drawable? = null
 
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        return when (adapter.getItemViewType(viewHolder.adapterPosition)) {
+            WalletAdapter.TYPE_ADD_BUTTON -> {
+                0 // Запрещаем свайп для кнопки "Создать новый счет"
+            }
+
+            else -> {
+                makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+            }
+        }
+    }
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         return false
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
         when (direction) {
-            ItemTouchHelper.LEFT -> onSwipeLeft(position) // Свайп влево — удаление
-            ItemTouchHelper.RIGHT -> onSwipeRight(position) // Свайп вправо — редактирование
+            ItemTouchHelper.LEFT -> onSwipeLeft(position)
+            ItemTouchHelper.RIGHT -> onSwipeRight(position)
         }
     }
 
-    // Метод для отображения иконок при свайпе
-    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
         val itemView = viewHolder.itemView
-        val iconMargin = (iconDelete?.intrinsicHeight?.let { itemView.height - it } ?: 0) / 2
+        val iconMargin = (itemView.height - (iconDelete?.intrinsicHeight ?: 0)) / 2
 
-        // Если свайп влево (удаление)
         if (dX < 0) {
-            iconDelete?.setBounds(itemView.right + dX.toInt() - iconMargin, itemView.top + iconMargin, itemView.right - iconMargin, itemView.bottom - iconMargin)
-            iconDelete?.draw(c)
-        }
+            // Свайп влево — удаление
+            val iconTop = itemView.top + iconMargin
+            val iconBottom = itemView.bottom - iconMargin
+            val iconWidth = iconDelete?.intrinsicWidth ?: 0
+            val iconLeft = itemView.right - iconMargin - iconWidth
+            val iconRight = itemView.right - iconMargin
 
-        // Если свайп вправо (редактирование)
-        if (dX > 0) {
-            iconEdit?.setBounds(itemView.left + iconMargin, itemView.top + iconMargin, itemView.left + iconMargin + (iconEdit?.intrinsicWidth ?: 0), itemView.bottom - iconMargin)
+            iconDelete?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            iconDelete?.draw(c)
+        } else if (dX > 0) {
+            // Свайп вправо — редактирование
+            val iconTop = itemView.top + iconMargin
+            val iconBottom = itemView.bottom - iconMargin
+            val iconWidth = iconEdit?.intrinsicWidth ?: 0
+            val iconLeft = itemView.left + iconMargin
+            val iconRight = itemView.left + iconMargin + iconWidth
+
+            iconEdit?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
             iconEdit?.draw(c)
         }
+
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         super.onSelectedChanged(viewHolder, actionState)
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            // Инициализируем иконки, если их еще нет
-            if (iconDelete == null) {
-                iconDelete = ContextCompat.getDrawable(viewHolder?.itemView?.context!!, R.drawable.ic_delete)
-            }
-            if (iconEdit == null) {
-                iconEdit = ContextCompat.getDrawable(viewHolder?.itemView?.context!!, R.drawable.ic_pencil)
+            viewHolder?.itemView?.context?.let { context ->
+                if (iconDelete == null) {
+                    iconDelete = ContextCompat.getDrawable(context, R.drawable.ic_delete)?.apply {
+                        setTint(ContextCompat.getColor(context, R.color.light_red))
+                    }
+                }
+                if (iconEdit == null) {
+                    iconEdit = ContextCompat.getDrawable(context, R.drawable.ic_pencil)?.apply {
+                        setTint(ContextCompat.getColor(context, R.color.blue))
+                    }
+                }
             }
         }
     }

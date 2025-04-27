@@ -17,8 +17,11 @@ import com.example.moneyflow.ui.activities.TransactionAddActivity
 import com.example.moneyflow.ui.activities.TransactionListActivity
 import com.example.moneyflow.ui.activities.WalletEditActivity
 import com.example.moneyflow.ui.adapters.WalletAdapter
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.time.LocalDate
 import java.time.Month
+import java.util.Locale
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -35,45 +38,71 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewmodel = ViewModelProvider(this)[HomeViewModel::class.java]
         adapter = WalletAdapter(
             { wallet ->
+                adapter.deselectAll()
+                adapter.selectWallet(wallet)
                 selectedWallet = wallet
+                binding.textViewWallet.text = getString(R.string.wallet, wallet.name)
             },
             {
                 startActivity(WalletAddActivity.newIntent(requireContext()))
             }
         )
 
-        // Свайп для удаления и редактирования
-        val itemTouchHelper = ItemTouchHelper(SwipeCallback(
-            { position ->
-                // Действие при свайпе влево (удаление)
-                viewmodel.deleteWallet(adapter.wallets[position])
-            },
-            { position ->
-                // Действие при свайпе вправо (редактирование)
-                val wallet = adapter.wallets[position]
-                startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
-            }
-        ))
-
-        itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
-
         viewmodel.wallets.observe(viewLifecycleOwner) {
             adapter.wallets = it
         }
 
-        viewmodel.overallBalance.observe(viewLifecycleOwner) {
-            val rounded = String.format("%.2f", it)
-            binding.textViewBalance.text = getString(R.string.balance, rounded)
+        viewmodel.overallBalance.observe(viewLifecycleOwner) { balance ->
+            val formatted = balance.formatWithSpaces()
+            binding.textViewBalance.text = getString(R.string.balance, formatted)
         }
 
         binding.recyclerViewWallets.adapter = adapter
-        binding.textViewCurrentMonthExpenses.text = getString(R.string.current_month, getCurrentMonth())
-        binding.textViewCurrentMonthIncomes.text = getString(R.string.current_month, getCurrentMonth())
-        clickListeners()
+
+        binding.textViewChooseAll.setOnClickListener {
+            val walletBalance = viewmodel.overallBalance.value ?: 0.0
+            binding.textViewWallet.text = getString(R.string.all_wallets)
+            adapter.selectAll()
+            selectedWallet = null
+        }
+
+        setupMonthData()
+        setupItemTouchHelper()
+        setupClickListeners()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getCurrentMonth(): String {
+    private fun setupMonthData() {
+        binding.textViewCurrentMonthExpenses.text = getString(R.string.current_month, getCurrentMonth())
+        binding.textViewCurrentMonthIncomes.text = getString(R.string.current_month, getCurrentMonth())
+
+        viewmodel.monthExpenses.observe(viewLifecycleOwner) { expenses ->
+            val formatted = expenses.formatWithSpaces()
+            binding.textViewExpenses.text = "$formatted ₽"
+        }
+
+        viewmodel.monthIncomes.observe(viewLifecycleOwner) { incomes ->
+            val formatted = incomes.formatWithSpaces()
+            binding.textViewIncomes.text = "$formatted ₽"
+        }
+    }
+
+    private fun setupItemTouchHelper() {
+        val itemTouchHelper = ItemTouchHelper(
+            SwipeCallback(
+                adapter,
+                { position -> viewmodel.deleteWallet(adapter.wallets[position]) },
+                { position ->
+                    val wallet = adapter.wallets[position]
+                    startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
+                }
+            )
+        )
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getCurrentMonth(): String {
         val month = LocalDate.now().month
         return when (month) {
             Month.JANUARY -> "январе"
@@ -91,16 +120,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private fun Double.formatWithSpaces(): String {
+        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
+            groupingSize = 3
+            isDecimalSeparatorAlwaysShown = false
+        }
+        return formatter.format(this)
+    }
+
     override fun onResume() {
         super.onResume()
         viewmodel.refreshWalletsList()
     }
 
-    fun clickListeners() {
+    private fun setupClickListeners() {
         binding.cardViewAddTransaction.setOnClickListener {
             if (selectedWallet == null) {
-                // Показываем предупреждение, если не выбран кошелек
-                Toast.makeText(requireContext(), "Сначала выберите счет", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Сначала создайте счет", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = TransactionAddActivity.newIntent(requireContext(), selectedWallet!!.id)
                 startActivity(intent)
