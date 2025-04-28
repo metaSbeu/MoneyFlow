@@ -72,8 +72,12 @@ class WalletAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
         if (holder is WalletViewHolder) {
+            val context = holder.itemView.context
             val wallet = wallets[position]
             val formatted = wallet.balance.formatWithSpaces()
             holder.textViewWalletNameAndBalance.text =
@@ -83,8 +87,14 @@ class WalletAdapter(
                     formatted
                 )
 
-            if (wallet.iconResId != 0) {
-                holder.imageViewIcon.setImageResource(wallet.iconResId)
+            val iconResId = context.resources.getIdentifier(
+                wallet.icon,
+                "drawable",
+                context.packageName
+            )
+
+            if (iconResId != 0) {
+                holder.imageViewIcon.setImageResource(iconResId)
             } else {
                 holder.imageViewIcon.setImageResource(R.drawable.ic_bank)
             }

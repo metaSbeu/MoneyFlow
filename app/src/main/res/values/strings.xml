@@ -66,6 +66,7 @@
     <string name="expenses">Расходы</string>
     <string name="incomes">Доходы</string>
     <string name="comment_s">Комментарий: %s</string>
+    <string name="setup_pin_title">Установите ПИН код для авторизации</string>
 
     <string-array name="themes">
         <item>Светлая</item>
@@ -78,5 +79,8 @@
         <item>USD</item>
         <item>EUR</item>
     </string-array>
+
+    <string name="confirm_pin_title">Подтвердите PIN-код</string>
+    <string name="enter_pin_title">Введите PIN-код</string>
 
 </resources>

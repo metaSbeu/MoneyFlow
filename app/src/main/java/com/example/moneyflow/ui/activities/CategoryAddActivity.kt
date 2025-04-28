@@ -56,16 +56,15 @@ class CategoryAddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val icon = selectedCategory?.iconResId
+            val icon = selectedCategory.icon
             if (icon == null) {
                 Toast.makeText(this, "Выберите иконку категории", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val category = Category(name = name, iconResId = icon, isIncome = isIncome ?: false)
+            val category = Category(name = name, icon = icon, isIncome = isIncome == true)
 
             viewModel.addCategory(category)
-
         }
         viewModel.shouldCloseScreen.observe(this) { shouldCloseScreen ->
             if (shouldCloseScreen) {

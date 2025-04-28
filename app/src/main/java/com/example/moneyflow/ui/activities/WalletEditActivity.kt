@@ -19,7 +19,7 @@ class WalletEditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWalletEditBinding
     private lateinit var adapter: BankIconAdapter
     private lateinit var viewModel: WalletEditViewModel
-    private var selectedIconResId: Int? = null
+    private var selectedIconResId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +33,7 @@ class WalletEditActivity : AppCompatActivity() {
         val wallet = intent.getSerializableExtra(EXTRA_WALLET) as Wallet
 
         adapter = BankIconAdapter(
-            icons = listOf(R.drawable.logo_sber, R.drawable.logo_alfa, R.drawable.logo_t_bank),
+            icons = listOf("logo_sber", "logo_alfa", "logo_t_bank"),
             onIconClick = { resId ->
                 selectedIconResId = resId
             })
@@ -47,8 +47,7 @@ class WalletEditActivity : AppCompatActivity() {
                 id = wallet.id,
                 name = newName,
                 balance = wallet.balance,
-                iconResId = selectedIconResId!!,
-                currency = wallet.currency
+                icon = selectedIconResId!!
             )
             viewModel.editWallet(walletToReplace)
         }

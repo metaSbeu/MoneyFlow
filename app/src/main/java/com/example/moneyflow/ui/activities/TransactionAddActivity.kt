@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.Transaction
+import com.example.moneyflow.data.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel
@@ -160,7 +161,8 @@ class TransactionAddActivity : AppCompatActivity() {
 
         viewModel.wallet.observe(this) { wallet ->
             val roundedBalance = String.format("%.2f", wallet.balance)
-            binding.imageViewWalletIcon.setBackgroundResource(wallet.iconResId)
+            val iconResId = baseContext.getDrawableResId(wallet.icon)
+            binding.imageViewWalletIcon.setImageResource(iconResId)
             binding.textViewWalletNameAndBalance.text = getString(
                 R.string.wallet_name_wallet_balance,
                 wallet.name,

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
+import com.example.moneyflow.data.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
 import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
@@ -254,7 +255,8 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun setupWallet(wallet: Wallet) {
-        binding.imageViewWalletIcon.setImageResource(wallet.iconResId)
+        val iconResId = baseContext.getDrawableResId(wallet.icon)
+        binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces()
         binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
     }

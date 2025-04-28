@@ -44,7 +44,7 @@ class CategoryEditActivity : AppCompatActivity() {
 
         adapter = CategoryAdapter(
             {
-                selectedCategory = selectedCategory.copy(iconResId = it.iconResId)
+                selectedCategory = selectedCategory.copy(icon = it.icon)
 //                adapter.notifyDataSetChanged()
             },
             {},
@@ -58,7 +58,7 @@ class CategoryEditActivity : AppCompatActivity() {
 
         binding.buttonSave.setOnClickListener {
             val newName = binding.editTextNewName.text.toString().trim()
-            val newIcon = selectedCategory.iconResId
+            val newIcon = selectedCategory.icon
             val newCategory = Category(
                 selectedCategory.id,
                 newName,

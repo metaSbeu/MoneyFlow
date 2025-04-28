@@ -5,50 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    tools:context=".ui.activities.AuthActivity">
+    tools:context=".ui.activities.SetupPinActivity">
 
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        tools:text="@string/setup_pin_title"
-        android:paddingHorizontal="10dp"
-        android:textAlignment="center"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/imageViewAvatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/user_avatar"
-        android:src="@drawable/avatar"
-        app:layout_constraintBottom_toTopOf="@+id/textViewUsername"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/textViewUsername"
-        android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:gravity="center"
-        android:padding="1dp"
-        android:text="Username"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayoutNumberPad"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewAvatar"
-        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/imageViewIndicator1"
@@ -61,7 +19,8 @@
         app:layout_constraintEnd_toStartOf="@+id/imageViewIndicator2"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewUsername"
+        app:layout_constraintBottom_toTopOf="@id/gridLayoutNumberPad"
+        android:layout_marginBottom="181dp"
         tools:ignore="ImageContrastCheck"
         tools:layout_editor_absoluteY="288dp" />
 
@@ -190,16 +149,6 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/buttonFingerprint"
-                style="@style/NumberButtonStyle"
-                android:contentDescription="@string/fingerprint_button"
-                android:padding="20dp"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                android:src="@drawable/ic_fingerprint"
-                android:visibility="visible" />
-
-            <ImageView
                 android:id="@+id/buttonErase"
                 style="@style/NumberButtonStyle"
                 android:contentDescription="@string/erase_button"
@@ -207,7 +156,8 @@
                 android:scaleX="1.5"
                 android:scaleY="1.3"
                 android:src="@drawable/ic_backspace"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </FrameLayout>
     </GridLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

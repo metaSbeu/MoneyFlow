@@ -1,6 +1,5 @@
 package com.example.moneyflow.data
 
-import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
@@ -12,8 +11,5 @@ data class Wallet(
     val id: Int = 0,
     val name: String,
     val balance: Double,
-
-    @DrawableRes val iconResId: Int,
-
-    val currency: String = "RUB"
-): Serializable
+    val icon: String
+) : Serializable

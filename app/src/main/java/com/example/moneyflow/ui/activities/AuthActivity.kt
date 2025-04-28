@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -36,6 +38,7 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    private var isSetupMode: Boolean = false
     private val viewModel: AuthViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -45,6 +48,13 @@ class AuthActivity : AppCompatActivity() {
 
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        isSetupMode = PreferenceManager.isFirstLaunch(this)
+        if (isSetupMode) {
+            setupForFirstLaunch()
+        } else {
+            setupForAuth()
+        }
 
         setUpInsets()
         setUpIndicators()
@@ -66,6 +76,18 @@ class AuthActivity : AppCompatActivity() {
         fingerprintAuth()
     }
 
+    private fun setupForFirstLaunch() {
+        binding.buttonFingerprint.visibility = View.GONE
+        binding.buttonErase.visibility = View.VISIBLE
+        binding.textViewTitle.text = getString(R.string.setup_pin_title)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupForAuth() {
+        binding.textViewTitle.visibility = View.GONE
+        fingerprintAuth()
+    }
+
     fun insertDefaultDbData() {
         if (!PreferenceManager.areDefaultCategoriesAdded(this)) {
             viewModel.insertDefaultCategories()
@@ -76,36 +98,48 @@ class AuthActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
-        viewModel.passwordState.observe(this, Observer { state ->
+        viewModel.passwordState.observe(this) { state ->
             when (state) {
                 AuthViewModel.PasswordState.EMPTY -> clearAllIndicators()
-                AuthViewModel.PasswordState.IN_PROGRESS -> {
-                    refreshIndicators(true)
-                    updateEraseButtonVisibility()
+                AuthViewModel.PasswordState.IN_PROGRESS -> refreshIndicators(true)
+                AuthViewModel.PasswordState.COMPLETE -> {
+                    if (isSetupMode) {
+                        viewModel.handleSetupMode(viewModel.password.value ?: "")
+                    } else {
+                        viewModel.checkPassword(this)
+                    }
                 }
-                AuthViewModel.PasswordState.COMPLETE -> viewModel.checkPassword()
                 AuthViewModel.PasswordState.CORRECT -> handleCorrectPassword()
                 AuthViewModel.PasswordState.INCORRECT -> handleIncorrectPassword()
                 AuthViewModel.PasswordState.ERASED_LAST_DIGIT -> refreshIndicators(false)
             }
-        })
+        }
 
-        viewModel.navigateToMain.observe(this, Observer { shouldNavigate ->
+        viewModel.setupState.observe(this) { state ->
+            when (state) {
+                AuthViewModel.SetupState.FIRST_ENTRY -> {
+                    binding.textViewTitle.text = getString(R.string.setup_pin_title)
+                }
+                AuthViewModel.SetupState.CONFIRMATION -> {
+                    binding.textViewTitle.text = getString(R.string.confirm_pin_title)
+                }
+            }
+        }
+
+        viewModel.navigateToMain.observe(this) { shouldNavigate ->
             if (shouldNavigate) {
                 startActivity(MainActivity.newIntent(this))
-                viewModel.onNavigationComplete()
                 finish()
             }
-        })
+        }
 
-        viewModel.showError.observe(this, Observer { showError ->
+        viewModel.showError.observe(this) { showError ->
             if (showError) {
-                Toast.makeText(this, "INCORRECT PASSWORD", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "PIN-коды не совпадают!", Toast.LENGTH_SHORT).show()
                 viewModel.onErrorShown()
             }
-        })
+        }
     }
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun handleCorrectPassword() {
         switchIndicatorToGreen()
@@ -120,10 +154,12 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun updateEraseButtonVisibility() {
-        binding.buttonErase.visibility = if (viewModel.password.value?.isNotEmpty() == true) {
-            View.VISIBLE
-        } else {
-            View.GONE
+        if (!isSetupMode) {
+            binding.buttonErase.visibility = if (viewModel.password.value?.isNotEmpty() == true) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
     }
 
@@ -302,6 +338,12 @@ class AuthActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, AuthActivity::class.java)
         }
     }
 }
