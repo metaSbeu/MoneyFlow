@@ -1,12 +1,14 @@
 package com.example.moneyflow.ui.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moneyflow.data.DefaultCategories
 import com.example.moneyflow.data.DefaultWallets
 import com.example.moneyflow.data.MainDatabase
+import com.example.moneyflow.data.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -15,7 +17,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
-        const val CORRECT_PASSWORD = "0000"
         const val PASSWORD_LENGTH = 4
     }
 
@@ -33,6 +34,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _showError = MutableLiveData<Boolean>()
     val showError: LiveData<Boolean> get() = _showError
+
+    private val _setupState = MutableLiveData<SetupState>(SetupState.FIRST_ENTRY)
+    val setupState: LiveData<SetupState> get() = _setupState
+
+    private var firstPinAttempt: String = ""
 
     init {
         _password.value = ""
@@ -62,18 +68,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         _passwordState.value = PasswordState.EMPTY
     }
 
-    fun checkPassword() {
-        if (_password.value == CORRECT_PASSWORD) {
+    fun checkPassword(context: Context) {
+        if (_password.value == PreferenceManager.getPinCode(context)) {
             _passwordState.value = PasswordState.CORRECT
             _navigateToMain.value = true
         } else {
             _passwordState.value = PasswordState.INCORRECT
             _showError.value = true
         }
-    }
-
-    fun onNavigationComplete() {
-        _navigateToMain.value = false
     }
 
     fun onErrorShown() {
@@ -127,6 +129,34 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    fun handleSetupMode(pin: String) {
+        when (_setupState.value) {
+            SetupState.FIRST_ENTRY -> {
+                firstPinAttempt = pin
+                _setupState.value = SetupState.CONFIRMATION
+                _password.value = ""
+                _passwordState.value = PasswordState.EMPTY
+            }
+            SetupState.CONFIRMATION -> {
+                if (pin == firstPinAttempt) {
+                    PreferenceManager.setPinCode(getApplication(), pin)
+                    PreferenceManager.setFirstLaunch(getApplication(), false)
+                    _navigateToMain.value = true
+                } else {
+                    _setupState.value = SetupState.FIRST_ENTRY
+                    _passwordState.value = PasswordState.INCORRECT
+                    _showError.value = true
+                    firstPinAttempt = ""
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    enum class SetupState {
+        FIRST_ENTRY, CONFIRMATION
     }
 
     enum class PasswordState {
