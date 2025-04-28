@@ -2,6 +2,7 @@ package com.example.moneyflow.ui.activities
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -12,10 +13,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
+import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
 import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -117,6 +123,80 @@ class TransactionListActivity : AppCompatActivity() {
         setUpInsets()
     }
 
+    private fun setupPieChart(transactions: List<TransactionWithCategory>) {
+        val pieChart = binding.pieChart
+
+        // Базовые настройки
+        pieChart.setUsePercentValues(false)
+        pieChart.description.isEnabled = false
+        pieChart.isDrawHoleEnabled = false
+        pieChart.setDrawCenterText(true)
+        pieChart.legend.isEnabled = false
+        pieChart.setEntryLabelColor(Color.BLACK)
+
+        // Подготовка данных
+        val entries = preparePieChartData(transactions)
+
+        // Обработка пустых данных
+        if (entries.isEmpty()) {
+            pieChart.clear()
+            pieChart.centerText = "Нет данных"
+            return
+        }
+
+        // Создание набора данных
+        val dataSet = PieDataSet(entries, "Категории транзакций").apply {
+            sliceSpace = 2f
+            colors = getPieChartColors()
+            valueTextSize = 12f
+            yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
+            xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+            valueLinePart1OffsetPercentage = 80f
+            valueTextColor = Color.BLACK
+            valueLineColor = Color.BLACK
+            valueLineWidth = 1f
+        }
+
+        // Применение данных
+        val pieData = PieData(dataSet)
+        pieChart.data = pieData
+
+        // Анимация
+        pieChart.animateY(1000, Easing.EaseInOutQuad)
+
+        // Обновление отображения
+        pieChart.invalidate()
+    }
+    private fun getPieChartColors(): List<Int> {
+        return listOf(
+            ContextCompat.getColor(this, R.color.category_color_1),
+            ContextCompat.getColor(this, R.color.category_color_6),
+            ContextCompat.getColor(this, R.color.category_color_10),
+            ContextCompat.getColor(this, R.color.category_color_12),
+
+            ContextCompat.getColor(this, R.color.category_color_3),
+            ContextCompat.getColor(this, R.color.category_color_9),
+            ContextCompat.getColor(this, R.color.category_color_15),
+            ContextCompat.getColor(this, R.color.category_color_5),
+            ContextCompat.getColor(this, R.color.category_color_16),
+            ContextCompat.getColor(this, R.color.category_color_4)
+        )
+    }
+
+    private fun preparePieChartData(transactions: List<TransactionWithCategory>): List<PieEntry> {
+        val categorySums = mutableMapOf<String, Double>()
+
+        // Вычисляем сумму для каждой категории
+        for (transaction in transactions) {
+            val categoryName = transaction.category.name ?: "Без категории"
+            val amount = transaction.transaction.sum
+            categorySums[categoryName] = categorySums.getOrDefault(categoryName, 0.0) + amount
+        }
+
+        // Преобразуем в формат PieEntry для пайчарта
+        return categorySums.map { PieEntry(it.value.toFloat(), it.key) }
+    }
+
     private fun resetCardViewBackgroundColor() {
         binding.cardViewExpenses.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
         binding.cardViewIncomes.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
@@ -205,8 +285,10 @@ class TransactionListActivity : AppCompatActivity() {
     private fun observeViewModels() {
         viewModel.transactions.observe(this) { transactions ->
             adapter.transactions = transactions
+            setupPieChart(transactions) // Обновляем пайчарт
         }
     }
+
 
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
