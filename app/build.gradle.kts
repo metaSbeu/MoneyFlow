@@ -53,6 +53,9 @@ dependencies {
 
     implementation ("androidx.biometric:biometric-ktx:1.4.0-alpha02")
 
+    // MPAndroid chart
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

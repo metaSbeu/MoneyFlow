@@ -28,6 +28,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var adapter: WalletAdapter
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewmodel: HomeViewModel
+
     private var selectedWallet: Wallet? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -73,8 +74,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupMonthData() {
-        binding.textViewCurrentMonthExpenses.text = getString(R.string.current_month, getCurrentMonth())
-        binding.textViewCurrentMonthIncomes.text = getString(R.string.current_month, getCurrentMonth())
+        binding.textViewCurrentMonthExpenses.text =
+            getString(R.string.current_month, getCurrentMonth())
+        binding.textViewCurrentMonthIncomes.text =
+            getString(R.string.current_month, getCurrentMonth())
 
         viewmodel.monthExpenses.observe(viewLifecycleOwner) { expenses ->
             val formatted = expenses.formatWithSpaces()
@@ -136,7 +139,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupClickListeners() {
         binding.cardViewAddTransaction.setOnClickListener {
             if (selectedWallet == null) {
-                Toast.makeText(requireContext(), "Сначала создайте счет", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Выберите счет", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = TransactionAddActivity.newIntent(requireContext(), selectedWallet!!.id)
                 startActivity(intent)
@@ -144,7 +147,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.cardViewBalance.setOnClickListener {
-            val intent = TransactionListActivity.Companion.newIntent(requireContext())
+            val intent = if (selectedWallet == null) {
+                TransactionListActivity.newIntentAllWallets(requireContext())
+            } else {
+                TransactionListActivity.newIntent(requireContext(), selectedWallet!!)
+            }
             startActivity(intent)
         }
     }

@@ -9,6 +9,23 @@
     <color name="light_red">#F44336</color>
     <color name="main_bg">#EFEFEF</color>
 
+    <color name="category_color_1">#EF5350</color>
+    <color name="category_color_2">#EC407A</color>
+    <color name="category_color_3">#AB47BC</color>
+    <color name="category_color_4">#7E57C2</color>
+    <color name="category_color_5">#5C6BC0</color>
+    <color name="category_color_6">#42A5F5</color>
+    <color name="category_color_7">#29B6F6</color>
+    <color name="category_color_8">#26C6DA</color>
+    <color name="category_color_9">#26A69A</color>
+    <color name="category_color_10">#66BB6A</color>
+    <color name="category_color_11">#9CCC65</color>
+    <color name="category_color_12">#D4E157</color>
+    <color name="category_color_13">#FFEE58</color>
+    <color name="category_color_14">#FFCA28</color>
+    <color name="category_color_15">#FFA726</color>
+    <color name="category_color_16">#FF7043</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
