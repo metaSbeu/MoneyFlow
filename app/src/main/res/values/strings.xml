@@ -82,5 +82,12 @@
 
     <string name="confirm_pin_title">Подтвердите PIN-код</string>
     <string name="enter_pin_title">Введите PIN-код</string>
+    <string name="enter_old_pin">Введите старый PIN-код</string>
+    <string name="enter_new_pin">Введите новый PIN-код</string>
+    <string name="confirm_new_pin_title">Подтвердите новый PIN-код</string>
+    <string name="pin_changed_successfully">PIN-код успешно изменен</string>
+    <string name="incorrect_old_pin">Неверный старый PIN-код</string>
+    <string name="pins_dont_match">PIN-коды не совпадают</string>
+    <string name="pin_codes_dont_match">PIN-коды не совпадают!</string>
 
 </resources>

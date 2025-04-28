@@ -49,11 +49,19 @@ class AuthActivity : AppCompatActivity() {
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val mode = intent.getIntExtra(EXTRA_MODE, MODE_AUTH)
         isSetupMode = PreferenceManager.isFirstLaunch(this)
-        if (isSetupMode) {
-            setupForFirstLaunch()
-        } else {
-            setupForAuth()
+
+        when (mode) {
+            MODE_CHANGE_PIN -> setupForChangePin()
+            else -> {
+                if (isSetupMode) {
+                    setupForFirstLaunch()
+                    viewModel.setSetupModeFirstEntry()
+                } else {
+                    setupForAuth()
+                }
+            }
         }
 
         setUpInsets()
@@ -70,21 +78,39 @@ class AuthActivity : AppCompatActivity() {
 
         binding.buttonExit.setOnClickListener {
             vibrate(50)
-            finish()
+            if (mode == MODE_CHANGE_PIN) {
+                finish()
+            } else {
+                finishAffinity()
+            }
         }
 
-        fingerprintAuth()
+        if (mode != MODE_CHANGE_PIN) {
+            fingerprintAuth()
+        }
+    }
+
+    private fun setupForChangePin() {
+        binding.textViewTitle.visibility = View.VISIBLE
+        binding.buttonFingerprint.visibility = View.GONE
+        binding.buttonErase.visibility = View.VISIBLE
+        binding.buttonExit.visibility = View.VISIBLE
+        binding.textViewTitle.text = getString(R.string.enter_old_pin)
+        viewModel.setChangePinMode()
+        updateEraseButtonVisibility()
     }
 
     private fun setupForFirstLaunch() {
         binding.buttonFingerprint.visibility = View.GONE
         binding.buttonErase.visibility = View.VISIBLE
+        binding.buttonExit.visibility = View.VISIBLE
         binding.textViewTitle.text = getString(R.string.setup_pin_title)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupForAuth() {
         binding.textViewTitle.visibility = View.GONE
+        binding.buttonExit.visibility = View.VISIBLE
         fingerprintAuth()
     }
 
@@ -99,14 +125,23 @@ class AuthActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
         viewModel.passwordState.observe(this) { state ->
+            android.util.Log.d("AuthActivity", "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${intent.getIntExtra(EXTRA_MODE, MODE_AUTH)}")
             when (state) {
                 AuthViewModel.PasswordState.EMPTY -> clearAllIndicators()
                 AuthViewModel.PasswordState.IN_PROGRESS -> refreshIndicators(true)
                 AuthViewModel.PasswordState.COMPLETE -> {
-                    if (isSetupMode) {
-                        viewModel.handleSetupMode(viewModel.password.value ?: "")
-                    } else {
-                        viewModel.checkPassword(this)
+                    android.util.Log.d("AuthActivity", "Password COMPLETE triggered")
+                    when (intent.getIntExtra(EXTRA_MODE, MODE_AUTH)) {
+                        MODE_CHANGE_PIN -> viewModel.handlePinChange(this)
+                        else -> {
+                            if (isSetupMode) {
+                                android.util.Log.d("AuthActivity", "Handling setup mode with pin: ${viewModel.password.value}")
+                                viewModel.handleSetupMode(viewModel.password.value ?: "")
+                            } else {
+                                android.util.Log.d("AuthActivity", "Checking password: ${viewModel.password.value}")
+                                viewModel.checkPassword(this)
+                            }
+                        }
                     }
                 }
                 AuthViewModel.PasswordState.CORRECT -> handleCorrectPassword()
@@ -114,7 +149,6 @@ class AuthActivity : AppCompatActivity() {
                 AuthViewModel.PasswordState.ERASED_LAST_DIGIT -> refreshIndicators(false)
             }
         }
-
         viewModel.setupState.observe(this) { state ->
             when (state) {
                 AuthViewModel.SetupState.FIRST_ENTRY -> {
@@ -123,6 +157,26 @@ class AuthActivity : AppCompatActivity() {
                 AuthViewModel.SetupState.CONFIRMATION -> {
                     binding.textViewTitle.text = getString(R.string.confirm_pin_title)
                 }
+                else -> Unit
+            }
+        }
+
+        viewModel.changePinState.observe(this) { state ->
+            when (state) {
+                AuthViewModel.ChangePinState.ENTER_OLD_PIN -> {
+                    binding.textViewTitle.text = getString(R.string.enter_old_pin)
+                }
+                AuthViewModel.ChangePinState.ENTER_NEW_PIN -> {
+                    binding.textViewTitle.text = getString(R.string.enter_new_pin)
+                }
+                AuthViewModel.ChangePinState.CONFIRM_NEW_PIN -> {
+                    binding.textViewTitle.text = getString(R.string.confirm_new_pin_title)
+                }
+                AuthViewModel.ChangePinState.SUCCESS -> {
+                    Toast.makeText(this, R.string.pin_changed_successfully, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else -> Unit
             }
         }
 
@@ -135,14 +189,42 @@ class AuthActivity : AppCompatActivity() {
 
         viewModel.showError.observe(this) { showError ->
             if (showError) {
-                Toast.makeText(this, "PIN-коды не совпадают!", Toast.LENGTH_SHORT).show()
+                val errorMessageResId = when (viewModel.changePinState.value) {
+                    AuthViewModel.ChangePinState.ENTER_OLD_PIN -> R.string.incorrect_old_pin
+                    AuthViewModel.ChangePinState.CONFIRM_NEW_PIN -> R.string.pins_dont_match
+                    else -> R.string.pin_codes_dont_match // Для режима setup
+                }
+                Toast.makeText(this, getString(errorMessageResId), Toast.LENGTH_SHORT).show()
+                if (viewModel.changePinState.value != AuthViewModel.ChangePinState.SUCCESS) {
+                    indicators.forEach { animateIndicatorsFail(it) }
+                }
                 viewModel.onErrorShown()
             }
         }
+
+        viewModel.password.observe(this) { password ->
+            if (!isSetupMode && intent.getIntExtra(EXTRA_MODE, MODE_AUTH) == MODE_AUTH) {
+                if (password.isNotEmpty()) {
+                    binding.buttonFingerprint.visibility = View.GONE
+                    binding.buttonErase.visibility = View.VISIBLE
+                } else {
+                    binding.buttonFingerprint.visibility = View.VISIBLE
+                    binding.buttonErase.visibility = View.GONE
+                }
+            } else if (isSetupMode) {
+                binding.buttonErase.visibility = if (password.isNotEmpty()) View.VISIBLE else View.GONE
+                binding.buttonFingerprint.visibility = View.GONE
+            } else if (intent.getIntExtra(EXTRA_MODE, MODE_AUTH) == MODE_CHANGE_PIN) {
+                binding.buttonErase.visibility = if (password.isNotEmpty()) View.VISIBLE else View.GONE
+                binding.buttonFingerprint.visibility = View.GONE
+            }
+        }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun handleCorrectPassword() {
         switchIndicatorToGreen()
+        indicators.forEach { animateIndicatorsScale(it) } // Анимация при успешном вводе
         vibrate(100)
     }
 
@@ -154,13 +236,8 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun updateEraseButtonVisibility() {
-        if (!isSetupMode) {
-            binding.buttonErase.visibility = if (viewModel.password.value?.isNotEmpty() == true) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-        }
+        // Эта функция больше не нужна, так как видимость кнопки стирания
+        // контролируется через observer на viewModel.password
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -293,6 +370,7 @@ class AuthActivity : AppCompatActivity() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     switchIndicatorToGreen()
+                    indicators.forEach { animateIndicatorsScale(it) } // Анимация при успехе биометрии
                     startActivity(MainActivity.newIntent(this@AuthActivity))
                     finish()
                 }
@@ -342,8 +420,14 @@ class AuthActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, AuthActivity::class.java)
+        const val EXTRA_MODE = "auth_mode"
+        const val MODE_AUTH = 0
+        const val MODE_CHANGE_PIN = 1
+
+        fun newIntent(context: Context, mode: Int = MODE_AUTH): Intent {
+            return Intent(context, AuthActivity::class.java).apply {
+                putExtra(EXTRA_MODE, mode)
+            }
         }
     }
 }

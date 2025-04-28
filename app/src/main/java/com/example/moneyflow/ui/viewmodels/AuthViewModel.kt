@@ -1,5 +1,4 @@
 package com.example.moneyflow.ui.viewmodels
-
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
@@ -40,9 +39,19 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private var firstPinAttempt: String = ""
 
+    private val _changePinState = MutableLiveData<ChangePinState>(ChangePinState.IDLE)
+    val changePinState: LiveData<ChangePinState> get() = _changePinState
+
+    private var oldPinAttempt: String = ""
+    private var newPinAttempt: String = ""
+
     init {
         _password.value = ""
         _passwordState.value = PasswordState.EMPTY
+    }
+
+    fun setSetupModeFirstEntry() {
+        _setupState.value = SetupState.FIRST_ENTRY
     }
 
     fun addDigit(digit: Int) {
@@ -155,11 +164,70 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun setChangePinMode() {
+        _changePinState.value = ChangePinState.ENTER_OLD_PIN
+        _password.value = ""
+        _passwordState.value = PasswordState.EMPTY
+    }
+
+    fun handlePinChange(context: Context) {
+        when (_changePinState.value) {
+            ChangePinState.ENTER_OLD_PIN -> {
+                if (_password.value?.length == PASSWORD_LENGTH) {
+                    if (_password.value == PreferenceManager.getPinCode(context)) {
+                        _changePinState.value = ChangePinState.ENTER_NEW_PIN
+                        _password.value = ""
+                        _passwordState.value = PasswordState.EMPTY
+                        // Обновите заголовок в AuthActivity
+                    } else {
+                        _passwordState.value = PasswordState.INCORRECT
+                        _showError.value = true
+                        _password.value = ""
+                        _passwordState.value = PasswordState.EMPTY
+                        // Сообщите пользователю о неверном PIN-коде (можно через LiveData)
+                    }
+                }
+            }
+            ChangePinState.ENTER_NEW_PIN -> {
+                if (_password.value?.length == PASSWORD_LENGTH) {
+                    newPinAttempt = _password.value!!
+                    _changePinState.value = ChangePinState.CONFIRM_NEW_PIN
+                    _password.value = ""
+                    _passwordState.value = PasswordState.EMPTY
+                    // Обновите заголовок
+                }
+            }
+            ChangePinState.CONFIRM_NEW_PIN -> {
+                if (_password.value?.length == PASSWORD_LENGTH) {
+                    if (_password.value == newPinAttempt) {
+                        PreferenceManager.setPinCode(getApplication(), newPinAttempt)
+                        // Сообщите об успешной смене PIN-кода (через LiveData)
+                        _changePinState.value = ChangePinState.SUCCESS
+                        _navigateToMain.value = true // Или просто finish() AuthActivity
+                    } else {
+                        _passwordState.value = PasswordState.INCORRECT
+                        _showError.value = true
+                        _password.value = ""
+                        _passwordState.value = PasswordState.EMPTY
+                        // Сообщите, что новые PIN-коды не совпадают
+                        _changePinState.value = ChangePinState.ENTER_NEW_PIN // Верните на ввод нового PIN-кода
+                        // Обновите заголовок
+                    }
+                }
+            }
+            else -> Unit
+        }
+    }
+
     enum class SetupState {
-        FIRST_ENTRY, CONFIRMATION
+        IDLE, FIRST_ENTRY, CONFIRMATION
     }
 
     enum class PasswordState {
         EMPTY, IN_PROGRESS, COMPLETE, CORRECT, INCORRECT, ERASED_LAST_DIGIT
+    }
+
+    enum class ChangePinState {
+        IDLE, ENTER_OLD_PIN, ENTER_NEW_PIN, CONFIRM_NEW_PIN, SUCCESS
     }
 }
