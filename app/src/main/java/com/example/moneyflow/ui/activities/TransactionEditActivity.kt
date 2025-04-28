@@ -16,6 +16,7 @@ import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.Wallet
+import com.example.moneyflow.data.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionEditViewModel
@@ -113,7 +114,8 @@ class TransactionEditActivity : AppCompatActivity() {
         viewModel.updateTransactionWallet(updatedTransaction, wallet)
 
         // Обновляем отображение кошелька
-        binding.imageViewWalletIcon.setImageResource(wallet.iconResId)
+        val iconResId = baseContext.getDrawableResId(wallet.icon)
+        binding.imageViewWalletIcon.setImageResource(iconResId)
         binding.textViewWalletName.text = wallet.name
         binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
     }
@@ -227,10 +229,12 @@ class TransactionEditActivity : AppCompatActivity() {
 
         // Устанавливаем данные категории
         binding.textViewOldCategoryName.text = category.name
-        binding.imageViewCategoryOldIcon.setImageResource(category.iconResId)
+        var iconResId = baseContext.getDrawableResId(category.icon)
+        binding.imageViewCategoryOldIcon.setImageResource(iconResId)
 
         // Устанавливаем данные кошелька
-        binding.imageViewWalletIcon.setImageResource(wallet.iconResId)
+        iconResId = baseContext.getDrawableResId(category.icon)
+        binding.imageViewWalletIcon.setImageResource(iconResId)
         binding.textViewWalletName.text = wallet.name
         binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
     }

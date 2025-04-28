@@ -36,11 +36,20 @@ class TransactionAdapter(
         holder: TransactionViewHolder,
         position: Int
     ) {
-        val transactionWithCategory = transactions[position]
-        val transaction = transactionWithCategory.transaction
-        val category = transactionWithCategory.category
+//        val transactionWithCategory = transactions[position]
 
-        holder.imageViewIcon.setImageResource(category.iconResId)
+        val (transaction, category) = transactions[position]
+        val context = holder.itemView.context
+
+        // Загрузка иконки категории по имени
+        val iconResId = context.resources.getIdentifier(
+            category.icon,
+            "drawable",
+            context.packageName
+        )
+
+        holder.imageViewIcon.setImageResource(iconResId)
+
         holder.textViewCategory.text = category.name
         holder.textViewAmount.text = transaction.sum.toString()
         val note = transaction.note
