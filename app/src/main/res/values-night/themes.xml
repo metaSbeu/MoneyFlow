@@ -12,16 +12,26 @@
 <!--    </style>-->
 <!--</resources>-->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Тема приложения, которая автоматически переключается между светлой и темной -->
     <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Настройки для темной темы -->
-        <item name="android:windowBackground">@color/black</item>
-        <item name="android:navigationBarColor">@color/gray</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="colorPrimary">@color/light_blue</item> <!-- Основной цвет -->
-        <item name="android:textColorPrimary">@color/white</item> <!-- Цвет основного текста -->
-        <item name="android:textColorSecondary">@color/white</item> <!-- Цвет вторичного текста -->
-        <item name="colorOnPrimary">@color/white</item> <!-- Цвет текста на фоне colorPrimary -->
+
+        <item name="android:colorBackground">@color/my_dark_background</item>
+        <item name="colorPrimary">@color/my_dark_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/very_light_blue</item>
     </style>
+
+    <style name="Theme.MoneyFlow.AuthScreen" parent="Base.Theme.MoneyFlow">
+        <item name="colorPrimary">@color/my_dark_background</item>
+        <item name="android:colorBackground">@color/my_dark_background</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
+    <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
+
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="background">#000000</color>
 </resources>

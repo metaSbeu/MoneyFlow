@@ -204,7 +204,7 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun changeBackgroundColor(cardView: CardView) {
-        cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+        cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.my_light_primary))
     }
 
     private fun showDateRangePicker() {
