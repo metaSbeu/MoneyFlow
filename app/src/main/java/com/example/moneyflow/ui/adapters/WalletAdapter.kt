@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Wallet
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -127,14 +128,6 @@ class WalletAdapter(
                 onAddClick()
             }
         }
-    }
-
-    private fun Double.formatWithSpaces(): String {
-        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
-            groupingSize = 3
-            isDecimalSeparatorAlwaysShown = false
-        }
-        return formatter.format(this)
     }
 
     override fun getItemCount(): Int {

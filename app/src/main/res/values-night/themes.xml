@@ -34,4 +34,5 @@
 
     <color name="button_text_color">#FFFFFF</color>
     <color name="background">#000000</color>
+    <color name="primary">#5C84F2</color>
 </resources>

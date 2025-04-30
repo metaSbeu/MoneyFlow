@@ -37,18 +37,33 @@
             tools:layout_editor_absoluteX="16dp"
             tools:text="Следующий платеж: 12.01.2023" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView"-->
-<!--            android:layout_width="14dp"-->
-<!--            android:layout_height="14dp"-->
-<!--            android:layout_marginEnd="4dp"-->
-<!--            android:contentDescription="bell"-->
-<!--            android:src="@drawable/ic_bell"-->
-<!--            -->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <ImageView
+            android:id="@+id/imageViewNotificationsOn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/bell"
+            android:src="@drawable/ic_bell"
+            app:tint="@color/primary"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <TextView-->
+        <ImageView
+            android:id="@+id/imageViewNotificationsOff"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/bell"
+            android:src="@drawable/ic_bell_off"
+            app:tint="@color/light_red"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--        <TextView-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            android:text="Уведомления"-->
@@ -57,13 +72,13 @@
 <!--            app:layout_constraintEnd_toStartOf="@+id/switchNotification"-->
 <!--            app:layout_constraintTop_toTopOf="@+id/switchNotification" />-->
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchNotification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <androidx.appcompat.widget.SwitchCompat-->
+<!--            android:id="@+id/switchNotification"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

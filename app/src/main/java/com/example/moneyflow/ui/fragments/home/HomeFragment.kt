@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Formatter.formatWithSpaces
 import com.example.moneyflow.data.SwipeCallback
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.FragmentHomeBinding
@@ -118,14 +119,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Month.NOVEMBER -> "ноябре"
             Month.DECEMBER -> "декабре"
         }
-    }
-
-    private fun Double.formatWithSpaces(): String {
-        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
-            groupingSize = 3
-            isDecimalSeparatorAlwaysShown = false
-        }
-        return formatter.format(this)
     }
 
     override fun onResume() {

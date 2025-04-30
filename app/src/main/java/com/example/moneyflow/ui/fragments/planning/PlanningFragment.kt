@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Formatter.formatWithSpaces
 import com.example.moneyflow.databinding.FragmentPlanningBinding
 import com.example.moneyflow.ui.activities.PlanAddActivity
+import com.example.moneyflow.ui.activities.PlanEditActivity
 import com.example.moneyflow.ui.adapters.PlanningAdapter
 
 class PlanningFragment : Fragment() {
@@ -36,11 +38,11 @@ class PlanningFragment : Fragment() {
             },
             { plan, isActive ->
                 viewModel.setNotificationActive(plan, isActive)
+            }, {
+                startActivity(PlanEditActivity.newIntent(requireContext(), it))
             })
         observeViewmodel()
         binding.recyclerViewPlans.adapter = adapter
-
-
     }
 
     override fun onResume() {
@@ -52,11 +54,9 @@ class PlanningFragment : Fragment() {
         viewModel.plans.observe(viewLifecycleOwner) {
             adapter.plans = it
         }
-        viewModel.plansSum.observe(viewLifecycleOwner) {
-            binding.textViewPlannedExpenses.text = it.toString()
-        }
         viewModel.monthSum.observe(viewLifecycleOwner) {
-            binding.textViewMonthSum.text = it.toString()
+            val formattedSum = it.formatWithSpaces()
+            binding.textViewMonthSum.text = formattedSum
         }
     }
 }

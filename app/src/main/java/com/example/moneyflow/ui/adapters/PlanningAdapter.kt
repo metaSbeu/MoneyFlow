@@ -5,16 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Plan
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class PlanningAdapter(
     private val onAddClick: () -> Unit,
-    private val onNotificationToggle: (Plan, Boolean) -> Unit
+    private val onNotificationToggle: (Plan, Boolean) -> Unit,
+    private val onItemClick: (Plan) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var plans = listOf<Plan>()
@@ -53,8 +54,17 @@ class PlanningAdapter(
     ) {
         if (holder is PlansViewHolder) {
             val plan = plans[position]
-            holder.textViewPlanName.text = holder.itemView.context.getString(R.string.plan_name_sum, plan.name, plan.sum)
-            holder.switchNotification.isChecked = plan.isNotificationActive
+            val formattedSum = plan.sum.formatWithSpaces()
+            holder.textViewPlanName.text =
+                holder.itemView.context.getString(R.string.plan_name_sum, plan.name, formattedSum)
+
+            if (plan.isNotificationActive) {
+                holder.imageViewNotificationsOn.visibility = View.VISIBLE
+                holder.imageViewNotificationsOff.visibility = View.GONE
+            } else {
+                holder.imageViewNotificationsOn.visibility = View.GONE
+                holder.imageViewNotificationsOff.visibility = View.VISIBLE
+            }
 
             val targetDay = plan.targetNotificationDayOfMonth
             val currentDate = LocalDate.now()
@@ -73,10 +83,22 @@ class PlanningAdapter(
             holder.textViewNextPaymentDate.text =
                 holder.itemView.context.getString(R.string.next_payment, formattedDate)
 
-            holder.switchNotification.setOnCheckedChangeListener { _, isChecked ->
-                onNotificationToggle(plan, isChecked)
+
+            holder.imageViewNotificationsOn.setOnClickListener {
+                onNotificationToggle(plan, false)
+                holder.imageViewNotificationsOn.visibility = View.GONE
+                holder.imageViewNotificationsOff.visibility = View.VISIBLE
             }
 
+            holder.imageViewNotificationsOff.setOnClickListener {
+                onNotificationToggle(plan, true)
+                holder.imageViewNotificationsOn.visibility = View.VISIBLE
+                holder.imageViewNotificationsOff.visibility = View.GONE
+            }
+
+            holder.itemView.setOnClickListener {
+                onItemClick(plan)
+            }
         } else if (holder is AddButtonViewHolder) {
             holder.textViewName.text = "Создать новый план"
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
@@ -94,7 +116,10 @@ class PlanningAdapter(
     class PlansViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewPlanName: TextView = itemView.findViewById(R.id.textViewPlanName)
         val textViewNextPaymentDate: TextView = itemView.findViewById(R.id.textViewNextPaymentDate)
-        val switchNotification: SwitchCompat = itemView.findViewById(R.id.switchNotification)
+        val imageViewNotificationsOn: ImageView =
+            itemView.findViewById(R.id.imageViewNotificationsOn)
+        val imageViewNotificationsOff: ImageView =
+            itemView.findViewById(R.id.imageViewNotificationsOff)
     }
 
     class AddButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

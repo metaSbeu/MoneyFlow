@@ -90,6 +90,7 @@
     <string name="incorrect_old_pin">Неверный старый PIN-код</string>
     <string name="pins_dont_match">PIN-коды не совпадают</string>
     <string name="pin_codes_dont_match">PIN-коды не совпадают!</string>
-    <string name="plan_name_sum">%s: %f</string>
+    <string name="plan_name_sum">%s: %s</string>
+    <string name="bell">bell</string>
 
 </resources>

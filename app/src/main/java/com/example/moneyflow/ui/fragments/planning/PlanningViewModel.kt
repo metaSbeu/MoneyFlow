@@ -18,9 +18,6 @@ class PlanningViewModel(application: Application) : AndroidViewModel(application
     private val _plans = MutableLiveData<List<Plan>>()
     val plans: LiveData<List<Plan>> = _plans
 
-    private val _plansSum = MutableLiveData<Double>()
-    val plansSum: LiveData<Double> = _plansSum
-
     private val _monthSum = MutableLiveData<Double>()
     val monthSum: LiveData<Double> = _monthSum
 
@@ -58,15 +55,6 @@ class PlanningViewModel(application: Application) : AndroidViewModel(application
                     _monthSum.value = monthSum
                 }
             )
-        compositeDisposable.add(disposable)
-    }
-    fun removePlan(plan: Plan) {
-        val disposable = database.planDao().delete(plan.id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                refreshPlans()
-            }
         compositeDisposable.add(disposable)
     }
 

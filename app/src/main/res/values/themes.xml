@@ -16,4 +16,5 @@
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
     <color name="button_text_color">#000000</color>
     <color name="background">#EFEFEF</color>
+    <color name="primary">#5C84F2</color>
 </resources>

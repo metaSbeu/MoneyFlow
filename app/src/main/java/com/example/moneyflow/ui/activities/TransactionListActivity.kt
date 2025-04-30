@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Formatter.formatWithSpaces
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.data.getDrawableResId
@@ -264,14 +265,6 @@ class TransactionListActivity : AppCompatActivity() {
     private fun setupAllWallets() {
         binding.imageViewWalletIcon.setImageResource(R.drawable.ic_bank)
         binding.textViewWalletName.text = getString(R.string.all_wallets)
-    }
-
-    private fun Double.formatWithSpaces(): String {
-        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
-            groupingSize = 3
-            isDecimalSeparatorAlwaysShown = false
-        }
-        return formatter.format(this)
     }
 
     private fun formatAmount(amount: Double): String {
