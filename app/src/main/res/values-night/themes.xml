@@ -21,6 +21,8 @@
         <item name="colorPrimary">@color/my_dark_primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
+        <item name="android:textColor">@color/white</item>
+
     </style>
 
     <style name="Theme.MoneyFlow.AuthScreen" parent="Base.Theme.MoneyFlow">
@@ -34,5 +36,6 @@
 
     <color name="button_text_color">#FFFFFF</color>
     <color name="background">#000000</color>
+    <color name="item_background">#424242</color>
     <color name="primary">#5C84F2</color>
 </resources>
