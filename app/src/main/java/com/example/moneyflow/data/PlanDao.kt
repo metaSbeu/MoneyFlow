@@ -22,4 +22,11 @@ interface PlanDao {
 
     @Update
     fun update(plan: Plan): Completable
+
+    @Query("SELECT * FROM plans WHERE isNotificationActive = 1")
+    fun getAllWithNotificationActive(): List<Plan>
+
+    @Query("SELECT * FROM plans WHERE id = :id")
+    fun getPlanById(id: Int): Plan?
+
 }

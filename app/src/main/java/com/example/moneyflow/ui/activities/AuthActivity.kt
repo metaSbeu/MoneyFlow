@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -19,10 +21,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import com.example.moneyflow.R
 import com.example.moneyflow.data.PreferenceManager
 import com.example.moneyflow.databinding.ActivityAuthBinding
@@ -85,7 +87,71 @@ class AuthActivity : AppCompatActivity() {
         if (mode != MODE_CHANGE_PIN) {
             fingerprintAuth()
         }
+
+//        val notificationChannel = NotificationChannel(
+//            "TEST_CHANNEL",
+//            "TEST DESCRIPTION",
+//            NotificationManager.IMPORTANCE_DEFAULT
+//        )
+//        val notificationManager = getSystemService(NotificationManager::class.java)
+//        notificationManager.createNotificationChannel(notificationChannel)
+//
+//        val notification = NotificationCompat.Builder(this, "TEST_CHANNEL")
+//            .setContentTitle("Test title")
+//            .setContentText("Test text")
+//            .setSmallIcon(R.drawable.ic_bicycle)
+//            .build()
+//        notificationManager.notify(1, notification)
+//        scheduleDailyReminder(this)
     }
+
+//    fun scheduleDailyReminder(context: Context) {
+//        val DAILY_REMINDER_REQUEST_CODE = 123
+//        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val intent = Intent(context, DailyReminderReceiver::class.java)
+//        val pendingIntent = PendingIntent.getBroadcast(
+//            context,
+//            DAILY_REMINDER_REQUEST_CODE,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+//        )
+//
+//        val calendar = Calendar.getInstance(Locale.getDefault()).apply {
+//            timeInMillis = System.currentTimeMillis()
+//            set(Calendar.HOUR_OF_DAY, 23) // 20:00
+//            set(Calendar.MINUTE, 56)
+//            set(Calendar.SECOND, 50)
+//            set(Calendar.MILLISECOND, 0)
+//
+//            // Если текущее время уже после 20:00, запланируйте на следующий день
+//            if (timeInMillis <= System.currentTimeMillis()) {
+//                add(Calendar.DAY_OF_YEAR, 1)
+//            }
+//        }
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            alarmManager.setExactAndAllowWhileIdle(
+//                AlarmManager.RTC_WAKEUP,
+//                calendar.timeInMillis,
+//                pendingIntent
+//            )
+//            android.util.Log.d("AlarmScheduler", "Exact alarm scheduled for: ${calendar.time}")
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            alarmManager.setExact(
+//                AlarmManager.RTC_WAKEUP,
+//                calendar.timeInMillis,
+//                pendingIntent
+//            )
+//            android.util.Log.d("AlarmScheduler", "Exact alarm scheduled for (KitKat+): ${calendar.time}")
+//        } else {
+//            alarmManager.set(
+//                AlarmManager.RTC_WAKEUP,
+//                calendar.timeInMillis,
+//                pendingIntent
+//            )
+//            android.util.Log.d("AlarmScheduler", "Alarm scheduled (older versions): ${calendar.time}")
+//        }
+//    }
 
     private fun setupForChangePin() {
         binding.textViewTitle.visibility = View.VISIBLE
@@ -119,7 +185,15 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.passwordState.observe(this) { state ->
-            android.util.Log.d("AuthActivity", "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${intent.getIntExtra(EXTRA_MODE, MODE_AUTH)}")
+            android.util.Log.d(
+                "AuthActivity",
+                "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${
+                    intent.getIntExtra(
+                        EXTRA_MODE,
+                        MODE_AUTH
+                    )
+                }"
+            )
             when (state) {
                 AuthViewModel.PasswordState.EMPTY -> clearAllIndicators()
                 AuthViewModel.PasswordState.IN_PROGRESS -> refreshIndicators(true)
@@ -129,15 +203,22 @@ class AuthActivity : AppCompatActivity() {
                         MODE_CHANGE_PIN -> viewModel.handlePinChange(this)
                         else -> {
                             if (isSetupMode) {
-                                android.util.Log.d("AuthActivity", "Handling setup mode with pin: ${viewModel.password.value}")
+                                android.util.Log.d(
+                                    "AuthActivity",
+                                    "Handling setup mode with pin: ${viewModel.password.value}"
+                                )
                                 viewModel.handleSetupMode(viewModel.password.value ?: "")
                             } else {
-                                android.util.Log.d("AuthActivity", "Checking password: ${viewModel.password.value}")
+                                android.util.Log.d(
+                                    "AuthActivity",
+                                    "Checking password: ${viewModel.password.value}"
+                                )
                                 viewModel.checkPassword(this)
                             }
                         }
                     }
                 }
+
                 AuthViewModel.PasswordState.CORRECT -> handleCorrectPassword()
                 AuthViewModel.PasswordState.INCORRECT -> handleIncorrectPassword()
                 AuthViewModel.PasswordState.ERASED_LAST_DIGIT -> refreshIndicators(false)
@@ -148,9 +229,11 @@ class AuthActivity : AppCompatActivity() {
                 AuthViewModel.SetupState.FIRST_ENTRY -> {
                     binding.textViewTitle.text = getString(R.string.setup_pin_title)
                 }
+
                 AuthViewModel.SetupState.CONFIRMATION -> {
                     binding.textViewTitle.text = getString(R.string.confirm_pin_title)
                 }
+
                 else -> Unit
             }
         }
@@ -160,16 +243,21 @@ class AuthActivity : AppCompatActivity() {
                 AuthViewModel.ChangePinState.ENTER_OLD_PIN -> {
                     binding.textViewTitle.text = getString(R.string.enter_old_pin)
                 }
+
                 AuthViewModel.ChangePinState.ENTER_NEW_PIN -> {
                     binding.textViewTitle.text = getString(R.string.enter_new_pin)
                 }
+
                 AuthViewModel.ChangePinState.CONFIRM_NEW_PIN -> {
                     binding.textViewTitle.text = getString(R.string.confirm_new_pin_title)
                 }
+
                 AuthViewModel.ChangePinState.SUCCESS -> {
-                    Toast.makeText(this, R.string.pin_changed_successfully, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.pin_changed_successfully, Toast.LENGTH_SHORT)
+                        .show()
                     finish()
                 }
+
                 else -> Unit
             }
         }
@@ -206,10 +294,12 @@ class AuthActivity : AppCompatActivity() {
                     binding.buttonErase.visibility = View.GONE
                 }
             } else if (isSetupMode) {
-                binding.buttonErase.visibility = if (password.isNotEmpty()) View.VISIBLE else View.GONE
+                binding.buttonErase.visibility =
+                    if (password.isNotEmpty()) View.VISIBLE else View.GONE
                 binding.buttonFingerprint.visibility = View.GONE
             } else if (intent.getIntExtra(EXTRA_MODE, MODE_AUTH) == MODE_CHANGE_PIN) {
-                binding.buttonErase.visibility = if (password.isNotEmpty()) View.VISIBLE else View.GONE
+                binding.buttonErase.visibility =
+                    if (password.isNotEmpty()) View.VISIBLE else View.GONE
                 binding.buttonFingerprint.visibility = View.GONE
             }
         }
@@ -234,7 +324,12 @@ class AuthActivity : AppCompatActivity() {
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
-        vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+        vibrator.vibrate(
+            VibrationEffect.createOneShot(
+                duration,
+                VibrationEffect.DEFAULT_AMPLITUDE
+            )
+        )
     }
 
     private fun setUpIndicators() {
