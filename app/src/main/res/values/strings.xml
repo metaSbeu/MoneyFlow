@@ -67,6 +67,7 @@
     <string name="incomes">Доходы</string>
     <string name="comment_s">Комментарий: %s</string>
     <string name="setup_pin_title">Установите ПИН код для авторизации</string>
+    <string name="next_payment">Следующий платеж: %1$s</string>
 
     <string-array name="themes">
         <item>Светлая</item>
@@ -89,5 +90,7 @@
     <string name="incorrect_old_pin">Неверный старый PIN-код</string>
     <string name="pins_dont_match">PIN-коды не совпадают</string>
     <string name="pin_codes_dont_match">PIN-коды не совпадают!</string>
+    <string name="plan_name_sum">%s: %s</string>
+    <string name="bell">bell</string>
 
 </resources>

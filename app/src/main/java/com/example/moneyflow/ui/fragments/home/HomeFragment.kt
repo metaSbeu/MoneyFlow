@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Formatter.formatWithSpaces
 import com.example.moneyflow.data.SwipeCallback
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.FragmentHomeBinding
@@ -31,7 +32,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var selectedWallet: Wallet? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
@@ -72,7 +72,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupClickListeners()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupMonthData() {
         binding.textViewCurrentMonthExpenses.text =
             getString(R.string.current_month, getCurrentMonth())
@@ -104,7 +103,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getCurrentMonth(): String {
         val month = LocalDate.now().month
         return when (month) {
@@ -121,14 +119,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Month.NOVEMBER -> "ноябре"
             Month.DECEMBER -> "декабре"
         }
-    }
-
-    private fun Double.formatWithSpaces(): String {
-        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
-            groupingSize = 3
-            isDecimalSeparatorAlwaysShown = false
-        }
-        return formatter.format(this)
     }
 
     override fun onResume() {

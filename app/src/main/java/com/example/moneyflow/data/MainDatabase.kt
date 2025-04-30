@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Category::class, Transaction::class, Wallet::class],
+    entities = [Category::class, Transaction::class, Wallet::class, Plan::class],
     version = 1
 )
 abstract class MainDatabase : RoomDatabase() {
@@ -22,6 +22,7 @@ abstract class MainDatabase : RoomDatabase() {
                     MainDatabase::class.java,
                     "database.db"
                 )
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 instance
@@ -32,4 +33,5 @@ abstract class MainDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun walletDao(): WalletDao
     abstract fun transactionDao(): TransactionDao
+    abstract fun planDao(): PlanDao
 }
