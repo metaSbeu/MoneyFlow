@@ -17,7 +17,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -41,7 +40,6 @@ class AuthActivity : AppCompatActivity() {
     private var isSetupMode: Boolean = false
     private val viewModel: AuthViewModel by viewModels()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -73,7 +71,6 @@ class AuthActivity : AppCompatActivity() {
         binding.buttonErase.setOnClickListener {
             vibrate(50)
             viewModel.removeLastDigit()
-            updateEraseButtonVisibility()
         }
 
         binding.buttonExit.setOnClickListener {
@@ -97,7 +94,6 @@ class AuthActivity : AppCompatActivity() {
         binding.buttonExit.visibility = View.VISIBLE
         binding.textViewTitle.text = getString(R.string.enter_old_pin)
         viewModel.setChangePinMode()
-        updateEraseButtonVisibility()
     }
 
     private fun setupForFirstLaunch() {
@@ -107,7 +103,6 @@ class AuthActivity : AppCompatActivity() {
         binding.textViewTitle.text = getString(R.string.setup_pin_title)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupForAuth() {
         binding.textViewTitle.visibility = View.GONE
         binding.buttonExit.visibility = View.VISIBLE
@@ -122,7 +117,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
         viewModel.passwordState.observe(this) { state ->
             android.util.Log.d("AuthActivity", "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${intent.getIntExtra(EXTRA_MODE, MODE_AUTH)}")
@@ -221,38 +215,26 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleCorrectPassword() {
         switchIndicatorToGreen()
         indicators.forEach { animateIndicatorsScale(it) } // Анимация при успешном вводе
         vibrate(100)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleIncorrectPassword() {
         switchIndicatorToRed()
         vibrate(200)
         indicators.forEach { animateIndicatorsFail(it) }
     }
 
-    private fun updateEraseButtonVisibility() {
-        // Эта функция больше не нужна, так как видимость кнопки стирания
-        // контролируется через observer на viewModel.password
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     fun vibrate(duration: Long) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = getSystemService(VibratorManager::class.java)
-            vibratorManager?.defaultVibrator?.vibrate(
-                VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
-            )
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (getSystemService(VibratorManager::class.java) as VibratorManager).defaultVibrator
         } else {
-            val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(
-                VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
-            )
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
+
+        vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
     private fun setUpIndicators() {
@@ -351,7 +333,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpNumberPadClickListeners() {
         getNumberPadButtons().forEach { button ->
             button.setOnClickListener {
@@ -361,7 +342,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun fingerprintAuth() {
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(

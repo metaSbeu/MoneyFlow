@@ -31,7 +31,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var selectedWallet: Wallet? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
@@ -72,7 +71,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupClickListeners()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupMonthData() {
         binding.textViewCurrentMonthExpenses.text =
             getString(R.string.current_month, getCurrentMonth())
@@ -104,7 +102,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getCurrentMonth(): String {
         val month = LocalDate.now().month
         return when (month) {
