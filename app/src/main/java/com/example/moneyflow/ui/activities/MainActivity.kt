@@ -112,23 +112,23 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        // Для тестирования - установите на 1 минуту вперед от текущего времени
-//        val calendar = Calendar.getInstance().apply {
-//            add(Calendar.MINUTE, 1)
-//        }
-
+//      Для тестирования - установите на 1 минуту вперед от текущего времени
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.DAY_OF_MONTH, plan.targetNotificationDayOfMonth)
-            set(Calendar.HOUR_OF_DAY, 12)
-            set(Calendar.MINUTE, 30)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-
-            // Если запланированное время уже прошло сегодня, планируем на следующий месяц
-            if (timeInMillis <= System.currentTimeMillis()) {
-                add(Calendar.MONTH, 1)
-            }
+            add(Calendar.MINUTE, 5)
         }
+
+//        val calendar = Calendar.getInstance().apply {
+//            set(Calendar.DAY_OF_MONTH, plan.targetNotificationDayOfMonth)
+//            set(Calendar.HOUR_OF_DAY, 12)
+//            set(Calendar.MINUTE, 30)
+//            set(Calendar.SECOND, 0)
+//            set(Calendar.MILLISECOND, 0)
+//
+//            // Если запланированное время уже прошло сегодня, планируем на следующий месяц
+//            if (timeInMillis <= System.currentTimeMillis()) {
+//                add(Calendar.MONTH, 1)
+//            }
+//        }
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
         // Для отладки

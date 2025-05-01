@@ -39,14 +39,21 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     private fun showNotification(context: Context, plan: Plan) {
+        // Добавьте звук и вибрацию
         val builder = NotificationCompat.Builder(context, "money_flow_channel_id")
             .setSmallIcon(R.drawable.ic_bicycle)
             .setContentTitle("Напоминание о платеже")
             .setContentText("Сегодня в ${plan.name} необходимо внести ${plan.sum} ₽.")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH) // Измените на HIGH
+            .setVibrate(longArrayOf(0, 500, 200, 500)) // Вибрация
+            .setAutoCancel(true)
+            .setTimeoutAfter(3600000) // Автоотмена через 1 час
 
         with(NotificationManagerCompat.from(context)) {
-            notify(plan.id, builder.build())
+            try {
+                notify(plan.id, builder.build())
+            } catch (e: Exception) {
+                Log.e("Notification", "Failed to show notification", e)
+            }
         }
-    }
-}
+    }}
