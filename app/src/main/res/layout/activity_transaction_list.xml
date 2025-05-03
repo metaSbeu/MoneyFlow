@@ -36,6 +36,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/item_background"
                 android:gravity="center_vertical"
                 android:minHeight="80dp"
                 android:orientation="horizontal"
@@ -70,6 +71,7 @@
             android:layout_marginEnd="4dp"
             android:foregroundGravity="center"
             app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/item_background"
             app:layout_constraintEnd_toStartOf="@id/cardViewIncomes"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="@id/cardViewBalance"
@@ -79,6 +81,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:gravity="center"
                 android:text="@string/expenses"
                 android:textAlignment="center"
@@ -93,6 +96,7 @@
             android:layout_height="75dp"
             android:layout_marginStart="4dp"
             app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/item_background"
             app:layout_constraintEnd_toEndOf="@id/cardViewBalance"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/cardViewExpenses"
@@ -100,9 +104,9 @@
             tools:ignore="TextSizeCheck">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/incomes"
                 android:textSize="26sp"
                 android:textStyle="bold" />

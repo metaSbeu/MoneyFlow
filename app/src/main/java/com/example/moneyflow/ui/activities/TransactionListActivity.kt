@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -154,8 +155,8 @@ class TransactionListActivity : AppCompatActivity() {
             yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             valueLinePart1OffsetPercentage = 80f
-            valueTextColor = Color.BLACK
-            valueLineColor = Color.BLACK
+            valueTextColor = R.color.item_background
+            valueLineColor = R.color.item_background
             valueLineWidth = 1f
         }
 
@@ -181,7 +182,8 @@ class TransactionListActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.category_color_15),
             ContextCompat.getColor(this, R.color.category_color_5),
             ContextCompat.getColor(this, R.color.category_color_16),
-            ContextCompat.getColor(this, R.color.category_color_4)
+            ContextCompat.getColor(this, R.color.category_color_4),
+            ContextCompat.getColor(this, R.color.category_color_1)
         )
     }
 
@@ -190,7 +192,7 @@ class TransactionListActivity : AppCompatActivity() {
 
         // Вычисляем сумму для каждой категории
         for (transaction in transactions) {
-            val categoryName = transaction.category.name ?: "Без категории"
+            val categoryName = transaction.category.name
             val amount = transaction.transaction.sum
             categorySums[categoryName] = categorySums.getOrDefault(categoryName, 0.0) + amount
         }
@@ -200,10 +202,15 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun resetCardViewBackgroundColor() {
-        binding.cardViewExpenses.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
-        binding.cardViewIncomes.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
-    }
+        // Получаем цвет из текущей темы
+        val typedValue = TypedValue()
+        theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
+        val backgroundColor = typedValue.data
 
+        // Устанавливаем цвет
+        binding.cardViewExpenses.setCardBackgroundColor(backgroundColor)
+        binding.cardViewIncomes.setCardBackgroundColor(backgroundColor)
+    }
     private fun changeBackgroundColor(cardView: CardView) {
         cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.my_light_primary))
     }
@@ -265,11 +272,6 @@ class TransactionListActivity : AppCompatActivity() {
     private fun setupAllWallets() {
         binding.imageViewWalletIcon.setImageResource(R.drawable.ic_bank)
         binding.textViewWalletName.text = getString(R.string.all_wallets)
-    }
-
-    private fun formatAmount(amount: Double): String {
-        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault()))
-        return formatter.format(amount)
     }
 
     override fun onResume() {

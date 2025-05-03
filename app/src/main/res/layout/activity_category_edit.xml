@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:background="@color/my_light_background"
+        android:background="@color/background"
         android:contentDescription="@string/delete_category"
         android:padding="8dp"
         android:src="@drawable/ic_delete"

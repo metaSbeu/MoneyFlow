@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFEFEF"
     tools:context=".ui.activities.TransactionAddActivity">
 
     <com.google.android.material.button.MaterialButtonToggleGroup
@@ -119,6 +118,7 @@
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:background="@color/item_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="12dp">
@@ -136,7 +136,7 @@
                 android:id="@+id/textViewWalletNameAndBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color_primary"
                 android:textSize="20sp"
                 android:text="@string/wallet_name_wallet_balance"
                 tools:text="Сбербанк: 500,00" />

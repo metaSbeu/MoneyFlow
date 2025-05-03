@@ -101,7 +101,7 @@
         android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/my_light_background"
+        android:background="@color/background"
         android:contentDescription="@string/delete_category"
         android:padding="8dp"
         android:layout_marginStart="8dp"
