@@ -8,8 +8,10 @@ import android.util.TypedValue
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -135,11 +137,12 @@ class TransactionListActivity : AppCompatActivity() {
         pieChart.isDrawHoleEnabled = false
         pieChart.setDrawCenterText(true)
         pieChart.legend.isEnabled = false
-        pieChart.setEntryLabelColor(Color.BLACK)
 
         // Подготовка данных
         val entries = preparePieChartData(transactions)
-
+        val labelTextColorMF = ContextCompat.getColor(this, R.color.text_color_primary)
+        val valueTextColorMF = ContextCompat.getColor(this, R.color.text_color_primary)
+        pieChart.setEntryLabelColor(labelTextColorMF)
         // Обработка пустых данных
         if (entries.isEmpty()) {
             pieChart.clear()
@@ -155,8 +158,9 @@ class TransactionListActivity : AppCompatActivity() {
             yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             valueLinePart1OffsetPercentage = 80f
-            valueTextColor = R.color.item_background
-            valueLineColor = R.color.item_background
+
+            valueTextColor = valueTextColorMF
+            valueLineColor = ContextCompat.getColor(this@TransactionListActivity, R.color.item_background) // Use context here
             valueLineWidth = 1f
         }
 
@@ -176,7 +180,6 @@ class TransactionListActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.category_color_6),
             ContextCompat.getColor(this, R.color.category_color_10),
             ContextCompat.getColor(this, R.color.category_color_12),
-
             ContextCompat.getColor(this, R.color.category_color_3),
             ContextCompat.getColor(this, R.color.category_color_9),
             ContextCompat.getColor(this, R.color.category_color_15),
@@ -271,8 +274,18 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun setupAllWallets() {
         binding.imageViewWalletIcon.setImageResource(R.drawable.ic_bank)
+
+        val iconColor = ContextCompat.getColor(this, R.color.button_text_color)
+        val drawable = AppCompatResources.getDrawable(this, R.drawable.ic_bank)
+        drawable?.let {
+            val wrappedDrawable = DrawableCompat.wrap(it).mutate()
+            DrawableCompat.setTint(wrappedDrawable, iconColor)
+            binding.imageViewWalletIcon.setImageDrawable(wrappedDrawable)
+        }
+
         binding.textViewWalletName.text = getString(R.string.all_wallets)
     }
+
 
     override fun onResume() {
         super.onResume()
