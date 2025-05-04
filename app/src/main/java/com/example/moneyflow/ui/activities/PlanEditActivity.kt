@@ -11,6 +11,7 @@ import com.example.moneyflow.R
 import com.example.moneyflow.data.Plan
 import com.example.moneyflow.databinding.ActivityPlanEditBinding
 import com.example.moneyflow.ui.viewmodels.PlanEditViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class PlanEditActivity : AppCompatActivity() {
 
@@ -25,6 +26,7 @@ class PlanEditActivity : AppCompatActivity() {
         viewModel = PlanEditViewModel(application)
         setContentView(binding.root)
         setupInsets()
+        setupBottomViewKeyboardVisibilityListener(binding.bottomButtonsContainer)
 
         planToEdit = intent.getSerializableExtra(EXTRA_PLAN) as? Plan // Получаем редактируемый план
         planToEdit?.let { plan ->

@@ -13,6 +13,7 @@ import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityWalletEditBinding
 import com.example.moneyflow.ui.adapters.BankIconAdapter
 import com.example.moneyflow.ui.viewmodels.WalletEditViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class WalletEditActivity : AppCompatActivity() {
 
@@ -27,6 +28,7 @@ class WalletEditActivity : AppCompatActivity() {
 
         binding = ActivityWalletEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupBottomViewKeyboardVisibilityListener(binding.bottomButtonsContainer)
         setupInsets()
         viewModel = ViewModelProvider(this)[WalletEditViewModel::class.java]
 

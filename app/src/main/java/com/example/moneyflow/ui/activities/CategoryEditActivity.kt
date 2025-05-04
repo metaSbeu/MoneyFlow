@@ -11,10 +11,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
-import com.example.moneyflow.data.IconsManager
+import com.example.moneyflow.utils.IconsManager
 import com.example.moneyflow.databinding.ActivityCategoryEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.CategoryEditViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class CategoryEditActivity : AppCompatActivity() {
 
@@ -25,11 +26,11 @@ class CategoryEditActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
 
         binding = ActivityCategoryEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupInsets()
+
 
         viewModel = ViewModelProvider(this)[CategoryEditViewModel::class.java]
 

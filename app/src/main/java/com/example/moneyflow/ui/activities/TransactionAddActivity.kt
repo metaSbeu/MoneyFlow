@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.Transaction
-import com.example.moneyflow.data.getDrawableResId
+import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 
@@ -40,7 +40,6 @@ class TransactionAddActivity : AppCompatActivity() {
 
         binding = ActivityTransactionAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupInsets()
 
         viewModel = ViewModelProvider(this)[TransactionAddViewModel::class.java]
 

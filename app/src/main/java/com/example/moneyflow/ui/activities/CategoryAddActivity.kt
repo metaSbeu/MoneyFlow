@@ -14,6 +14,7 @@ import com.example.moneyflow.data.Category
 import com.example.moneyflow.databinding.ActivityCategoryAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.CategoryAddViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class CategoryAddActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class CategoryAddActivity : AppCompatActivity() {
 
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupBottomViewKeyboardVisibilityListener(binding.buttonSave)
 
         isIncome = intent.getBooleanExtra(EXTRA_IS_INCOME_CATEGORY, false)
 

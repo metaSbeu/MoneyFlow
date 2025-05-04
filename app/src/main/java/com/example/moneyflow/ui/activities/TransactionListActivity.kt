@@ -2,7 +2,6 @@ package com.example.moneyflow.ui.activities
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.activity.enableEdgeToEdge
@@ -16,10 +15,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
-import com.example.moneyflow.data.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
-import com.example.moneyflow.data.getDrawableResId
+import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
 import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
@@ -28,8 +27,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 

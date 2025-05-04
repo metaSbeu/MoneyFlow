@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.moneyflow.data.DefaultCategories
-import com.example.moneyflow.data.DefaultWallets
+import com.example.moneyflow.utils.DefaultCategories
+import com.example.moneyflow.utils.DefaultWallets
 import com.example.moneyflow.data.MainDatabase
-import com.example.moneyflow.data.PreferenceManager
+import com.example.moneyflow.utils.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
