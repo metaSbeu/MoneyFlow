@@ -25,8 +25,7 @@ class TransactionAddActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransactionAddBinding
 
-    private lateinit var expenseAdapter: CategoryAdapter
-    private lateinit var incomeAdapter: CategoryAdapter
+    private lateinit var categoriesAdapter: CategoryAdapter
 
     private lateinit var viewModel: TransactionAddViewModel
 
@@ -52,8 +51,7 @@ class TransactionAddActivity : AppCompatActivity() {
         viewModel.getWalletById(walletId)
 
         setupAdapters()
-        binding.recyclerViewExpenseCategories.adapter = expenseAdapter
-        binding.recyclerViewIncomeCategories.adapter = incomeAdapter
+        binding.recyclerViewCategories.adapter = categoriesAdapter
 
         observeViewModel()
 
@@ -90,12 +88,10 @@ class TransactionAddActivity : AppCompatActivity() {
             val intent = CategoryEditActivity.newIntent(this, selectedCategory)
             startActivity(intent)
         }
-
-
     }
 
     fun setupAdapters() {
-        expenseAdapter = CategoryAdapter(
+        categoriesAdapter = CategoryAdapter(
             onItemClick = {
                 selectedCategory = it
             },
@@ -108,30 +104,6 @@ class TransactionAddActivity : AppCompatActivity() {
                 selectedCategory = it
             }
         )
-
-        incomeAdapter = CategoryAdapter(
-            onItemClick = {
-                selectedCategory = it
-            },
-            onAddClick = {
-                startActivity(CategoryAddActivity.newIntent(this, true))
-            },
-            showAddButton = true,
-            isIncome = true,
-            onFirstCategorySelected = {
-                selectedCategory = it
-            }
-        )
-    }
-
-    fun switchRecyclerViewVisibility(isIncomeSelected: Boolean) {
-        if (isIncomeSelected) {
-            binding.recyclerViewIncomeCategories.visibility = View.VISIBLE
-            binding.recyclerViewExpenseCategories.visibility = View.GONE
-        } else {
-            binding.recyclerViewIncomeCategories.visibility = View.GONE
-            binding.recyclerViewExpenseCategories.visibility = View.VISIBLE
-        }
     }
 
     override fun onResume() {
@@ -144,8 +116,11 @@ class TransactionAddActivity : AppCompatActivity() {
             val expenseCategories = categories.filter { !it.isIncome }
             val incomeCategories = categories.filter { it.isIncome }
 
-            expenseAdapter.categories = expenseCategories
-            incomeAdapter.categories = incomeCategories
+            if (isIncomeSelected) {
+                categoriesAdapter.categories = incomeCategories
+            } else {
+                categoriesAdapter.categories = expenseCategories
+            }
 
             val defaultCategory = if (isIncomeSelected) incomeCategories.firstOrNull() else expenseCategories.firstOrNull()
             if (defaultCategory != null) {
@@ -206,12 +181,15 @@ class TransactionAddActivity : AppCompatActivity() {
         toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 isIncomeSelected = checkedId == R.id.buttonIncome
-                switchRecyclerViewVisibility(isIncomeSelected)
+                // Обновляем список категорий, отображаемый адаптером
+                viewModel.categories.value?.let { categories ->
+                    val filteredCategories = categories.filter { it.isIncome == isIncomeSelected }
+                    categoriesAdapter.categories = filteredCategories
+                    categoriesAdapter.isIncome = isIncomeSelected // Обновите флаг isIncome в адаптере
+                }
             }
         }
-        switchRecyclerViewVisibility(isIncomeSelected)
     }
-
     fun setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
