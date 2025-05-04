@@ -95,7 +95,7 @@ class TransactionAddActivity : AppCompatActivity() {
                 selectedCategory = it
             },
             onAddClick = {
-                startActivity(CategoryAddActivity.newIntent(this, false))
+                startActivity(CategoryAddActivity.newIntent(this, isIncomeSelected))
             },
             showAddButton = true,
             isIncome = false,

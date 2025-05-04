@@ -26,11 +26,9 @@ class CategoryAddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupBottomViewKeyboardVisibilityListener(binding.buttonSave)
 
         isIncome = intent.getBooleanExtra(EXTRA_IS_INCOME_CATEGORY, false)
 
@@ -45,7 +43,7 @@ class CategoryAddActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
 
         viewModel.defaultIcons.observe(this) {
-            adapter.categories = viewModel.getUpDefaultCategoryIcons()
+            adapter.categories = viewModel.getDefaultCategoryIcons()
         }
 
         binding.recyclerViewCategories.adapter = adapter
@@ -73,7 +71,6 @@ class CategoryAddActivity : AppCompatActivity() {
                 finish()
             }
         }
-        setupInsets()
     }
 
     fun setupInsets() {

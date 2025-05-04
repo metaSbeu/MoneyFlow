@@ -3,6 +3,7 @@ package com.example.moneyflow.ui.fragments.home
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -65,6 +66,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupMonthData()
         setupItemTouchHelper()
         setupClickListeners()
+
+        binding.recyclerViewWallets.postDelayed({
+            val viewHolder = binding.recyclerViewWallets.findViewHolderForAdapterPosition(0)
+            viewHolder?.itemView?.let { view ->
+                // Анимация свайпа влево и назад
+                view.animate()
+                    .translationX(-100f)
+                    .setDuration(200)
+                    .withEndAction {
+                        view.animate()
+                            .translationX(0f)
+                            .setDuration(200)
+                            .start()
+                    }
+                    .start()
+            }
+        }, 800) // Подождать, чтобы элементы успели отрисоваться
+
     }
 
     private fun setupMonthData() {
@@ -84,14 +103,36 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private fun showDeleteConfirmationDialog(position: Int) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Удалить счет")
+            .setMessage("Вы уверены, что хотите удалить счет '${adapter.wallets[position].name}'? Также удалятся все транзакции этого счета!")
+            .setPositiveButton("Удалить") { _, _ ->
+                // Удаляем счет
+                viewmodel.deleteWallet(adapter.wallets[position])
+            }
+            .setNegativeButton("Отмена") { _, _ ->
+                // Возвращаем элемент на место
+                adapter.notifyItemChanged(position)
+            }
+            .setOnCancelListener {
+                // На случай если пользователь закрыл диалог (например, тапнул вне окна)
+                adapter.notifyItemChanged(position)
+            }
+            .show()
+    }
+
     private fun setupItemTouchHelper() {
         val itemTouchHelper = ItemTouchHelper(
             SwipeCallback(
                 adapter,
-                { position -> viewmodel.deleteWallet(adapter.wallets[position]) },
                 { position ->
                     val wallet = adapter.wallets[position]
                     startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
+                },
+                { position ->
+                    showDeleteConfirmationDialog(position)
+
                 }
             )
         )

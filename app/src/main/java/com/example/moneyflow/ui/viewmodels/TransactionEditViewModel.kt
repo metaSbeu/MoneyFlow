@@ -29,6 +29,13 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
     private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> get() = _categories
 
+    private val _selectedWalletId = MutableLiveData<Int?>()
+    val selectedWalletId: LiveData<Int?> get() = _selectedWalletId
+
+    fun setSelectedWalletId(walletId: Int) {
+        _selectedWalletId.value = walletId
+    }
+
     fun refreshCategories() {
         val disposable = database.categoryDao().getCategories()
             .subscribeOn(Schedulers.io())
@@ -87,6 +94,7 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
             )
         compositeDisposable.add(disposable)
     }
+
     // Обновляем баланс кошелька в зависимости от транзакции
     fun updateWalletBalance(wallet: Wallet) {
         val disposable = database.walletDao().update(wallet)
@@ -114,50 +122,6 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
         compositeDisposable.add(disposable)
     }
 
-    // Обновление кошелька в транзакции
-    fun updateTransactionWallet(transaction: Transaction, newWallet: Wallet) {
-        val disposable = database.transactionDao().getTransactionById(transaction.id)
-            .flatMapCompletable { originalTransaction ->
-                // Обновляем балансы обоих кошельков
-                val oldWalletDisposable = database.walletDao().getWalletById(originalTransaction.walletId)
-                    .flatMapCompletable { oldWallet ->
-                        val updatedOldWallet = if (originalTransaction.isIncome) {
-                            oldWallet.copy(balance = oldWallet.balance - originalTransaction.sum)
-                        } else {
-                            oldWallet.copy(balance = oldWallet.balance + originalTransaction.sum)
-                        }
-                        database.walletDao().update(updatedOldWallet)
-                    }
-
-                val newWalletDisposable = database.walletDao().getWalletById(newWallet.id)
-                    .flatMapCompletable { currentNewWallet ->
-                        val updatedNewWallet = if (originalTransaction.isIncome) {
-                            currentNewWallet.copy(balance = currentNewWallet.balance + originalTransaction.sum)
-                        } else {
-                            currentNewWallet.copy(balance = currentNewWallet.balance - originalTransaction.sum)
-                        }
-                        database.walletDao().update(updatedNewWallet)
-                    }
-
-                // Обновляем саму транзакцию
-                val updateTransactionDisposable = Completable.fromAction {
-                    database.transactionDao().update(transaction.copy(walletId = newWallet.id))
-                }
-
-                Completable.concat(listOf(
-                    oldWalletDisposable,
-                    newWalletDisposable,
-                    updateTransactionDisposable
-                ))
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { Log.d(TAG, "Wallet changed successfully") },
-                { Log.e(TAG, "Error changing wallet", it) }
-            )
-        compositeDisposable.add(disposable)
-    }
     fun deleteTransaction(transactionId: Int) {
         // 1. Получаем транзакцию для удаления
         val getTransactionDisposable = database.transactionDao().getTransactionById(transactionId)
@@ -217,38 +181,69 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun updateTransaction(transaction: Transaction) {
-        val walletDisposable = database.walletDao().getWalletById(transaction.walletId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ wallet ->
-                // Получаем старую транзакцию, чтобы вычесть её сумму из баланса
-                val oldTransaction = _transaction.value
-                val oldAmount = oldTransaction?.sum ?: 0.0
+        val currentTransaction = _transaction.value ?: return
+        val newWalletId = _selectedWalletId.value ?: currentTransaction.walletId
 
-                // Вычисляем новый баланс
-                val newBalance = if (transaction.isIncome) {
-                    wallet.balance - oldAmount + transaction.sum // Вычитаем старую сумму и добавляем новую
-                } else {
-                    wallet.balance + oldAmount - transaction.sum // Вычитаем старую сумму и вычитаем новую
+        // Получаем старый кошелек
+        val getOldWalletDisposable = database.walletDao().getWalletById(currentTransaction.walletId)
+            .subscribeOn(Schedulers.io())
+            .flatMap { oldWallet ->
+                // Получаем новый кошелек
+                database.walletDao().getWalletById(newWalletId)
+                    .map { newWallet -> Pair(oldWallet, newWallet) }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ (oldWallet, newWallet) ->
+                // Обновляем балансы, если кошелек был изменен
+                if (oldWallet.id != newWallet.id) {
+                    val amount = currentTransaction.sum
+                    // Обновляем баланс старого кошелька (возвращаем сумму)
+                    val updatedOldWallet = if (currentTransaction.isIncome) {
+                        oldWallet.copy(balance = oldWallet.balance - amount)
+                    } else {
+                        oldWallet.copy(balance = oldWallet.balance + amount)
+                    }
+                    updateWalletBalanceInternal(updatedOldWallet)
+
+                    // Обновляем баланс нового кошелька (применяем сумму)
+                    val updatedNewWallet = if (transaction.isIncome) {
+                        newWallet.copy(balance = newWallet.balance + amount)
+                    } else {
+                        newWallet.copy(balance = newWallet.balance - amount)
+                    }
+                    updateWalletBalanceInternal(updatedNewWallet)
                 }
 
-                val updatedWallet = wallet.copy(balance = newBalance)
-                updateWalletBalance(updatedWallet)
-
-                // Обновляем транзакцию в базе данных
-                val transactionDisposable = database.transactionDao().update(transaction)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        _shouldCloseScreen.value = true
-                    }, {
-                        // Обработка ошибок
-                    })
-                compositeDisposable.add(transactionDisposable)
-            }, {
-                // Обработка ошибки, если не найден кошелек
+                // Обновляем саму транзакцию
+                updateTransactionInternal(transaction.copy(walletId = newWallet.id))
+            }, { error ->
+                Log.e(TAG, "Error getting wallets for update", error)
             })
-        compositeDisposable.add(walletDisposable)
+        compositeDisposable.add(getOldWalletDisposable)
+    }
+
+    private fun updateWalletBalanceInternal(wallet: Wallet) {
+        val disposable = database.walletDao().update(wallet)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d(TAG, "Wallet balance updated")
+            }, { error ->
+                Log.e(TAG, "Error updating wallet balance", error)
+            })
+        compositeDisposable.add(disposable)
+    }
+
+    private fun updateTransactionInternal(transaction: Transaction) {
+        val disposable = database.transactionDao().update(transaction)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _shouldCloseScreen.value = true
+            }, { error ->
+                Log.e(TAG, "Error updating transaction", error)
+            })
+        compositeDisposable.add(disposable)
     }
 
     override fun onCleared() {

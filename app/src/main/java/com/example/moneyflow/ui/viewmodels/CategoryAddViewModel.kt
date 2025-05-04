@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.MainDatabase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -23,7 +22,7 @@ class CategoryAddViewModel(application: Application) : AndroidViewModel(applicat
     val defaultIcons: LiveData<List<Category>> get() = _defaultIcons
 
     init {
-        _defaultIcons.value = getUpDefaultCategoryIcons()
+        _defaultIcons.value = getDefaultCategoryIcons()
     }
 
     fun addCategory(category: Category) {
@@ -38,7 +37,7 @@ class CategoryAddViewModel(application: Application) : AndroidViewModel(applicat
         compositeDisposable.add(disposable)
     }
 
-    fun getUpDefaultCategoryIcons(): List<Category> {
+    fun getDefaultCategoryIcons(): List<Category> {
         return listOf<Category>(
             Category(name = "", icon = "ic_movie", isIncome = false),
             Category(name = "", icon = "ic_game", isIncome = false),
