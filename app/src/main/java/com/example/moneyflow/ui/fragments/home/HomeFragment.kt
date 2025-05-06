@@ -1,7 +1,6 @@
 package com.example.moneyflow.ui.fragments.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -9,15 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.moneyflow.R
-import com.example.moneyflow.utils.Formatter.formatWithSpaces
-import com.example.moneyflow.utils.SwipeCallback
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.FragmentHomeBinding
-import com.example.moneyflow.ui.activities.WalletAddActivity
 import com.example.moneyflow.ui.activities.TransactionAddActivity
 import com.example.moneyflow.ui.activities.TransactionListActivity
+import com.example.moneyflow.ui.activities.WalletAddActivity
 import com.example.moneyflow.ui.activities.WalletEditActivity
 import com.example.moneyflow.ui.adapters.WalletAdapter
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.SwipeCallback
 import java.time.LocalDate
 import java.time.Month
 
@@ -45,7 +44,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 startActivity(WalletAddActivity.newIntent(requireContext()))
             }
         )
-
+        adapter.selectAll()
         viewmodel.wallets.observe(viewLifecycleOwner) {
             adapter.wallets = it
         }

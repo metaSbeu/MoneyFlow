@@ -149,7 +149,9 @@ class TransactionListActivity : AppCompatActivity() {
 
         pieChart.setUsePercentValues(false)
         pieChart.description.isEnabled = false
-        pieChart.isDrawHoleEnabled = false
+        pieChart.isDrawHoleEnabled = true
+        pieChart.setNoDataText("Не добавлено ни одной транзакции")
+        pieChart.setHoleColor(ContextCompat.getColor(this, R.color.background))
         pieChart.setDrawCenterText(true)
         pieChart.legend.isEnabled = false
 
