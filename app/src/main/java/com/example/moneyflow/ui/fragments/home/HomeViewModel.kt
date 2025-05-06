@@ -29,6 +29,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _monthIncomes = MutableLiveData<Double>()
     val monthIncomes: LiveData<Double> get() = _monthIncomes
 
+    private val _wallet = MutableLiveData<Wallet?>() // Изменили на MutableLiveData<Wallet?>
+    val wallet: LiveData<Wallet?> get() = _wallet // Добавили публичный getter
+
     fun getMonthBalance() {
         val disposable = database.transactionDao().getTransactions().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe({ transactions ->
@@ -95,6 +98,20 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 refreshWalletsList()
             })
         compositeDisposable.add(disposable)
+    }
+
+    fun getWalletById(walletId: Int): LiveData<Wallet?> { // Изменили возвращаемый тип на LiveData<Wallet?>
+        val disposable = database.walletDao().getWalletById(walletId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ wallet ->
+                _wallet.value = wallet // Обновляем _wallet при получении данных
+            }, { error ->
+                Log.e("HomeViewModel", "Error fetching wallet by ID: $walletId", error)
+                _wallet.value = null // Обрабатываем ошибку, устанавливая значение null
+            })
+        compositeDisposable.add(disposable)
+        return _wallet // Возвращаем LiveData
     }
 
     override fun onCleared() {

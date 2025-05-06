@@ -1,6 +1,7 @@
 package com.example.moneyflow.ui.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -173,12 +174,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.cardViewBalance.setOnClickListener {
-            val intent = if (selectedWallet == null) {
-                TransactionListActivity.newIntentAllWallets(requireContext())
+            if (selectedWallet == null) {
+                val intent = TransactionListActivity.newIntentAllWallets(requireContext())
+                startActivity(intent)
             } else {
-                TransactionListActivity.newIntent(requireContext(), selectedWallet!!)
+                // Запрашиваем актуальную информацию о кошельке перед переходом
+                viewmodel.getWalletById(selectedWallet!!.id).observe(viewLifecycleOwner) { updatedWallet ->
+                    updatedWallet?.let {
+                        val intent = TransactionListActivity.newIntent(requireContext(), it) // Передаем обновленный объект
+                        startActivity(intent)
+                        Log.d("TAG", "intent sent to start TransactionListActivity")
+                    }
+                }
             }
-            startActivity(intent)
         }
-    }
-}
+    }}

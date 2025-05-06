@@ -3,6 +3,7 @@ package com.example.moneyflow.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -46,6 +47,8 @@ class TransactionListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
 
         binding = ActivityTransactionListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -121,8 +124,35 @@ class TransactionListActivity : AppCompatActivity() {
                 isIncomeSelected = true
             }
         }
-
+        Log.d(TAG, "onCreate: started")
+//        Log.d(TAG, "onCreate: wallet = $wallet")
         setUpInsets()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: started")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadTransactions(wallet?.id)
+        Log.d(TAG, "onResume: started")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause: started")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop: started")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy: started")
     }
 
     private fun setupPieChart(transactions: List<TransactionWithCategory>) {
@@ -283,12 +313,6 @@ class TransactionListActivity : AppCompatActivity() {
         binding.textViewWalletName.text = getString(R.string.all_wallets)
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadTransactions(wallet?.id)
-    }
-
     private fun observeViewModels() {
         viewModel.transactions.observe(this) { transactions ->
             adapter.transactions = transactions
@@ -307,8 +331,10 @@ class TransactionListActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_WALLET = "wallet"
+        const val TAG = "TAG"
 
         fun newIntent(context: Context, wallet: Wallet): Intent {
+            Log.d(TAG, "newIntent called with wallet: $wallet")
             val intent = Intent(context, TransactionListActivity::class.java)
             intent.putExtra(EXTRA_WALLET, wallet)
             return intent

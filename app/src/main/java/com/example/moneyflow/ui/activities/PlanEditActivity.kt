@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.moneyflow.R
+import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.Plan
 import com.example.moneyflow.databinding.ActivityPlanEditBinding
 import com.example.moneyflow.ui.viewmodels.PlanEditViewModel
@@ -51,7 +53,7 @@ class PlanEditActivity : AppCompatActivity() {
 
         binding.buttonDelete.setOnClickListener {
             planToEdit?.let {
-                viewModel.removePlan(it)
+                showDeleteConfirmationDialog(it)
             }
         }
 
@@ -60,6 +62,17 @@ class PlanEditActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    private fun showDeleteConfirmationDialog(plan: Plan) {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.removal))
+            .setMessage("Вы уверены что хотите удалить запланированный расход?")
+            .setPositiveButton(getString(R.string.remove)) { _, _ ->
+                viewModel.removePlan(plan)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
     private fun setupInsets() {

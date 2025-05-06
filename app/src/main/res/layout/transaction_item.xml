@@ -51,12 +51,16 @@
 
         <TextView
             android:id="@+id/textViewComment"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp" android:maxWidth="250dp"
             android:layout_height="wrap_content"
+            android:text="@string/comment_s"
+            tools:text="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
             android:textColor="@color/text_color_primary"
+            app:layout_constraintEnd_toStartOf="@+id/textViewSum"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:paddingEnd="4dp"
             app:layout_constraintStart_toStartOf="@+id/textViewCategoryName"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCategoryName"
-            android:text="@string/comment_s" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewCategoryName" />
 
         <TextView
             android:id="@+id/textViewDate"

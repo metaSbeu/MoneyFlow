@@ -90,6 +90,7 @@
         android:id="@+id/buttonSave"
         android:layout_width="140dp"
         android:layout_marginBottom="16dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_height="wrap_content"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"

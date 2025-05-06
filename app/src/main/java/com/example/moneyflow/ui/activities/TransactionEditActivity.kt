@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
+import com.example.moneyflow.data.Plan
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.utils.getDrawableResId
@@ -83,7 +84,7 @@ class TransactionEditActivity : AppCompatActivity() {
             viewModel.updateTransaction(updatedTransaction)
         }
         binding.buttonDelete.setOnClickListener {
-            viewModel.deleteTransaction(transactionId)
+            showDeleteConfirmationDialog()
         }
 
         binding.imageViewChangeWallet.setOnClickListener {
@@ -145,6 +146,17 @@ class TransactionEditActivity : AppCompatActivity() {
                 .setNegativeButton("Отмена", null)
                 .show()
         }
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.removal))
+            .setMessage("Вы уверены что хотите удалить запланированный расход?")
+            .setPositiveButton(getString(R.string.remove)) { _, _ ->
+                viewModel.deleteTransaction(transactionId)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
     private fun updateWalletInTransaction(wallet: Wallet) {
