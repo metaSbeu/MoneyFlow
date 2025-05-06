@@ -160,7 +160,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onResume() {
         super.onResume()
-        viewmodel.refreshWalletsList()
+        viewmodel.refreshWalletsList() // Обновляем список кошельков
+
+        // Если есть выбранный кошелек, запрашиваем его актуальные данные
+        selectedWallet?.let {
+            viewmodel.getWalletById(it.id).observe(viewLifecycleOwner) { updatedWallet ->
+                updatedWallet?.let {
+                    selectedWallet = it
+                    binding.textViewWallet.text = getString(R.string.wallet, it.name)
+                    // Возможно, потребуется обновить UI, зависящий от selectedWallet
+                }
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -174,18 +185,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.cardViewBalance.setOnClickListener {
-            if (selectedWallet == null) {
-                val intent = TransactionListActivity.newIntentAllWallets(requireContext())
-                startActivity(intent)
+            val intent = if (selectedWallet == null) {
+                TransactionListActivity.newIntentAllWallets(requireContext())
             } else {
-                // Запрашиваем актуальную информацию о кошельке перед переходом
-                viewmodel.getWalletById(selectedWallet!!.id).observe(viewLifecycleOwner) { updatedWallet ->
-                    updatedWallet?.let {
-                        val intent = TransactionListActivity.newIntent(requireContext(), it) // Передаем обновленный объект
-                        startActivity(intent)
-                        Log.d("TAG", "intent sent to start TransactionListActivity")
-                    }
-                }
+                TransactionListActivity.newIntent(requireContext(), selectedWallet!!)
             }
+            startActivity(intent)
         }
-    }}
+    }
+}
