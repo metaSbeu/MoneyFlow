@@ -20,12 +20,11 @@
             android:id="@+id/textViewPlanName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@string/plan_name_sum"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewNextPaymentDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="16dp"
-            android:text="@string/plan_name_sum"
             tools:text="Подписки: 1200 P" />
 
         <TextView

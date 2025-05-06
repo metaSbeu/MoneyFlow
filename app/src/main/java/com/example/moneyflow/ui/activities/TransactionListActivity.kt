@@ -48,8 +48,6 @@ class TransactionListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-
-
         binding = ActivityTransactionListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[TransactionListViewModel::class.java]
@@ -86,19 +84,15 @@ class TransactionListActivity : AppCompatActivity() {
         }
 
         binding.cardViewExpenses.setOnClickListener {
-            // Если "Расходы" уже выбраны, сбрасываем фильтр
             if (isExpenseSelected) {
                 resetCardViewBackgroundColor()
                 viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.ALL)
                 isExpenseSelected = false
             } else {
-                // Сбрасываем фон у "Доходов", если они были выбраны
                 if (isIncomeSelected) {
                     resetCardViewBackgroundColor()
-                    viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.ALL)
                     isIncomeSelected = false
                 }
-                // Выбираем "Расходы"
                 changeBackgroundColor(binding.cardViewExpenses)
                 viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.EXPENSE)
                 isExpenseSelected = true
@@ -106,26 +100,21 @@ class TransactionListActivity : AppCompatActivity() {
         }
 
         binding.cardViewIncomes.setOnClickListener {
-            // Если "Доходы" уже выбраны, сбрасываем фильтр
             if (isIncomeSelected) {
                 resetCardViewBackgroundColor()
                 viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.ALL)
                 isIncomeSelected = false
             } else {
-                // Сбрасываем фон у "Расходов", если они были выбраны
                 if (isExpenseSelected) {
                     resetCardViewBackgroundColor()
-                    viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.ALL)
                     isExpenseSelected = false
                 }
-                // Выбираем "Доходы"
                 changeBackgroundColor(binding.cardViewIncomes)
                 viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.INCOME)
                 isIncomeSelected = true
             }
         }
         Log.d(TAG, "onCreate: started")
-//        Log.d(TAG, "onCreate: wallet = $wallet")
         setUpInsets()
     }
 
@@ -158,26 +147,23 @@ class TransactionListActivity : AppCompatActivity() {
     private fun setupPieChart(transactions: List<TransactionWithCategory>) {
         val pieChart = binding.pieChart
 
-        // Базовые настройки
         pieChart.setUsePercentValues(false)
         pieChart.description.isEnabled = false
         pieChart.isDrawHoleEnabled = false
         pieChart.setDrawCenterText(true)
         pieChart.legend.isEnabled = false
 
-        // Подготовка данных
         val entries = preparePieChartData(transactions)
         val labelTextColorMF = ContextCompat.getColor(this, R.color.text_color_primary)
         val valueTextColorMF = ContextCompat.getColor(this, R.color.text_color_primary)
         pieChart.setEntryLabelColor(labelTextColorMF)
-        // Обработка пустых данных
+
         if (entries.isEmpty()) {
             pieChart.clear()
             pieChart.centerText = "Нет данных"
             return
         }
 
-        // Создание набора данных
         val dataSet = PieDataSet(entries, "Категории транзакций").apply {
             sliceSpace = 2f
             colors = getPieChartColors()
@@ -185,22 +171,18 @@ class TransactionListActivity : AppCompatActivity() {
             yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             valueLinePart1OffsetPercentage = 80f
-
             valueTextColor = valueTextColorMF
-            valueLineColor = ContextCompat.getColor(this@TransactionListActivity, R.color.item_background) // Use context here
+            valueLineColor = ContextCompat.getColor(this@TransactionListActivity, R.color.item_background)
             valueLineWidth = 1f
         }
 
-        // Применение данных
         val pieData = PieData(dataSet)
         pieChart.data = pieData
 
-        // Анимация
         pieChart.animateY(1000, Easing.EaseInOutQuad)
-
-        // Обновление отображения
         pieChart.invalidate()
     }
+
     private fun getPieChartColors(): List<Int> {
         return listOf(
             ContextCompat.getColor(this, R.color.category_color_1),
@@ -219,28 +201,22 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun preparePieChartData(transactions: List<TransactionWithCategory>): List<PieEntry> {
         val categorySums = mutableMapOf<String, Double>()
-
-        // Вычисляем сумму для каждой категории
         for (transaction in transactions) {
             val categoryName = transaction.category.name
             val amount = transaction.transaction.sum
             categorySums[categoryName] = categorySums.getOrDefault(categoryName, 0.0) + amount
         }
-
-        // Преобразуем в формат PieEntry для пайчарта
         return categorySums.map { PieEntry(it.value.toFloat(), it.key) }
     }
 
     private fun resetCardViewBackgroundColor() {
-        // Получаем цвет из текущей темы
         val typedValue = TypedValue()
         theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
         val backgroundColor = typedValue.data
-
-        // Устанавливаем цвет
         binding.cardViewExpenses.setCardBackgroundColor(backgroundColor)
         binding.cardViewIncomes.setCardBackgroundColor(backgroundColor)
     }
+
     private fun changeBackgroundColor(cardView: CardView) {
         cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.my_light_primary))
     }
@@ -250,25 +226,21 @@ class TransactionListActivity : AppCompatActivity() {
             .setTitleText("Выберите диапазон дат")
             .build()
 
-        // Устанавливаем слушатель для положительной кнопки (выбора дат)
         dateRangePicker.addOnPositiveButtonClickListener { selection ->
             val startMillis = selection.first ?: 0L
             val endMillis = selection.second ?: 0L
 
-            // Преобразуем миллисекунды в даты
             startDate = Date(startMillis)
             endDate = Date(endMillis)
 
             updateDateTextView()
-            viewModel.sortTransactionsByDate(false, startDate!!, endDate!!) // Фильтрация по дате
+            viewModel.sortTransactionsByDate(false, startDate!!, endDate!!)
         }
 
-        // Показываем MaterialDatePicker
         dateRangePicker.show(supportFragmentManager, "DATE_PICKER")
     }
 
     private fun updateDateTextView() {
-        // Преобразуем startDate и endDate в строку для отображения в textView
         val startFormatted = formatDate(startDate)
         val endFormatted = formatDate(endDate)
         binding.textViewDate.text = "Период: $startFormatted - $endFormatted"
@@ -316,10 +288,9 @@ class TransactionListActivity : AppCompatActivity() {
     private fun observeViewModels() {
         viewModel.transactions.observe(this) { transactions ->
             adapter.transactions = transactions
-            setupPieChart(transactions) // Обновляем пайчарт
+            setupPieChart(transactions)
         }
     }
-
 
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

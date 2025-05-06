@@ -22,6 +22,7 @@ import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionEditViewModel
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
@@ -163,8 +164,8 @@ class TransactionEditActivity : AppCompatActivity() {
         // Обновляем отображение кошелька
         val iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        binding.textViewWalletName.text = wallet.name
-        binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
+        val formatted = wallet.balance.formatWithSpaces()
+        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
         viewModel.setSelectedWalletId(wallet.id)
     }
 
@@ -259,9 +260,9 @@ class TransactionEditActivity : AppCompatActivity() {
     }
 
     private fun setupOldTransaction(transaction: Transaction, wallet: Wallet, category: Category) {
-        // Устанавливаем сумму с правильным знаком и цветом
-        val sumText = if (transaction.isIncome) "+${transaction.sum} ₽" else "-${transaction.sum} ₽"
-        binding.textViewOldSum.text = sumText
+        val sign = if (transaction.isIncome) "+" else "-"
+        val formattedTransactionSum = transaction.sum.formatWithSpaces() // Используем сумму транзакции
+        binding.textViewOldSum.text = "$sign$formattedTransactionSum ₽" // Добавляем знак и символ рубля
         binding.textViewOldSum.setTextColor(
             ContextCompat.getColor(
                 this,
@@ -284,10 +285,9 @@ class TransactionEditActivity : AppCompatActivity() {
         // Устанавливаем данные кошелька
         iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        binding.textViewWalletName.text = wallet.name
-        binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
+        val formattedWalletBalance = wallet.balance.formatWithSpaces()
+        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)
     }
-
 
     companion object {
         const val EXTRA_TRANSACTION_ID = "transaction_id"

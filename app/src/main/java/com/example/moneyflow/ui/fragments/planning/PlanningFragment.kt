@@ -55,7 +55,7 @@ class PlanningFragment : Fragment() {
         }
         viewModel.monthSum.observe(viewLifecycleOwner) {
             val formattedSum = it.formatWithSpaces()
-            binding.textViewMonthSum.text = formattedSum
+            binding.textViewMonthSum.text = "$formattedSum ₽"
         }
     }
 }
