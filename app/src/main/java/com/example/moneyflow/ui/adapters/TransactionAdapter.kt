@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.TransactionWithCategory
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.time.Duration.Companion.nanoseconds
@@ -36,8 +37,6 @@ class TransactionAdapter(
         holder: TransactionViewHolder,
         position: Int
     ) {
-//        val transactionWithCategory = transactions[position]
-
         val (transaction, category) = transactions[position]
         val context = holder.itemView.context
 
@@ -51,21 +50,27 @@ class TransactionAdapter(
         holder.imageViewIcon.setImageResource(iconResId)
 
         holder.textViewCategory.text = category.name
-        holder.textViewAmount.text = transaction.sum.toString()
+
+        val formattedSumWithSign = if (transaction.isIncome) {
+            "+${transaction.sum.formatWithSpaces()} ₽"
+        } else {
+            "-${transaction.sum.formatWithSpaces()} ₽"
+        }
+        holder.textViewAmount.text = formattedSumWithSign
+
         val note = transaction.note
         holder.textViewComment.text = if (note.isNullOrBlank()) {
-            holder.itemView.context.getString(R.string.comment_s, "<пусто>") // Default string from resources
+            holder.itemView.context.getString(R.string.comment_s, "<пусто>")
         } else {
             holder.itemView.context.getString(R.string.comment_s, note)
         }
-
 
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) // Пример формата
         val formattedDate = dateFormat.format(transaction.createdAt) // Преобразование временной метки в строку
 
         holder.textViewDate.text = formattedDate
 
-        val colorResId = when(transaction.isIncome) {
+        val colorResId = when (transaction.isIncome) {
             true -> R.color.light_green
             false -> R.color.light_red
         }
@@ -75,9 +80,7 @@ class TransactionAdapter(
         holder.itemView.setOnClickListener {
             onItemClick(transaction)
         }
-    }
-
-    override fun getItemCount(): Int {
+    }    override fun getItemCount(): Int {
         return transactions.size
     }
 

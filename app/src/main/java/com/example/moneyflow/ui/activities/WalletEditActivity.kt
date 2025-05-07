@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,6 +14,7 @@ import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityWalletEditBinding
 import com.example.moneyflow.ui.adapters.BankIconAdapter
 import com.example.moneyflow.ui.viewmodels.WalletEditViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class WalletEditActivity : AppCompatActivity() {
 
@@ -27,6 +29,7 @@ class WalletEditActivity : AppCompatActivity() {
 
         binding = ActivityWalletEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupBottomViewKeyboardVisibilityListener(binding.bottomButtonsContainer)
         setupInsets()
         viewModel = ViewModelProvider(this)[WalletEditViewModel::class.java]
 

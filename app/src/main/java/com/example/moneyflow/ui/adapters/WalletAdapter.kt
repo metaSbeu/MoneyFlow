@@ -8,11 +8,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
-import com.example.moneyflow.data.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Wallet
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Locale
 
 class WalletAdapter(
     private val onItemClick: (Wallet) -> Unit,

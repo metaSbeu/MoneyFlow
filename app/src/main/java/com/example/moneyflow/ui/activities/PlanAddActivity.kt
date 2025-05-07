@@ -14,6 +14,7 @@ import com.example.moneyflow.data.Plan
 import com.example.moneyflow.databinding.ActivityPlanAddBinding
 import com.example.moneyflow.ui.fragments.planning.PlanningViewModel
 import com.example.moneyflow.ui.viewmodels.PlanAddViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -29,6 +30,7 @@ class PlanAddActivity : AppCompatActivity() {
         binding = ActivityPlanAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupInsets()
+        setupBottomViewKeyboardVisibilityListener(binding.buttonSave)
         viewModel = ViewModelProvider(this)[PlanAddViewModel::class.java]
 
         binding.buttonSave.setOnClickListener {

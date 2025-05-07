@@ -23,21 +23,25 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.TransactionEditActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.WalletEditActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.CategoryEditActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.WalletAddActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.CategoryAddActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.TransactionAddActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.TransactionListActivity"

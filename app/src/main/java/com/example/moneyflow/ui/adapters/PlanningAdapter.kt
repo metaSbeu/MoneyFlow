@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
-import com.example.moneyflow.data.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Plan
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -56,7 +56,7 @@ class PlanningAdapter(
             val plan = plans[position]
             val formattedSum = plan.sum.formatWithSpaces()
             holder.textViewPlanName.text =
-                holder.itemView.context.getString(R.string.plan_name_sum, plan.name, formattedSum)
+                holder.itemView.context.getString(R.string.plan_name_sum, plan.name, "$formattedSum ₽")
 
             if (plan.isNotificationActive) {
                 holder.imageViewNotificationsOn.visibility = View.VISIBLE

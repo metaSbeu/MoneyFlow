@@ -14,7 +14,7 @@ class CategoryAdapter(
     private val onItemClick: (Category) -> Unit,
     private val onAddClick: () -> Unit,
     private val showAddButton: Boolean = true,
-    private val isIncome: Boolean,
+    internal var isIncome: Boolean,
     private val onFirstCategorySelected: ((Category) -> Unit)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

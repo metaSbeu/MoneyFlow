@@ -22,9 +22,8 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import com.example.moneyflow.R
-import com.example.moneyflow.data.PreferenceManager
+import com.example.moneyflow.utils.PreferenceManager
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import com.example.moneyflow.ui.viewmodels.AuthViewModel
 import java.util.concurrent.Executor

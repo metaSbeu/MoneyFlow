@@ -1,5 +1,6 @@
 package com.example.moneyflow.ui.activities
 
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -29,6 +30,7 @@ class WalletAddActivity : AppCompatActivity() {
         binding = ActivityWalletAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupInsets()
+        setupBottomViewKeyboardVisibilityListener(binding.buttonAdd) // Добавляем слушатель клавиатуры
 
         viewModel = ViewModelProvider(this)[WalletAddViewModel::class.java]
 

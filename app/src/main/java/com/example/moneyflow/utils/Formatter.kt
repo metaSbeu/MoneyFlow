@@ -1,4 +1,4 @@
-package com.example.moneyflow.data
+package com.example.moneyflow.utils
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols

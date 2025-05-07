@@ -3,6 +3,7 @@ package com.example.moneyflow.ui.activities
 import android.os.Bundle
 import android.content.Context
 import android.content.Intent
+import android.icu.util.Calendar
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -14,12 +15,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
+import com.example.moneyflow.data.Plan
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.Wallet
-import com.example.moneyflow.data.getDrawableResId
+import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionEditViewModel
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
+import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,7 +39,7 @@ class TransactionEditActivity : AppCompatActivity() {
     private lateinit var incomeAdapter: CategoryAdapter
 
     private var isIncomeSelected = false
-
+    private var selectedDateInMillis = System.currentTimeMillis()
     private lateinit var selectedCategory: Category
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +48,6 @@ class TransactionEditActivity : AppCompatActivity() {
 
         binding = ActivityTransactionEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupInsets()
 
         // Получаем ID транзакции из Intent
         transactionId = intent.getIntExtra(EXTRA_TRANSACTION_ID, 0)
@@ -54,8 +58,8 @@ class TransactionEditActivity : AppCompatActivity() {
 
         // Наблюдаем за данными
         observeViewModel()
-
         setupAdapters()
+
         binding.recyclerViewExpenseCategories.adapter = expenseAdapter
         binding.recyclerViewIncomeCategories.adapter = incomeAdapter
 
@@ -74,20 +78,57 @@ class TransactionEditActivity : AppCompatActivity() {
             val updatedTransaction = currentTransaction.copy(
                 sum = sumText.toDouble(),
                 note = binding.editTextNewComment.text.toString(),
+                createdAt = selectedDateInMillis,
                 categoryId = selectedCategory.id // Добавляем обновленную категорию
             )
 
             viewModel.updateTransaction(updatedTransaction)
         }
         binding.buttonDelete.setOnClickListener {
-            viewModel.deleteTransaction(transactionId)
+            showDeleteConfirmationDialog()
         }
 
         binding.imageViewChangeWallet.setOnClickListener {
             showWalletSelectionDialog()
         }
+        binding.buttonDate.setOnClickListener {
+            datePicker()
+        }
     }
 
+    fun datePicker() {
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .build()
+        datePicker.show(supportFragmentManager, "tag")
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = selection
+            selectedDateInMillis = selection
+
+            val locale = resources.configuration.locales[0]
+            val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
+            val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
+
+            binding.textViewDate.text = formattedDate
+        }
+    }
+
+    fun setTransactionDate() {
+        viewModel.transaction.value?.let { transaction ->
+            val dateInMillis = transaction.createdAt
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = dateInMillis
+
+            val locale = resources.configuration.locales[0]
+            val dateFormat = SimpleDateFormat("d MMM yyyy", locale) // Убрал лишний символ
+            val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
+            binding.textViewDate.text = formattedDate
+            selectedDateInMillis = dateInMillis // Обновляем selectedDateInMillis
+        }
+    }
     private fun showWalletSelectionDialog() {
         viewModel.getAllWallets { wallets ->
             val walletNames = wallets.map { it.name }
@@ -108,16 +149,24 @@ class TransactionEditActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateWalletInTransaction(wallet: Wallet) {
-        val currentTransaction = viewModel.transaction.value ?: return
-        val updatedTransaction = currentTransaction.copy(walletId = wallet.id)
-        viewModel.updateTransactionWallet(updatedTransaction, wallet)
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.removal))
+            .setMessage("Вы уверены что хотите удалить запланированный расход?")
+            .setPositiveButton(getString(R.string.remove)) { _, _ ->
+                viewModel.deleteTransaction(transactionId)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
 
+    private fun updateWalletInTransaction(wallet: Wallet) {
         // Обновляем отображение кошелька
         val iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        binding.textViewWalletName.text = wallet.name
-        binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
+        val formatted = wallet.balance.formatWithSpaces()
+        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
+        viewModel.setSelectedWalletId(wallet.id)
     }
 
     fun setupAdapters() {
@@ -163,7 +212,8 @@ class TransactionEditActivity : AppCompatActivity() {
 
             // Определяем тип транзакции (доход/расход)
             isIncomeSelected = transaction.isIncome
-
+            selectedDateInMillis = transaction.createdAt
+            setTransactionDate()
             if (transaction.isIncome) {
                 binding.recyclerViewIncomeCategories.visibility = View.VISIBLE
                 binding.recyclerViewExpenseCategories.visibility = View.GONE
@@ -210,9 +260,9 @@ class TransactionEditActivity : AppCompatActivity() {
     }
 
     private fun setupOldTransaction(transaction: Transaction, wallet: Wallet, category: Category) {
-        // Устанавливаем сумму с правильным знаком и цветом
-        val sumText = if (transaction.isIncome) "+${transaction.sum} ₽" else "-${transaction.sum} ₽"
-        binding.textViewOldSum.text = sumText
+        val sign = if (transaction.isIncome) "+" else "-"
+        val formattedTransactionSum = transaction.sum.formatWithSpaces() // Используем сумму транзакции
+        binding.textViewOldSum.text = "$sign$formattedTransactionSum ₽" // Добавляем знак и символ рубля
         binding.textViewOldSum.setTextColor(
             ContextCompat.getColor(
                 this,
@@ -233,19 +283,10 @@ class TransactionEditActivity : AppCompatActivity() {
         binding.imageViewCategoryOldIcon.setImageResource(iconResId)
 
         // Устанавливаем данные кошелька
-        iconResId = baseContext.getDrawableResId(category.icon)
+        iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        binding.textViewWalletName.text = wallet.name
-        binding.textViewWalletBalance.text = "%.2f ₽".format(wallet.balance)
-    }
-
-
-    private fun setupInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        val formattedWalletBalance = wallet.balance.formatWithSpaces()
+        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)
     }
 
     companion object {
