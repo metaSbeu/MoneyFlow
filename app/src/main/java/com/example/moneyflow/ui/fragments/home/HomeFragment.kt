@@ -110,6 +110,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setPositiveButton("Удалить") { _, _ ->
                 // Удаляем счет
                 viewmodel.deleteWallet(adapter.wallets[position])
+                selectedWallet = null
+                adapter.selectAll()
+                binding.textViewWallet.text = getString(R.string.all_wallets)
             }
             .setNegativeButton("Отмена") { _, _ ->
                 // Возвращаем элемент на место
@@ -176,7 +179,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupClickListeners() {
         binding.cardViewAddTransaction.setOnClickListener {
             if (selectedWallet == null) {
-                Toast.makeText(requireContext(), "Выберите счет", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Выберите один счет", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = TransactionAddActivity.newIntent(requireContext(), selectedWallet!!.id)
                 startActivity(intent)

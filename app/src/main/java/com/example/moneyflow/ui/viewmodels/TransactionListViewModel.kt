@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.TransactionWithCategory
+import com.example.moneyflow.data.Wallet
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -17,6 +18,9 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
 
     private val _transactions = MutableLiveData<List<TransactionWithCategory>>()
     val transactions: LiveData<List<TransactionWithCategory>> get() = _transactions
+
+    private val _wallet = MutableLiveData<Wallet>()
+    val wallet: LiveData<Wallet> get() = _wallet
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -29,6 +33,16 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
     private var currentCategoryFilter: String? = null
     private var currentDateFilterStart: Date? = null
     private var currentDateFilterEnd: Date? = null
+
+    fun refreshWallet(wallet: Wallet) {
+        val disposable = database.walletDao().getWalletById(wallet.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _wallet.value = it
+            })
+        compositeDisposable.add(disposable)
+    }
 
     fun loadTransactions(walletId: Int? = null) {
         val disposable = if (walletId == null) {

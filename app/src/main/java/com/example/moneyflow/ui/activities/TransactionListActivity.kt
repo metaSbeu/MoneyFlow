@@ -118,30 +118,13 @@ class TransactionListActivity : AppCompatActivity() {
         setUpInsets()
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: started")
-    }
-
     override fun onResume() {
         super.onResume()
         viewModel.loadTransactions(wallet?.id)
+        wallet?.let {
+            viewModel.refreshWallet(it)
+        }
         Log.d(TAG, "onResume: started")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: started")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop: started")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: started")
     }
 
     private fun setupPieChart(transactions: List<TransactionWithCategory>) {
@@ -291,6 +274,10 @@ class TransactionListActivity : AppCompatActivity() {
         viewModel.transactions.observe(this) { transactions ->
             adapter.transactions = transactions
             setupPieChart(transactions)
+        }
+
+        viewModel.wallet.observe(this) { updatedWallet ->
+            setupWallet(updatedWallet)
         }
     }
 

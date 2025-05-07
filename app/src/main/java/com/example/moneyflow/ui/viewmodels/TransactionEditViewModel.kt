@@ -11,7 +11,6 @@ import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel.Companion.TAG
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -72,7 +71,9 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { callback(it) },
+                {
+                    callback(it)
+                },
                 {
                     Log.e(TAG, "Error getting category", it)
                     callback(null)
@@ -86,7 +87,9 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { callback(it) },
+                {
+                    callback(it)
+                },
                 {
                     Log.e(TAG, "Error getting wallet", it)
                     callback(null)
@@ -95,25 +98,14 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
         compositeDisposable.add(disposable)
     }
 
-    // Обновляем баланс кошелька в зависимости от транзакции
-    fun updateWalletBalance(wallet: Wallet) {
-        val disposable = database.walletDao().update(wallet)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                // Обработка успешного обновления
-            }, {
-                // Обработка ошибок
-            })
-        compositeDisposable.add(disposable)
-    }
-
     fun getAllWallets(callback: (List<Wallet>) -> Unit) {
         val disposable = database.walletDao().getWallets()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { callback(it) },
+                {
+                    callback(it)
+                },
                 {
                     Log.e(TAG, "Error getting wallets", it)
                     callback(emptyList())
@@ -184,41 +176,52 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
         val currentTransaction = _transaction.value ?: return
         val newWalletId = _selectedWalletId.value ?: currentTransaction.walletId
 
-        // Получаем старый кошелек
         val getOldWalletDisposable = database.walletDao().getWalletById(currentTransaction.walletId)
             .subscribeOn(Schedulers.io())
             .flatMap { oldWallet ->
-                // Получаем новый кошелек
                 database.walletDao().getWalletById(newWalletId)
                     .map { newWallet -> Pair(oldWallet, newWallet) }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ (oldWallet, newWallet) ->
-                // Обновляем балансы, если кошелек был изменен
-                if (oldWallet.id != newWallet.id) {
-                    val amount = currentTransaction.sum
-                    // Обновляем баланс старого кошелька (возвращаем сумму)
-                    val updatedOldWallet = if (currentTransaction.isIncome) {
-                        oldWallet.copy(balance = oldWallet.balance - amount)
-                    } else {
-                        oldWallet.copy(balance = oldWallet.balance + amount)
-                    }
-                    updateWalletBalanceInternal(updatedOldWallet)
+                val oldSum = currentTransaction.sum
+                val newSum = transaction.sum
+                val amountDiff = newSum - oldSum
 
-                    // Обновляем баланс нового кошелька (применяем сумму)
-                    val updatedNewWallet = if (transaction.isIncome) {
-                        newWallet.copy(balance = newWallet.balance + amount)
+                if (oldWallet.id != newWallet.id) {
+                    // Перевод между кошельками
+                    val updatedOldWallet = if (currentTransaction.isIncome) {
+                        oldWallet.copy(balance = oldWallet.balance - oldSum)
                     } else {
-                        newWallet.copy(balance = newWallet.balance - amount)
+                        oldWallet.copy(balance = oldWallet.balance + oldSum)
                     }
+
+                    val updatedNewWallet = if (transaction.isIncome) {
+                        newWallet.copy(balance = newWallet.balance + newSum)
+                    } else {
+                        newWallet.copy(balance = newWallet.balance - newSum)
+                    }
+
+                    updateWalletBalanceInternal(updatedOldWallet)
                     updateWalletBalanceInternal(updatedNewWallet)
+                } else {
+                    // Кошелек тот же, но сумма изменилась
+                    val updatedWallet = if (transaction.isIncome) {
+                        newWallet.copy(balance = newWallet.balance + amountDiff)
+                    } else {
+                        newWallet.copy(balance = newWallet.balance - amountDiff)
+                    }
+
+                    if (amountDiff != 0.0) {
+                        updateWalletBalanceInternal(updatedWallet)
+                    }
                 }
 
-                // Обновляем саму транзакцию
                 updateTransactionInternal(transaction.copy(walletId = newWallet.id))
             }, { error ->
                 Log.e(TAG, "Error getting wallets for update", error)
             })
+
         compositeDisposable.add(getOldWalletDisposable)
     }
 

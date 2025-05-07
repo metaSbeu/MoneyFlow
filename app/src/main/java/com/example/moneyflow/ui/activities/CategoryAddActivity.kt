@@ -21,7 +21,7 @@ class CategoryAddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCategoryAddBinding
     private lateinit var adapter: CategoryAdapter
     private lateinit var viewModel: CategoryAddViewModel
-    private lateinit var selectedCategory: Category
+    private var selectedCategory: Category? = null
     private var isIncome: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,28 +56,20 @@ class CategoryAddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val icon = selectedCategory.icon
-            if (icon == null) {
+            val selected = selectedCategory
+            if (selected == null) {
                 Toast.makeText(this, "Выберите иконку категории", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val category = Category(name = name, icon = icon, isIncome = isIncome == true)
-
+            val category = Category(name = name, icon = selected.icon, isIncome = isIncome == true)
             viewModel.addCategory(category)
+
         }
         viewModel.shouldCloseScreen.observe(this) { shouldCloseScreen ->
             if (shouldCloseScreen) {
                 finish()
             }
-        }
-    }
-
-    fun setupInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
         }
     }
 
