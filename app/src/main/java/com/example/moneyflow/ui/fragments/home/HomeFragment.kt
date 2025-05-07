@@ -38,7 +38,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 adapter.deselectAll()
                 adapter.selectWallet(wallet)
                 selectedWallet = wallet
-                binding.textViewWallet.text = getString(R.string.wallet, wallet.name)
             },
             {
                 startActivity(WalletAddActivity.newIntent(requireContext()))
@@ -58,7 +57,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.textViewChooseAll.setOnClickListener {
             val walletBalance = viewmodel.overallBalance.value ?: 0.0
-            binding.textViewWallet.text = getString(R.string.all_wallets)
             adapter.selectAll()
             selectedWallet = null
         }
@@ -112,7 +110,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewmodel.deleteWallet(adapter.wallets[position])
                 selectedWallet = null
                 adapter.selectAll()
-                binding.textViewWallet.text = getString(R.string.all_wallets)
             }
             .setNegativeButton("Отмена") { _, _ ->
                 // Возвращаем элемент на место
@@ -169,8 +166,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewmodel.getWalletById(it.id).observe(viewLifecycleOwner) { updatedWallet ->
                 updatedWallet?.let {
                     selectedWallet = it
-                    binding.textViewWallet.text = getString(R.string.wallet, it.name)
-                    // Возможно, потребуется обновить UI, зависящий от selectedWallet
                 }
             }
         }
@@ -186,7 +181,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        binding.cardViewBalance.setOnClickListener {
+        binding.cardViewAllOperations.setOnClickListener {
             val intent = if (selectedWallet == null) {
                 TransactionListActivity.newIntentAllWallets(requireContext())
             } else {
@@ -194,5 +189,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             startActivity(intent)
         }
+
+        binding.cardViewIncomes.setOnClickListener {
+            val intent = if (selectedWallet == null) {
+                TransactionListActivity.newIntentAllIncomes(requireContext())
+            } else {
+                TransactionListActivity.newIntentIncomes(requireContext(), selectedWallet!!)
+            }
+            startActivity(intent)
+        }
+
+        binding.cardViewExpenses.setOnClickListener {
+            val intent = if (selectedWallet == null) {
+                TransactionListActivity.newIntentAllExpenses(requireContext())
+            } else {
+                TransactionListActivity.newIntentExpenses(requireContext(), selectedWallet!!)
+            }
+            startActivity(intent)
+        }
+
     }
 }

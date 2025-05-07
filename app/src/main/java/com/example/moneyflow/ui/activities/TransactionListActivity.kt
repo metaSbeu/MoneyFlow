@@ -62,6 +62,22 @@ class TransactionListActivity : AppCompatActivity() {
             viewModel.loadTransactions()
         }
 
+        // Проверяем, были ли переданы фильтры через Intent
+        intent.getStringExtra(EXTRA_FILTER_TYPE)?.let { filterType ->
+            when (filterType) {
+                FILTER_INCOME -> {
+                    changeBackgroundColor(binding.cardViewIncomes)
+                    viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.INCOME)
+                    isIncomeSelected = true
+                }
+                FILTER_EXPENSE -> {
+                    changeBackgroundColor(binding.cardViewExpenses)
+                    viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.EXPENSE)
+                    isExpenseSelected = true
+                }
+            }
+        }
+
         adapter = TransactionAdapter { transaction ->
             val transactionId = transaction.id
             val intent = TransactionEditActivity.newIntent(this, transactionId)
@@ -292,6 +308,9 @@ class TransactionListActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_WALLET = "wallet"
         const val TAG = "TAG"
+        private const val EXTRA_FILTER_TYPE = "filter_type"
+        private const val FILTER_INCOME = "income"
+        private const val FILTER_EXPENSE = "expense"
 
         fun newIntent(context: Context, wallet: Wallet): Intent {
             Log.d(TAG, "newIntent called with wallet: $wallet")
@@ -302,6 +321,30 @@ class TransactionListActivity : AppCompatActivity() {
 
         fun newIntentAllWallets(context: Context): Intent {
             return Intent(context, TransactionListActivity::class.java)
+        }
+
+        fun newIntentIncomes(context: Context, wallet: Wallet): Intent {
+            val intent = newIntent(context, wallet)
+            intent.putExtra(EXTRA_FILTER_TYPE, FILTER_INCOME)
+            return intent
+        }
+
+        fun newIntentExpenses(context: Context, wallet: Wallet): Intent {
+            val intent = newIntent(context, wallet)
+            intent.putExtra(EXTRA_FILTER_TYPE, FILTER_EXPENSE)
+            return intent
+        }
+
+        fun newIntentAllIncomes(context: Context): Intent {
+            val intent = newIntentAllWallets(context)
+            intent.putExtra(EXTRA_FILTER_TYPE, FILTER_INCOME)
+            return intent
+        }
+
+        fun newIntentAllExpenses(context: Context): Intent {
+            val intent = newIntentAllWallets(context)
+            intent.putExtra(EXTRA_FILTER_TYPE, FILTER_EXPENSE)
+            return intent
         }
     }
 }

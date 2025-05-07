@@ -7,10 +7,12 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="16dp">
 
         <LinearLayout
@@ -33,6 +35,7 @@
                 android:layout_weight="1" />
 
             <Spinner
+                android:id="@+id/themeSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:entries="@array/themes"

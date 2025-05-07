@@ -11,16 +11,16 @@ object DefaultCategories {
         Category(name = "Кафе", icon = "ic_cafe", isIncome = false),
         Category(name = "Образование", icon = "ic_education", isIncome = false),
         Category(name = "Подарки", icon = "ic_gift", isIncome = false),
-        Category(name = "Продукты", icon = "ic_grocery", isIncome = false)
+        Category(name = "Продукты", icon = "ic_grocery", isIncome = false),
+        Category(name = "Другое", icon = "ic_questionmark", isIncome = false),
     )
 
     val defaultIncomeCategories = listOf(
-        Category(name = "Зарплата", icon = "ic_plane", isIncome = true),
-        Category(name = "Фриланс", icon = "ic_plane", isIncome = true),
-        Category(name = "Инвестиции", icon = "ic_plane", isIncome = true),
-        Category(name = "Подарки", icon = "ic_plane", isIncome = true),
-        Category(name = "Стипендия", icon = "ic_plane", isIncome = true),
-        Category(name = "Кэшбэк", icon = "ic_plane", isIncome = true),
-        Category(name = "Другое", icon = "ic_plane", isIncome = true)
+        Category(name = "Зарплата", icon = "ic_salary", isIncome = true),
+        Category(name = "Инвестиции", icon = "ic_investments", isIncome = true),
+        Category(name = "Подарки", icon = "ic_gift", isIncome = true),
+        Category(name = "Стипендия", icon = "ic_student", isIncome = true),
+        Category(name = "Кэшбэк", icon = "ic_cashback", isIncome = true),
+        Category(name = "Другое", icon = "ic_questionmark", isIncome = true)
     )
 }

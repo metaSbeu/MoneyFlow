@@ -5,11 +5,12 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 object Formatter {
-    fun Double.formatWithSpaces(): String {
-        val formatter = DecimalFormat("#,###", DecimalFormatSymbols(Locale.getDefault())).apply {
+    fun Double.formatWithSpaces(currencySymbol: String? = null): String {
+        val formatter = DecimalFormat("#,###.##", DecimalFormatSymbols(Locale.getDefault())).apply {
             groupingSize = 3
             isDecimalSeparatorAlwaysShown = false
         }
-        return formatter.format(this)
+        val formatted = formatter.format(this)
+        return if (currencySymbol != null) "$formatted $currencySymbol" else formatted
     }
 }

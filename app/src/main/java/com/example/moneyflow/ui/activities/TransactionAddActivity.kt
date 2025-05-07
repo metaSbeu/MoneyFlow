@@ -13,11 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.Transaction
-import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.getDrawableResId
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 
@@ -121,7 +121,8 @@ class TransactionAddActivity : AppCompatActivity() {
                 categoriesAdapter.categories = expenseCategories
             }
 
-            val defaultCategory = if (isIncomeSelected) incomeCategories.firstOrNull() else expenseCategories.firstOrNull()
+            val defaultCategory =
+                if (isIncomeSelected) incomeCategories.firstOrNull() else expenseCategories.firstOrNull()
             if (defaultCategory != null) {
                 selectedCategory = defaultCategory
             }
@@ -134,13 +135,13 @@ class TransactionAddActivity : AppCompatActivity() {
         }
 
         viewModel.wallet.observe(this) { wallet ->
-            val roundedBalance = String.format("%.2f", wallet.balance)
+            val formatted = wallet.balance.formatWithSpaces()
             val iconResId = baseContext.getDrawableResId(wallet.icon)
             binding.imageViewWalletIcon.setImageResource(iconResId)
             binding.textViewWalletNameAndBalance.text = getString(
                 R.string.wallet_name_wallet_balance,
                 wallet.name,
-                roundedBalance
+                formatted + " ₽"
             )
         }
     }
@@ -184,11 +185,13 @@ class TransactionAddActivity : AppCompatActivity() {
                 viewModel.categories.value?.let { categories ->
                     val filteredCategories = categories.filter { it.isIncome == isIncomeSelected }
                     categoriesAdapter.categories = filteredCategories
-                    categoriesAdapter.isIncome = isIncomeSelected // Обновите флаг isIncome в адаптере
+                    categoriesAdapter.isIncome =
+                        isIncomeSelected // Обновите флаг isIncome в адаптере
                 }
             }
         }
     }
+
     fun setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

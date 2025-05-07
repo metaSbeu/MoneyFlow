@@ -26,7 +26,7 @@ class CategoryEditActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
 
         binding = ActivityCategoryEditBinding.inflate(layoutInflater)
         setContentView(binding.root)

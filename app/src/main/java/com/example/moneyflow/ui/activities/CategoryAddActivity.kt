@@ -26,7 +26,7 @@ class CategoryAddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -36,8 +36,7 @@ class CategoryAddActivity : AppCompatActivity() {
             {
                 selectedCategory = it
             },
-            {}, showAddButton = false
-            , isIncome = isIncome!!
+            {}, showAddButton = false, isIncome = isIncome!!
         )
 
         viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
