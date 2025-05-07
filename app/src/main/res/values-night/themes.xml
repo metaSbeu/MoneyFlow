@@ -40,5 +40,9 @@
     <color name="circle_background">#1a1a1a</color>
     <color name="primary">#5C84F2</color>
     <color name="text_color_primary">#FFF</color>
+
+    <color name="adapter_bg_unchecked">#3E3E3E</color>
+    <color name="adapter_bg_checked">#5C84F2</color>
+
     <attr name="cardBackgroundColor" format="reference|color"/>
 </resources>

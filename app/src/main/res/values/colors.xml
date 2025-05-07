@@ -12,6 +12,8 @@
     <color name="my_dark_background">#000000</color>
 
     <color name="gray">#A4A4A4</color>
+    <color name="light_gray">#A4A4A4</color>
+
     <color name="light_green">#4CAF50</color>
     <color name="light_red">#F44336</color>
 

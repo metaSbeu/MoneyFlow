@@ -35,11 +35,70 @@ class WalletAddActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[WalletAddViewModel::class.java]
 
         val adapter = BankIconAdapter(
-            icons = listOf("logo_sber", "logo_alfa", "logo_t_bank"),
+            icons = listOf(
+                "logo_sber",
+                "logo_alfa",
+                "logo_t_bank",
+                "logo_vtb",
+                "logo_raiffaisen",
+                "logo_yandex",
+                "logo_vk_pay",
+                "logo_bitcoin",
+                "logo_chelinvest",
+                "logo_ozon",
+                "logo_wb",
+                "logo_qiwi",
+                "logo_webmoney",
+                "logo_paypal",
+                "logo_mts",
+                "logo_otkritie",
+                "logo_ubrir",
+                "logo_rosselhoz",
+                "logo_sovkom",
+                "logo_corona",
+                "logo_deutsche_bank",
+                "logo_pb",
+                "logo_renessans",
+                "logo_uralsib",
+            ),
             onIconClick = { resId ->
                 selectedIconResId = resId
             }
         )
+
+//        val adapter = BankIconAdapter(
+//            icons = listOf(
+//                "logo_sber",
+//                "logo_alfa",
+//                "logo_t_bank",
+//                "logo_asia_pay",
+//                "logo_chelinvest",
+//                "logo_citibank",
+//                "logo_corona",
+//                "logo_deutsche_bank",
+//                "logo_mts",
+//                "logo_otkritie",
+//                "logo_ozon",
+//                "logo_paypal",
+//                "logo_pb",
+//                "logo_qiwi",
+//                "logo_raiffaisen",
+//                "logo_renessans",
+//                "logo_rosselhoz",
+//                "logo_sovkom",
+//                "logo_ubrir",
+//                "logo_uralsib",
+//                "logo_vk_pay",
+//                "logo_vtb",
+//                "logo_wb",
+//                "logo_webmoney",
+//                "logo_yandex",
+//                "logo_bitcoin"
+//            ),
+//            onIconClick = { resId ->
+//                selectedIconResId = resId
+//            }
+//        )
 
         binding.recyclerViewWalletIcons.adapter = adapter
 

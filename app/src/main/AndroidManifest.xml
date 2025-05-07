@@ -27,6 +27,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.WalletEditActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.CategoryEditActivity"
@@ -34,6 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.WalletAddActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.CategoryAddActivity"
