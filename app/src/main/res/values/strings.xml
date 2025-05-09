@@ -101,5 +101,6 @@
     <string name="plan_name_sum">%s: %s</string>
     <string name="bell">bell</string>
     <string name="main_title">Обзор финансов</string>
+    <string name="notification">Напоминание</string>
 
 </resources>
