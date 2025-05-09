@@ -1,9 +1,15 @@
 package com.example.moneyflow.ui.activities
 
+import android.R.attr.description
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -11,6 +17,7 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -26,6 +33,9 @@ import com.example.moneyflow.R
 import com.example.moneyflow.utils.PreferenceManager
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import com.example.moneyflow.ui.viewmodels.AuthViewModel
+import com.example.moneyflow.utils.DailyNotificationReceiver
+import java.util.Calendar
+import java.util.Date
 import java.util.concurrent.Executor
 
 class AuthActivity : AppCompatActivity() {
@@ -66,6 +76,8 @@ class AuthActivity : AppCompatActivity() {
         setUpNumberPadClickListeners()
         setupObservers()
         insertDefaultDbData()
+        createNotificationChannel()
+        scheduleDailyNotification()
 
         binding.buttonErase.setOnClickListener {
             vibrate(50)
@@ -85,6 +97,43 @@ class AuthActivity : AppCompatActivity() {
             fingerprintAuth()
         }
     }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private fun scheduleDailyNotification() {
+        val intent = Intent(this, DailyNotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 13)
+            set(Calendar.MINUTE, 40)
+            set(Calendar.SECOND, 0)
+        }
+        Log.d("AlarmTest", "Scheduled for: ${Date(calendar.timeInMillis)}")
+        Log.d("AlarmTest", "Now: ${Date(System.currentTimeMillis())}")
+
+
+        // Если время уже прошло, ставим на завтра
+        if (calendar.timeInMillis < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        // Повторять каждый день
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+
+    }
+
 
     private fun setupForChangePin() {
         binding.textViewTitle.visibility = View.VISIBLE
@@ -118,20 +167,20 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.passwordState.observe(this) { state ->
-            android.util.Log.d("AuthActivity", "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${intent.getIntExtra(EXTRA_MODE, MODE_AUTH)}")
+            Log.d("AuthActivity", "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${intent.getIntExtra(EXTRA_MODE, MODE_AUTH)}")
             when (state) {
                 AuthViewModel.PasswordState.EMPTY -> clearAllIndicators()
                 AuthViewModel.PasswordState.IN_PROGRESS -> refreshIndicators(true)
                 AuthViewModel.PasswordState.COMPLETE -> {
-                    android.util.Log.d("AuthActivity", "Password COMPLETE triggered")
+                    Log.d("AuthActivity", "Password COMPLETE triggered")
                     when (intent.getIntExtra(EXTRA_MODE, MODE_AUTH)) {
                         MODE_CHANGE_PIN -> viewModel.handlePinChange(this)
                         else -> {
                             if (isSetupMode) {
-                                android.util.Log.d("AuthActivity", "Handling setup mode with pin: ${viewModel.password.value}")
+                                Log.d("AuthActivity", "Handling setup mode with pin: ${viewModel.password.value}")
                                 viewModel.handleSetupMode(viewModel.password.value ?: "")
                             } else {
-                                android.util.Log.d("AuthActivity", "Checking password: ${viewModel.password.value}")
+                                Log.d("AuthActivity", "Checking password: ${viewModel.password.value}")
                                 viewModel.checkPassword(this)
                             }
                         }
@@ -389,6 +438,22 @@ class AuthActivity : AppCompatActivity() {
             binding.button9
         )
     }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "daily_reminder", // ID канала
+                "Ежедневные уведомления",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Канал для ежедневных напоминаний"
+            }
+
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
+
 
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

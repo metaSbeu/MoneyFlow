@@ -53,7 +53,7 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
 
     implementation ("androidx.biometric:biometric-ktx:1.4.0-alpha02")
-
+    implementation ("androidx.work:work-runtime-ktx:2.9.0")
     // MPAndroid chart
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
