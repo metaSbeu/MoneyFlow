@@ -23,6 +23,8 @@
         <receiver
             android:name=".utils.DailyNotificationReceiver"
             android:exported="false" />
+        <receiver android:name=".utils.DailyPurchaseReminderReceiver"
+            android:exported="false"/>
         <activity
             android:name=".ui.activities.PlanEditActivity"
             android:exported="false" />
@@ -31,28 +33,28 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.TransactionEditActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.WalletEditActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.CategoryEditActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.WalletAddActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.CategoryAddActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.TransactionAddActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.TransactionListActivity"
             android:exported="false" />

@@ -3,6 +3,7 @@ package com.example.moneyflow.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -34,10 +35,28 @@ class PlanAddActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[PlanAddViewModel::class.java]
 
         binding.buttonSave.setOnClickListener {
+            val name = binding.editTextName.text.toString().trim()
+            val sumText = binding.editTextPlanSum.text.toString()
+            val dayText = binding.editTextDateNumber.text.toString()
+
+            if (name.isEmpty() || sumText.isEmpty() || dayText.isEmpty()) {
+                // Покажи ошибку, например, Toast
+                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val sum = sumText.toDoubleOrNull()
+            val day = dayText.toIntOrNull()
+
+            if (sum == null || day == null || day !in 1..31) {
+                Toast.makeText(this, "Некорректные данные. Проверьте сумму и число месяца", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val plan = Plan(
-                name = binding.editTextName.text.toString().trim(),
-                sum = binding.editTextPlanSum.text.toString().toDouble(),
-                targetNotificationDayOfMonth = binding.editTextDateNumber.text.toString().toInt(),
+                name = name,
+                sum = sum,
+                targetNotificationDayOfMonth = day,
                 isNotificationActive = true
             )
             viewModel.addPlan(plan)
