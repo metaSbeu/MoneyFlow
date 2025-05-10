@@ -10,10 +10,17 @@ import com.example.moneyflow.ui.adapters.BankIconAdapter.BankIconViewHolder
 
 class BankIconAdapter(
     private val icons: List<String>,
-    private val onIconClick: (String) -> Unit
+    private val onIconClick: (String) -> Unit,
+    private val preselectedIcon: String? = null
 ): RecyclerView.Adapter<BankIconViewHolder>() {
 
     private var selectedPosition = RecyclerView.NO_POSITION
+
+    init {
+        if (preselectedIcon != null) {
+            selectedPosition = icons.indexOf(preselectedIcon)
+        }
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -28,11 +35,12 @@ class BankIconAdapter(
         position: Int
     ) {
         val iconName = icons[position]
+        val context = holder.itemView.context
 
-        val iconResId = holder.itemView.context.resources.getIdentifier(
+        val iconResId = context.resources.getIdentifier(
             iconName,
             "drawable",
-            holder.itemView.context.packageName
+            context.packageName
         )
 
         holder.icon.setImageResource(iconResId)
@@ -57,8 +65,7 @@ class BankIconAdapter(
         return icons.size
     }
 
-
     class BankIconViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView = itemView.findViewById<ImageView>(R.id.imageViewIBankIcon)
+        val icon: ImageView = itemView.findViewById(R.id.imageViewIBankIcon)
     }
 }

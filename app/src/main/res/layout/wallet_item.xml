@@ -31,7 +31,7 @@
             android:id="@+id/textViewWalletName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="21sp"
             tools:text="@string/wallet_main_info" />
 
     </LinearLayout>

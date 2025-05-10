@@ -1,9 +1,10 @@
 package com.example.moneyflow.ui.activities
 
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityWalletAddBinding
 import com.example.moneyflow.ui.adapters.BankIconAdapter
 import com.example.moneyflow.ui.viewmodels.WalletAddViewModel
+import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class WalletAddActivity : AppCompatActivity() {
 
@@ -30,7 +32,7 @@ class WalletAddActivity : AppCompatActivity() {
         binding = ActivityWalletAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupInsets()
-        setupBottomViewKeyboardVisibilityListener(binding.buttonAdd) // Добавляем слушатель клавиатуры
+        setupBottomViewKeyboardVisibilityListener(binding.buttonAdd)
 
         viewModel = ViewModelProvider(this)[WalletAddViewModel::class.java]
 
@@ -60,56 +62,45 @@ class WalletAddActivity : AppCompatActivity() {
                 "logo_pb",
                 "logo_renessans",
                 "logo_uralsib",
+                "ic_cash"
             ),
             onIconClick = { resId ->
                 selectedIconResId = resId
             }
         )
 
-//        val adapter = BankIconAdapter(
-//            icons = listOf(
-//                "logo_sber",
-//                "logo_alfa",
-//                "logo_t_bank",
-//                "logo_asia_pay",
-//                "logo_chelinvest",
-//                "logo_citibank",
-//                "logo_corona",
-//                "logo_deutsche_bank",
-//                "logo_mts",
-//                "logo_otkritie",
-//                "logo_ozon",
-//                "logo_paypal",
-//                "logo_pb",
-//                "logo_qiwi",
-//                "logo_raiffaisen",
-//                "logo_renessans",
-//                "logo_rosselhoz",
-//                "logo_sovkom",
-//                "logo_ubrir",
-//                "logo_uralsib",
-//                "logo_vk_pay",
-//                "logo_vtb",
-//                "logo_wb",
-//                "logo_webmoney",
-//                "logo_yandex",
-//                "logo_bitcoin"
-//            ),
-//            onIconClick = { resId ->
-//                selectedIconResId = resId
-//            }
-//        )
-
         binding.recyclerViewWalletIcons.adapter = adapter
+
+        setupBalanceEditTextValidation()
 
         binding.buttonAdd.setOnClickListener {
             val name = binding.editTextName.text.toString().trim()
             val balanceText = binding.editTextBalance.text.toString().trim()
 
-            if (name.isEmpty() || balanceText.isEmpty() || selectedIconResId == null) {
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Введите название кошелька", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (balanceText.isEmpty()) {
+                Toast.makeText(this, "Введите баланс кошелька", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val balance = balanceText.toDoubleOrNull()
+            if (balance == null) {
                 Toast.makeText(
                     this,
-                    "Выберите иконку и заполните все поля",
+                    "Введите корректный баланс",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            if (selectedIconResId == null) {
+                Toast.makeText(
+                    this,
+                    "Выберите иконку кошелька",
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
@@ -117,7 +108,7 @@ class WalletAddActivity : AppCompatActivity() {
 
             val wallet = Wallet(
                 name = name,
-                balance = balanceText.toDouble(),
+                balance = balance,
                 icon = selectedIconResId!!
             )
 
@@ -128,6 +119,30 @@ class WalletAddActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setupBalanceEditTextValidation() {
+        binding.editTextBalance.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not needed
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let { editable ->
+                    val text = editable.toString()
+                    if (text.startsWith("0") && text.length > 1 && !text.startsWith("0.")) {
+                        editable.delete(0, 1)
+                    }
+                    if (text == ".") {
+                        editable.clear()
+                    }
+                }
+            }
+        })
     }
 
     fun setupInsets() {

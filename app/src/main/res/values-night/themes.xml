@@ -1,19 +1,4 @@
-<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
-<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
-<!--    <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">-->
-<!--        &lt;!&ndash; Customize your dark theme here. &ndash;&gt;-->
-<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_dark_primary</item> &ndash;&gt;-->
-<!--        <item name="android:windowBackground">@color/black</item>-->
-<!--        <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
-<!--        <item name="colorPrimary">@color/light_blue</item>-->
-<!--        <item name="android:textColorPrimary">@color/white</item>-->
-<!--        <item name="android:textColorSecondary">@color/white</item>-->
-<!--        <item name="colorOnPrimary">@color/white</item>-->
-<!--    </style>-->
-<!--</resources>-->
-
 <resources>
-    <!-- Тема приложения, которая автоматически переключается между светлой и темной -->
     <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
@@ -29,7 +14,6 @@
         <item name="colorPrimary">@color/my_dark_background</item>
         <item name="android:colorBackground">@color/my_dark_background</item>
         <item name="android:textColor">@color/white</item>
-
     </style>
 
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
@@ -40,9 +24,9 @@
     <color name="circle_background">#1a1a1a</color>
     <color name="primary">#5C84F2</color>
     <color name="text_color_primary">#FFF</color>
-
     <color name="adapter_bg_unchecked">#3E3E3E</color>
     <color name="adapter_bg_checked">#5C84F2</color>
+    <color name="bottom_navigation_background">#000000</color>
 
     <attr name="cardBackgroundColor" format="reference|color"/>
 </resources>

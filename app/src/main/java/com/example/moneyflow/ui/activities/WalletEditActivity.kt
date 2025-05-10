@@ -3,6 +3,7 @@ package com.example.moneyflow.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ class WalletEditActivity : AppCompatActivity() {
     private lateinit var adapter: BankIconAdapter
     private lateinit var viewModel: WalletEditViewModel
     private var selectedIconResId: String? = null
+    private lateinit var initialWallet: Wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,8 @@ class WalletEditActivity : AppCompatActivity() {
         setupInsets()
         viewModel = ViewModelProvider(this)[WalletEditViewModel::class.java]
 
-        val wallet = intent.getSerializableExtra(EXTRA_WALLET) as Wallet
+        initialWallet = intent.getSerializableExtra(EXTRA_WALLET) as Wallet
+        selectedIconResId = initialWallet.icon // Инициализируем выбранную иконку
 
         adapter = BankIconAdapter(
             icons = listOf(
@@ -64,17 +67,30 @@ class WalletEditActivity : AppCompatActivity() {
             ),
             onIconClick = { resId ->
                 selectedIconResId = resId
-            })
+            },
+            preselectedIcon = initialWallet.icon // Передаем предустановленную иконку адаптеру
+        )
         binding.recyclerViewWalletIcons.adapter = adapter
 
-        binding.editTextNewName.setText(wallet.name.toString())
+        binding.editTextNewName.setText(initialWallet.name.toString())
 
         binding.buttonSave.setOnClickListener {
-            val newName = binding.editTextNewName.text.toString()
+            val newName = binding.editTextNewName.text.toString().trim()
+
+            if (newName.isEmpty()) {
+                Toast.makeText(this, "Введите название кошелька", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (selectedIconResId == null) {
+                Toast.makeText(this, "Выберите иконку кошелька", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val walletToReplace = Wallet(
-                id = wallet.id,
+                id = initialWallet.id,
                 name = newName,
-                balance = wallet.balance,
+                balance = initialWallet.balance,
                 icon = selectedIconResId!!
             )
             viewModel.editWallet(walletToReplace)
