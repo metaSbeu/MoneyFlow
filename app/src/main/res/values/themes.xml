@@ -2,11 +2,13 @@
     <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
+
         <item name="android:colorBackground">@color/my_light_background</item>
         <item name="colorPrimary">@color/my_light_primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
+
     </style>
 
     <style name="Theme.MoneyFlow.AuthScreen" parent="Base.Theme.MoneyFlow">
@@ -21,9 +23,9 @@
     <color name="circle_background">#A4A4A4</color>
     <color name="primary">#5C84F2</color>
     <color name="text_color_primary">#000</color>
-
     <color name="adapter_bg_unchecked">#A4A4A4</color>
     <color name="adapter_bg_checked">#BBDEFB</color>
+    <color name="bottom_navigation_background">#EFEFEF</color>
 
     <attr name="cardBackgroundColor" format="reference|color"/>
 </resources>

@@ -32,6 +32,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
+            android:maxLength="75"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences" />
 
@@ -51,6 +52,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPlanSum"
             android:layout_width="match_parent"
+            android:maxLength="10"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal" />
 

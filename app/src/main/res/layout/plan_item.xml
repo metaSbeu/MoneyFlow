@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textViewNextPaymentDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Подписки: 1200 P" />
+            app:layout_constraintEnd_toStartOf="@+id/imageViewNotificationsOn" />
 
         <TextView
             android:id="@+id/textViewNextPaymentDate"

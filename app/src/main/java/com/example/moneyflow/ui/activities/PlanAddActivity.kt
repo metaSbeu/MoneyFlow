@@ -10,14 +10,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
-import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.Plan
 import com.example.moneyflow.databinding.ActivityPlanAddBinding
-import com.example.moneyflow.ui.fragments.planning.PlanningViewModel
 import com.example.moneyflow.ui.viewmodels.PlanAddViewModel
 import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PlanAddActivity : AppCompatActivity() {
 
@@ -40,7 +36,6 @@ class PlanAddActivity : AppCompatActivity() {
             val dayText = binding.editTextDateNumber.text.toString()
 
             if (name.isEmpty() || sumText.isEmpty() || dayText.isEmpty()) {
-                // Покажи ошибку, например, Toast
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -49,7 +44,12 @@ class PlanAddActivity : AppCompatActivity() {
             val day = dayText.toIntOrNull()
 
             if (sum == null || day == null || day !in 1..31) {
-                Toast.makeText(this, "Некорректные данные. Проверьте сумму и число месяца", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Некорректные данные", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (sum <= 0) {
+                Toast.makeText(this, "Сумма плана должна быть больше 0", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 

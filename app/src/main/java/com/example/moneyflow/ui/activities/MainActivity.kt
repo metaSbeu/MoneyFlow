@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.moneyflow.R
@@ -13,7 +13,6 @@ import com.example.moneyflow.databinding.ActivityMainBinding
 import com.example.moneyflow.ui.fragments.home.HomeFragment
 import com.example.moneyflow.ui.fragments.planning.PlanningFragment
 import com.example.moneyflow.ui.fragments.settings.SettingsFragment
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpInsets()
-
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        setNavigationBarColor() // Добавляем вызов метода для установки цвета
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -49,15 +47,26 @@ class MainActivity : AppCompatActivity() {
                 true
             } == true
         }
-
     }
 
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            insets
+            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val navigationBarsInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+
+            v.setPadding(
+                systemBarsInsets.left,
+                systemBarsInsets.top,
+                systemBarsInsets.right,
+                navigationBarsInsets.bottom
+            )
+            WindowInsetsCompat.CONSUMED
         }
+    }
+
+    private fun setNavigationBarColor() {
+        val navigationBarColor = ContextCompat.getColor(this, R.color.background)
+        window.navigationBarColor = navigationBarColor
     }
 
     companion object {
@@ -67,3 +76,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,13 +26,9 @@ import java.text.SimpleDateFormat
 class TransactionAddActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransactionAddBinding
-
     private lateinit var categoriesAdapter: CategoryAdapter
-
     private lateinit var viewModel: TransactionAddViewModel
-
     private lateinit var selectedCategory: Category
-
     private var isIncomeSelected = false
     private var selectedDateInMillis = System.currentTimeMillis()
 
@@ -54,6 +52,8 @@ class TransactionAddActivity : AppCompatActivity() {
 
         observeViewModel()
 
+        setupSumEditTextValidation()
+
         binding.buttonDate.setOnClickListener {
             datePicker()
         }
@@ -71,11 +71,17 @@ class TransactionAddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val sum = sumText.toDoubleOrNull()
+            if (sum == null || sum <= 0) {
+                Toast.makeText(this, "Введите корректную сумму больше 0", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val transaction = Transaction(
                 id = 0,
                 categoryId = selectedCategory.id,
                 walletId = walletId,
-                sum = sumText.toDouble(),
+                sum = sum,
                 isIncome = isIncomeSelected,
                 note = binding.editTextComment.text.toString(),
                 createdAt = selectedDateInMillis
@@ -87,6 +93,30 @@ class TransactionAddActivity : AppCompatActivity() {
             val intent = CategoryEditActivity.newIntent(this, selectedCategory)
             startActivity(intent)
         }
+    }
+
+    private fun setupSumEditTextValidation() {
+        binding.editTextSum.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not needed
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let { editable ->
+                    val text = editable.toString()
+                    if (text.startsWith("0") && text.length > 1 && !text.startsWith("0.")) {
+                        editable.delete(0, 1) // Удаляем лидирующий 0, если он не является началом десятичной части
+                    }
+                    if (text == ".") {
+                        editable.clear() // Запрещаем ввод только точки
+                    }
+                }
+            }
+        })
     }
 
     fun setupAdapters() {
@@ -159,7 +189,7 @@ class TransactionAddActivity : AppCompatActivity() {
             selectedDateInMillis = selection
 
             val locale = resources.configuration.locales[0]
-            val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
+            val dateFormat = SimpleDateFormat("d MMM", locale)
             val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
 
             binding.textViewDate.text = formattedDate
@@ -169,7 +199,7 @@ class TransactionAddActivity : AppCompatActivity() {
     fun setTodayDate() {
         val today = java.util.Calendar.getInstance()
         val locale = resources.configuration.locales[0]
-        val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
+        val dateFormat = SimpleDateFormat("d MMM", locale)
         val formattedDate = "Дата: ${dateFormat.format(today.time)}"
         binding.textViewDate.text = formattedDate
     }
@@ -181,22 +211,12 @@ class TransactionAddActivity : AppCompatActivity() {
         toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 isIncomeSelected = checkedId == R.id.buttonIncome
-                // Обновляем список категорий, отображаемый адаптером
                 viewModel.categories.value?.let { categories ->
                     val filteredCategories = categories.filter { it.isIncome == isIncomeSelected }
                     categoriesAdapter.categories = filteredCategories
-                    categoriesAdapter.isIncome =
-                        isIncomeSelected // Обновите флаг isIncome в адаптере
+                    categoriesAdapter.isIncome = isIncomeSelected
                 }
             }
-        }
-    }
-
-    fun setupInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
         }
     }
 

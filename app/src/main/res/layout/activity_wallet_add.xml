@@ -48,6 +48,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextName"
+                android:maxLength="30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences" />
@@ -69,6 +70,7 @@
                 android:id="@+id/editTextBalance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="10"
                 android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>

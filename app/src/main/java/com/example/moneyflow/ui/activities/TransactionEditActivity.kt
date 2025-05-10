@@ -28,6 +28,9 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.text.TextWatcher
+import android.text.Editable
+import java.text.NumberFormat
 
 class TransactionEditActivity : AppCompatActivity() {
 
@@ -49,21 +52,17 @@ class TransactionEditActivity : AppCompatActivity() {
         binding = ActivityTransactionEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Получаем ID транзакции из Intent
         transactionId = intent.getIntExtra(EXTRA_TRANSACTION_ID, 0)
         viewModel = ViewModelProvider(this)[TransactionEditViewModel::class.java]
-
-        // Загружаем транзакцию для редактирования
         viewModel.getTransactionById(transactionId)
 
-        // Наблюдаем за данными
         observeViewModel()
         setupAdapters()
+        setupSumEditTextValidation() // Добавляем валидацию для поля суммы
 
         binding.recyclerViewExpenseCategories.adapter = expenseAdapter
         binding.recyclerViewIncomeCategories.adapter = incomeAdapter
 
-        // Сохраняем изменения
         binding.buttonSave.setOnClickListener {
             val sumText = binding.editTextNewSum.text.toString()
             if (sumText.isBlank()) {
@@ -71,17 +70,19 @@ class TransactionEditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Получаем текущую транзакцию
-            val currentTransaction = viewModel.transaction.value ?: return@setOnClickListener
+            val sum = sumText.toDoubleOrNull()
+            if (sum == null || sum <= 0) {
+                Toast.makeText(this, "Введите корректную сумму больше 0", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Создаем обновленную транзакцию с новыми данными
+            val currentTransaction = viewModel.transaction.value ?: return@setOnClickListener
             val updatedTransaction = currentTransaction.copy(
-                sum = sumText.toDouble(),
+                sum = sum,
                 note = binding.editTextNewComment.text.toString(),
                 createdAt = selectedDateInMillis,
-                categoryId = selectedCategory.id // Добавляем обновленную категорию
+                categoryId = selectedCategory.id
             )
-
             viewModel.updateTransaction(updatedTransaction)
         }
         binding.buttonDelete.setOnClickListener {
@@ -94,6 +95,30 @@ class TransactionEditActivity : AppCompatActivity() {
         binding.buttonDate.setOnClickListener {
             datePicker()
         }
+    }
+
+    private fun setupSumEditTextValidation() {
+        binding.editTextNewSum.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not needed
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let { editable ->
+                    val text = editable.toString()
+                    if (text.startsWith("0") && text.length > 1 && !text.startsWith("0.")) {
+                        editable.delete(0, 1)
+                    }
+                    if (text == ".") {
+                        editable.clear()
+                    }
+                }
+            }
+        })
     }
 
     fun datePicker() {
@@ -109,7 +134,7 @@ class TransactionEditActivity : AppCompatActivity() {
             selectedDateInMillis = selection
 
             val locale = resources.configuration.locales[0]
-            val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
+            val dateFormat = SimpleDateFormat("d MMM", locale)
             val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
 
             binding.textViewDate.text = formattedDate
@@ -123,12 +148,13 @@ class TransactionEditActivity : AppCompatActivity() {
             calendar.timeInMillis = dateInMillis
 
             val locale = resources.configuration.locales[0]
-            val dateFormat = SimpleDateFormat("d MMM yyyy", locale) // Убрал лишний символ
+            val dateFormat = SimpleDateFormat("d MMM", locale)
             val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
             binding.textViewDate.text = formattedDate
-            selectedDateInMillis = dateInMillis // Обновляем selectedDateInMillis
+            selectedDateInMillis = dateInMillis
         }
     }
+
     private fun showWalletSelectionDialog() {
         viewModel.getAllWallets { wallets ->
             val walletNames = wallets.map { it.name }
@@ -161,7 +187,6 @@ class TransactionEditActivity : AppCompatActivity() {
     }
 
     private fun updateWalletInTransaction(wallet: Wallet) {
-        // Обновляем отображение кошелька
         val iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces()
@@ -206,11 +231,11 @@ class TransactionEditActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.transaction.observe(this) { transaction ->
-            // Заполняем поля для редактирования
-            binding.editTextNewSum.setText(transaction.sum.toString())
+            val numberFormat = NumberFormat.getInstance(Locale.getDefault())
+            numberFormat.isGroupingUsed = false // Отключаем группировку разрядов
+            binding.editTextNewSum.setText(numberFormat.format(transaction.sum))
             binding.editTextNewComment.setText(transaction.note)
 
-            // Определяем тип транзакции (доход/расход)
             isIncomeSelected = transaction.isIncome
             selectedDateInMillis = transaction.createdAt
             setTransactionDate()
@@ -222,10 +247,8 @@ class TransactionEditActivity : AppCompatActivity() {
                 binding.recyclerViewExpenseCategories.visibility = View.VISIBLE
             }
 
-            // Загружаем категорию транзакции
             viewModel.getCategoryById(transaction.categoryId) { category ->
                 category?.let {
-                    // Загружаем кошелек транзакции
                     viewModel.getWalletById(transaction.walletId) { wallet ->
                         wallet?.let {
                             setupOldTransaction(transaction, it, category)
@@ -242,7 +265,6 @@ class TransactionEditActivity : AppCompatActivity() {
             expenseAdapter.categories = expenseCategories
             incomeAdapter.categories = incomeCategories
 
-            // Устанавливаем выбранную категорию на основе текущей транзакции
             viewModel.transaction.value?.let { transaction ->
                 val targetCategories =
                     if (transaction.isIncome) incomeCategories else expenseCategories
@@ -261,8 +283,8 @@ class TransactionEditActivity : AppCompatActivity() {
 
     private fun setupOldTransaction(transaction: Transaction, wallet: Wallet, category: Category) {
         val sign = if (transaction.isIncome) "+" else "-"
-        val formattedTransactionSum = transaction.sum.formatWithSpaces() // Используем сумму транзакции
-        binding.textViewOldSum.text = "$sign$formattedTransactionSum ₽" // Добавляем знак и символ рубля
+        val formattedTransactionSum = transaction.sum.formatWithSpaces()
+        binding.textViewOldSum.text = "$sign$formattedTransactionSum ₽"
         binding.textViewOldSum.setTextColor(
             ContextCompat.getColor(
                 this,
@@ -270,19 +292,15 @@ class TransactionEditActivity : AppCompatActivity() {
             )
         )
 
-        // Устанавливаем дату в формате "dd.MM.yyyy"
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         binding.textViewOldDate.text = "Дата: ${dateFormat.format(Date(transaction.createdAt))}"
 
-        // Устанавливаем комментарий
         binding.textViewOldComment.text = "Комментарий: ${transaction.note ?: "нет"}"
 
-        // Устанавливаем данные категории
         binding.textViewOldCategoryName.text = category.name
         var iconResId = baseContext.getDrawableResId(category.icon)
         binding.imageViewCategoryOldIcon.setImageResource(iconResId)
 
-        // Устанавливаем данные кошелька
         iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formattedWalletBalance = wallet.balance.formatWithSpaces()
@@ -299,4 +317,3 @@ class TransactionEditActivity : AppCompatActivity() {
         }
     }
 }
-
