@@ -77,7 +77,7 @@ class WalletAdapter(
         if (holder is WalletViewHolder) {
             val context = holder.itemView.context
             val wallet = wallets[position]
-            val formatted = wallet.balance.formatWithSpaces()
+            val formatted = wallet.balance.formatWithSpaces(holder.itemView.context)
             holder.textViewWalletNameAndBalance.text =
                 holder.itemView.context.getString(
                     R.string.wallet_main_info,

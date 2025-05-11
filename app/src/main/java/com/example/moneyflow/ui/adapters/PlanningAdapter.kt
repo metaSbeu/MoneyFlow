@@ -54,9 +54,9 @@ class PlanningAdapter(
     ) {
         if (holder is PlansViewHolder) {
             val plan = plans[position]
-            val formattedSum = plan.sum.formatWithSpaces()
+            val formattedSum = plan.sum.formatWithSpaces(holder.itemView.context)
             holder.textViewPlanName.text =
-                holder.itemView.context.getString(R.string.plan_name_sum, plan.name, "$formattedSum ₽")
+                holder.itemView.context.getString(R.string.plan_name_sum, plan.name, formattedSum)
 
             if (plan.isNotificationActive) {
                 holder.imageViewNotificationsOn.visibility = View.VISIBLE

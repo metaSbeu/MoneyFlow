@@ -21,7 +21,7 @@
     <string name="auth_negative_button_text">Ввести пароль</string>
     <string name="username">Username</string>
     <string name="wallet">Счет: %s</string>
-    <string name="balance">Общий баланс: %s ₽</string>
+    <string name="balance">Общий баланс: %s</string>
     <string name="all_expenses">Траты</string>
     <string name="current_month">В %s</string>
     <string name="sum_currency">%d %s</string>
@@ -57,19 +57,17 @@
     <string name="cancel">Отмена</string>
     <string name="current_wallet">Выбранный счет</string>
     <string name="all_wallets">Все счета</string>
-    <string name="wallet_main_info">%s: %s ₽</string>
+    <string name="wallet_main_info">%s: %s</string>
     <string name="wallet_edit_title">Редактирование счета</string>
     <string name="transaction_edit_title">Редактирование транзакции</string>
     <string name="wallet_name_wallet_balance">%s: %s</string>
     <string name="choose_all">Выбрать все</string>
-    <string name="expenses_sum">%s ₽</string>
+    <string name="expenses_sum">%s</string>
     <string name="expenses">Расходы</string>
     <string name="incomes">Доходы</string>
     <string name="comment_s">Комментарий: %s</string>
     <string name="setup_pin_title">Установите ПИН код для авторизации</string>
     <string name="next_payment">Следующий платеж: %1$s</string>
-
-
 
     <string-array name="currencies">
         <item>RUB</item>
@@ -77,17 +75,14 @@
         <item>EUR</item>
     </string-array>
 
-
-
-        <string name="light_theme">Light</string>
-        <string name="dark_theme">Dark</string>
-        <string name="system_default_theme">System</string>
-        <string-array name="themes">
-            <item>@string/system_default_theme</item>
-            <item>@string/light_theme</item>
-            <item>@string/dark_theme</item>
-        </string-array>
-
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_default_theme">System</string>
+    <string-array name="themes">
+        <item>@string/system_default_theme</item>
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+    </string-array>
 
     <string name="confirm_pin_title">Подтвердите PIN-код</string>
     <string name="enter_pin_title">Введите PIN-код</string>

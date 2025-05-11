@@ -1,9 +1,11 @@
 package com.example.moneyflow.ui.viewmodels
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.moneyflow.data.ApiFactory.apiService
 import com.example.moneyflow.utils.DefaultCategories
 import com.example.moneyflow.utils.DefaultWallets
 import com.example.moneyflow.data.MainDatabase
@@ -48,6 +50,24 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     init {
         _password.value = ""
         _passwordState.value = PasswordState.EMPTY
+    }
+
+    fun getCurrency() {
+        val disposable = apiService.getCurrencyRates()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                val usdRate = response.rates["USD"]
+                val eurRate = response.rates["EUR"]
+                Log.d("CurrencyRates", "USD: $usdRate, EUR: $eurRate")
+
+                // Сохраняем значения
+                PreferenceManager.saveCurrencyRates(getApplication(), usdRate, eurRate)
+
+            }, { error ->
+                Log.e("CurrencyRates", "Error fetching data", error)
+            })
+        compositeDisposable.add(disposable)
     }
 
     fun setSetupModeFirstEntry() {
