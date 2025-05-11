@@ -18,6 +18,7 @@ import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.databinding.ActivityTransactionAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel
+import com.example.moneyflow.utils.Formatter.convertToRub
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.utils.getDrawableResId
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -77,11 +78,13 @@ class TransactionAddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val sumInRub = convertToRub(this, sum)
+
             val transaction = Transaction(
                 id = 0,
                 categoryId = selectedCategory.id,
                 walletId = walletId,
-                sum = sum,
+                sum = sumInRub,
                 isIncome = isIncomeSelected,
                 note = binding.editTextComment.text.toString(),
                 createdAt = selectedDateInMillis
@@ -165,13 +168,13 @@ class TransactionAddActivity : AppCompatActivity() {
         }
 
         viewModel.wallet.observe(this) { wallet ->
-            val formatted = wallet.balance.formatWithSpaces()
+            val formatted = wallet.balance.formatWithSpaces(this)
             val iconResId = baseContext.getDrawableResId(wallet.icon)
             binding.imageViewWalletIcon.setImageResource(iconResId)
             binding.textViewWalletNameAndBalance.text = getString(
                 R.string.wallet_name_wallet_balance,
                 wallet.name,
-                formatted + " ₽"
+                formatted
             )
         }
     }

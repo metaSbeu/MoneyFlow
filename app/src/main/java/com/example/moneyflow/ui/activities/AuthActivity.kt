@@ -29,11 +29,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.moneyflow.R
+import com.example.moneyflow.data.ApiFactory.apiService
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import com.example.moneyflow.ui.viewmodels.AuthViewModel
 import com.example.moneyflow.utils.DailyNotificationReceiver
 import com.example.moneyflow.utils.DailyPurchaseReminderReceiver
 import com.example.moneyflow.utils.PreferenceManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.Executor

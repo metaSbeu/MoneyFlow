@@ -1,5 +1,6 @@
 package com.example.moneyflow.ui.fragments.planning
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,8 +55,8 @@ class PlanningFragment : Fragment() {
             adapter.plans = it
         }
         viewModel.monthSum.observe(viewLifecycleOwner) {
-            val formattedSum = it.formatWithSpaces()
-            binding.textViewMonthSum.text = "$formattedSum ₽"
+            val formattedSum = it.formatWithSpaces(requireContext())
+            binding.textViewMonthSum.text = "$formattedSum"
         }
     }
 }

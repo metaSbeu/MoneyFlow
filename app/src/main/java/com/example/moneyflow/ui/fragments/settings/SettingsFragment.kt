@@ -1,4 +1,5 @@
 package com.example.moneyflow.ui.fragments.settings
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.moneyflow.R
 import com.example.moneyflow.databinding.FragmentSettingsBinding
 import com.example.moneyflow.ui.activities.AuthActivity
-import android.os.Build
-import androidx.annotation.RequiresApi
-import android.content.Intent
+import com.example.moneyflow.utils.PreferenceManager
 
 class SettingsFragment : Fragment() {
 
@@ -27,9 +26,32 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Изменение PIN
         binding.cardViewChangePIN.setOnClickListener {
             val intent = AuthActivity.newIntent(requireContext(), AuthActivity.MODE_CHANGE_PIN)
             startActivity(intent)
         }
+
+        // Настройка спиннера выбора валюты
+        val currencies = resources.getStringArray(R.array.currencies)
+        val currentCurrency = PreferenceManager.getSelectedCurrency(requireContext())
+        val selectedIndex = currencies.indexOf(currentCurrency).takeIf { it >= 0 } ?: 0
+        binding.currencySpinner.setSelection(selectedIndex)
+
+        binding.currencySpinner.setOnItemSelectedListener(object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: android.widget.AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedCurrency = currencies[position]
+                PreferenceManager.setSelectedCurrency(requireContext(), selectedCurrency)
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {
+                // Ничего не делать
+            }
+        })
     }
 }

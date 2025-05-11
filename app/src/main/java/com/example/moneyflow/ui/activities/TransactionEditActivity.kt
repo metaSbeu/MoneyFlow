@@ -189,7 +189,7 @@ class TransactionEditActivity : AppCompatActivity() {
     private fun updateWalletInTransaction(wallet: Wallet) {
         val iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        val formatted = wallet.balance.formatWithSpaces()
+        val formatted = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
         viewModel.setSelectedWalletId(wallet.id)
     }
@@ -283,8 +283,8 @@ class TransactionEditActivity : AppCompatActivity() {
 
     private fun setupOldTransaction(transaction: Transaction, wallet: Wallet, category: Category) {
         val sign = if (transaction.isIncome) "+" else "-"
-        val formattedTransactionSum = transaction.sum.formatWithSpaces()
-        binding.textViewOldSum.text = "$sign$formattedTransactionSum ₽"
+        val formattedTransactionSum = transaction.sum.formatWithSpaces(this)
+        binding.textViewOldSum.text = "$sign$formattedTransactionSum"
         binding.textViewOldSum.setTextColor(
             ContextCompat.getColor(
                 this,
@@ -303,7 +303,7 @@ class TransactionEditActivity : AppCompatActivity() {
 
         iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        val formattedWalletBalance = wallet.balance.formatWithSpaces()
+        val formattedWalletBalance = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)
     }
 

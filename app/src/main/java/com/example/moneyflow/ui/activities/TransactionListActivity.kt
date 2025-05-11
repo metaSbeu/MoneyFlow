@@ -268,7 +268,7 @@ class TransactionListActivity : AppCompatActivity() {
     private fun setupWallet(wallet: Wallet) {
         val iconResId = baseContext.getDrawableResId(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
-        val formatted = wallet.balance.formatWithSpaces()
+        val formatted = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
     }
 

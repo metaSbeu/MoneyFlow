@@ -8,23 +8,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.databinding.ActivityMainBinding
 import com.example.moneyflow.ui.fragments.home.HomeFragment
 import com.example.moneyflow.ui.fragments.planning.PlanningFragment
 import com.example.moneyflow.ui.fragments.settings.SettingsFragment
+import com.example.moneyflow.ui.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setUpInsets()
-        setNavigationBarColor() // Добавляем вызов метода для установки цвета
+        setNavigationBarColor()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -47,6 +51,8 @@ class MainActivity : AppCompatActivity() {
                 true
             } == true
         }
+
+        viewModel.getCurrency()
     }
 
     private fun setUpInsets() {

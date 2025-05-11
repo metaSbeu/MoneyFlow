@@ -1,5 +1,6 @@
 package com.example.moneyflow.ui.fragments.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,6 +16,7 @@ import com.example.moneyflow.ui.activities.TransactionListActivity
 import com.example.moneyflow.ui.activities.WalletAddActivity
 import com.example.moneyflow.ui.activities.WalletEditActivity
 import com.example.moneyflow.ui.adapters.WalletAdapter
+import com.example.moneyflow.utils.Formatter
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.utils.SwipeCallback
 import java.time.LocalDate
@@ -49,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         viewmodel.overallBalance.observe(viewLifecycleOwner) { balance ->
-            val formatted = balance.formatWithSpaces()
+            val formatted = balance.formatWithSpaces(requireContext())
             binding.textViewBalance.text = getString(R.string.balance, formatted)
         }
 
@@ -91,13 +93,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             getString(R.string.current_month, getCurrentMonth())
 
         viewmodel.monthExpenses.observe(viewLifecycleOwner) { expenses ->
-            val formatted = expenses.formatWithSpaces()
-            binding.textViewExpenses.text = "$formatted ₽"
+            val formatted = expenses.formatWithSpaces(requireContext())
+            binding.textViewExpenses.text = formatted
         }
 
         viewmodel.monthIncomes.observe(viewLifecycleOwner) { incomes ->
-            val formatted = incomes.formatWithSpaces()
-            binding.textViewIncomes.text = "$formatted ₽"
+            val formatted = incomes.formatWithSpaces(requireContext())
+            binding.textViewIncomes.text = formatted
         }
     }
 

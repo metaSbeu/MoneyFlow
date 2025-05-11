@@ -71,6 +71,7 @@
                 android:layout_weight="1" />
 
             <Spinner
+                android:id="@+id/currencySpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:entries="@array/currencies"

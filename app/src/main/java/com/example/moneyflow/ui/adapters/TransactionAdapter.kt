@@ -52,9 +52,9 @@ class TransactionAdapter(
         holder.textViewCategory.text = category.name
 
         val formattedSumWithSign = if (transaction.isIncome) {
-            "+${transaction.sum.formatWithSpaces()} ₽"
+            "+${transaction.sum.formatWithSpaces(holder.itemView.context)}"
         } else {
-            "-${transaction.sum.formatWithSpaces()} ₽"
+            "-${transaction.sum.formatWithSpaces(holder.itemView.context)}"
         }
         holder.textViewAmount.text = formattedSumWithSign
 
