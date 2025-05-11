@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -53,6 +54,7 @@ class AuthActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        applyAppTheme()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -99,6 +101,14 @@ class AuthActivity : AppCompatActivity() {
 
         if (mode != MODE_CHANGE_PIN) {
             fingerprintAuth()
+        }
+    }
+
+    private fun applyAppTheme() {
+        when (PreferenceManager.getSelectedTheme(this)) {
+            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
 

@@ -13,6 +13,7 @@ object PreferenceManager {
     private const val KEY_RATE_USD = "rate_usd"
     private const val KEY_RATE_EUR = "rate_eur"
     private const val KEY_SELECTED_CURRENCY = "selected_currency"
+    private const val KEY_SELECTED_THEME = "selected_theme"
 
     fun areDefaultCategoriesAdded(context: Context): Boolean {
         val prefs = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
@@ -73,5 +74,15 @@ object PreferenceManager {
 
     fun getSelectedCurrency(context: Context): String {
         return getPrefs(context).getString(KEY_SELECTED_CURRENCY, "RUB") ?: "RUB"
+    }
+
+    fun setSelectedTheme(context: Context, theme: String) {
+        getPrefs(context).edit {
+            putString(KEY_SELECTED_THEME, theme)
+        }
+    }
+
+    fun getSelectedTheme(context: Context): String {
+        return getPrefs(context).getString(KEY_SELECTED_THEME, "System") ?: "System"
     }
 }

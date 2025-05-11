@@ -13,6 +13,7 @@ import android.app.AlarmManager
 import android.app.Application
 import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.Plan
+import com.example.moneyflow.ui.activities.AuthActivity
 
 class DailyNotificationReceiver : BroadcastReceiver() {
 
@@ -80,11 +81,24 @@ class DailyNotificationReceiver : BroadcastReceiver() {
     }
 
     private fun sendNotification(context: Context, plan: Plan) {
+        val intent = Intent(context, AuthActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val builder = NotificationCompat.Builder(context, "daily_reminder")
             .setSmallIcon(R.drawable.logo_flow)
             .setContentTitle(context.getString(R.string.notification))
             .setContentText("Внесите оплату за ${plan.name} в размере ${plan.sum}")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent) // 👈 вот это важно
+            .setAutoCancel(true)
 
         NotificationManagerCompat.from(context).notify(plan.id, builder.build())
     }
