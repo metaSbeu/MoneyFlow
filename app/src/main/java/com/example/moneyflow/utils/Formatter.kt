@@ -17,10 +17,12 @@ object Formatter {
             else -> this // RUB или по умолчанию
         }
 
-        val formatter = DecimalFormat("#,###.##", DecimalFormatSymbols(Locale.getDefault())).apply {
-            groupingSize = 3
-            isDecimalSeparatorAlwaysShown = false
+        // Устанавливаем пробел как разделитель тысяч
+        val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
+            groupingSeparator = ' '  // Устанавливаем пробел в качестве разделителя
         }
+
+        val formatter = DecimalFormat("#,###.##", symbols)
 
         val formatted = formatter.format(convertedValue)
         val currencySymbol = when (selectedCurrency) {

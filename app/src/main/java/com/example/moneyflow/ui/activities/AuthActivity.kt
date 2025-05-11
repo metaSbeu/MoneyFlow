@@ -11,11 +11,13 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -23,6 +25,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricPrompt
@@ -114,6 +117,26 @@ class AuthActivity : AppCompatActivity() {
 
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleDailyNotification() {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            !alarmManager.canScheduleExactAlarms()
+        ) {
+            AlertDialog.Builder(this)
+                .setTitle("Разрешение необходимо")
+                .setMessage("Для корректной работы напоминаний, пожалуйста, разрешите точные напоминания в настройках.")
+                .setPositiveButton("Открыть настройки") { _, _ ->
+                    val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                        data = Uri.parse("package:$packageName")
+                    }
+                    startActivity(intent)
+                }
+                .setNegativeButton("Отмена", null)
+                .show()
+            return
+        }
+
+        // Основной код для уведомлений
         val intent = Intent(this, DailyNotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             this,
@@ -121,8 +144,6 @@ class AuthActivity : AppCompatActivity() {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
@@ -141,6 +162,7 @@ class AuthActivity : AppCompatActivity() {
             pendingIntent
         )
 
+        // Второе уведомление (напоминание о покупках)
         val reminderIntent = Intent(this, DailyPurchaseReminderReceiver::class.java)
         val reminderPendingIntent = PendingIntent.getBroadcast(
             this,

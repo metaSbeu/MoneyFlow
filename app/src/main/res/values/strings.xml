@@ -68,6 +68,7 @@
     <string name="comment_s">Комментарий: %s</string>
     <string name="setup_pin_title">Установите ПИН код для авторизации</string>
     <string name="next_payment">Следующий платеж: %1$s</string>
+    <string name="exact_alarm_permission_required">Для напоминаний нужно разрешение на точные уведомления. Пожалуйста, включите его в настройках.</string>
 
     <string-array name="currencies">
         <item>RUB</item>
