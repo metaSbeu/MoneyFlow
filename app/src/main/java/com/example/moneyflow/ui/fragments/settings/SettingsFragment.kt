@@ -1,5 +1,6 @@
 package com.example.moneyflow.ui.fragments.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.moneyflow.R
 import com.example.moneyflow.databinding.FragmentSettingsBinding
 import com.example.moneyflow.ui.activities.AuthActivity
+import com.example.moneyflow.ui.activities.NotificationsSettingsActivity
 import com.example.moneyflow.utils.PreferenceManager
 
 class SettingsFragment : Fragment() {
@@ -56,6 +58,12 @@ class SettingsFragment : Fragment() {
                 // Ничего не делать
             }
         })
+
+        binding.cardViewNotifications.setOnClickListener {
+            val intent = Intent(requireContext(), NotificationsSettingsActivity::class.java)
+            startActivity(intent)
+        }
+
 
         val themes = resources.getStringArray(R.array.themes)
         val currentTheme = PreferenceManager.getSelectedTheme(requireContext())

@@ -1,6 +1,7 @@
 package com.example.moneyflow.utils
 
-import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.Application
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,17 +9,15 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.moneyflow.R
-import java.util.Calendar
-import android.app.AlarmManager
-import android.app.Application
 import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.Plan
 import com.example.moneyflow.ui.activities.AuthActivity
+import java.util.Calendar
 
 class DailyNotificationReceiver : BroadcastReceiver() {
 
-    @SuppressLint("CheckResult")
     override fun onReceive(context: Context, intent: Intent?) {
+        if (!PreferenceManager.isNotificationType1Enabled(context)) return
 
         val planDao = MainDatabase.getDb(context.applicationContext as Application).planDao()
         planDao.getPlans().subscribe { plans ->
@@ -28,6 +27,7 @@ class DailyNotificationReceiver : BroadcastReceiver() {
                 }
             }
 
+            // планируем следующее уведомление
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val nextAlarmTime = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()

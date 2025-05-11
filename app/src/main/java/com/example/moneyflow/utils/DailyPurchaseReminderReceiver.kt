@@ -13,6 +13,7 @@ import java.util.Calendar
 
 class DailyPurchaseReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
+        if (!PreferenceManager.isNotificationType2Enabled(context)) return
 
         val intentToOpenApp = Intent(context, AuthActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -25,7 +26,6 @@ class DailyPurchaseReminderReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Показ уведомления
         val builder = NotificationCompat.Builder(context, "purchase_reminder")
             .setSmallIcon(R.drawable.logo_flow)
             .setContentTitle("Напоминание")
@@ -36,16 +36,14 @@ class DailyPurchaseReminderReceiver : BroadcastReceiver() {
 
         NotificationManagerCompat.from(context).notify(10000, builder.build())
 
-
-        // Перезапланировать уведомление на следующий день
+        // Запланировать следующее уведомление
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         val nextReminderTime = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, 20)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
-            add(Calendar.DAY_OF_YEAR, 1) // на завтра
+            add(Calendar.DAY_OF_YEAR, 1)
         }
 
         val reminderIntent = Intent(context, DailyPurchaseReminderReceiver::class.java)

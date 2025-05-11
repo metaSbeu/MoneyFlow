@@ -75,14 +75,14 @@
         <item>EUR</item>
     </string-array>
 
-        <string name="light_theme">Light</string>
-        <string name="dark_theme">Dark</string>
-        <string name="system_default_theme">System</string>
-        <string-array name="themes">
-            <item>@string/system_default_theme</item>
-            <item>@string/light_theme</item>
-            <item>@string/dark_theme</item>
-        </string-array>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_default_theme">System</string>
+    <string-array name="themes">
+        <item>@string/system_default_theme</item>
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+    </string-array>
 
     <string name="confirm_pin_title">Подтвердите PIN-код</string>
     <string name="enter_pin_title">Введите PIN-код</string>

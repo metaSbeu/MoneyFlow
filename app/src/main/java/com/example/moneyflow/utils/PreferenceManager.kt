@@ -14,6 +14,8 @@ object PreferenceManager {
     private const val KEY_RATE_EUR = "rate_eur"
     private const val KEY_SELECTED_CURRENCY = "selected_currency"
     private const val KEY_SELECTED_THEME = "selected_theme"
+    private const val KEY_NOTIFICATION_TYPE1 = "notification_type1"
+    private const val KEY_NOTIFICATION_TYPE2 = "notification_type2"
 
     fun areDefaultCategoriesAdded(context: Context): Boolean {
         val prefs = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
@@ -85,4 +87,21 @@ object PreferenceManager {
     fun getSelectedTheme(context: Context): String {
         return getPrefs(context).getString(KEY_SELECTED_THEME, "System") ?: "System"
     }
+
+    fun isNotificationType1Enabled(context: Context): Boolean {
+        return getPrefs(context).getBoolean(KEY_NOTIFICATION_TYPE1, true)
+    }
+
+    fun setNotificationType1Enabled(context: Context, enabled: Boolean) {
+        getPrefs(context).edit { putBoolean(KEY_NOTIFICATION_TYPE1, enabled) }
+    }
+
+    fun isNotificationType2Enabled(context: Context): Boolean {
+        return getPrefs(context).getBoolean(KEY_NOTIFICATION_TYPE2, true)
+    }
+
+    fun setNotificationType2Enabled(context: Context, enabled: Boolean) {
+        getPrefs(context).edit { putBoolean(KEY_NOTIFICATION_TYPE2, enabled) }
+    }
+
 }
