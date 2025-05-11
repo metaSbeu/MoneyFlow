@@ -13,24 +13,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val compositeDisposable = CompositeDisposable()
 
-    fun getCurrency() {
-        val disposable = apiService.getCurrencyRates()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                val usdRate = response.rates["USD"]
-                val eurRate = response.rates["EUR"]
-                Log.d("CurrencyRates", "USD: $usdRate, EUR: $eurRate")
-
-                // Сохраняем значения
-                PreferenceManager.saveCurrencyRates(getApplication(), usdRate, eurRate)
-
-            }, { error ->
-                Log.e("CurrencyRates", "Error fetching data", error)
-            })
-        compositeDisposable.add(disposable)
-    }
-
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()

@@ -79,7 +79,7 @@ class AuthActivity : AppCompatActivity() {
         setUpNumberPadClickListeners()
         setupObservers()
         insertDefaultDbData()
-
+        viewModel.getCurrency()
         createNotificationChannel()
         scheduleDailyNotification()
 

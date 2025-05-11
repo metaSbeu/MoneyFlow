@@ -51,8 +51,6 @@ class MainActivity : AppCompatActivity() {
                 true
             } == true
         }
-
-        viewModel.getCurrency()
     }
 
     private fun setUpInsets() {
