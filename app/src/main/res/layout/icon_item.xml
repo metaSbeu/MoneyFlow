@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/bank_icon"
         android:padding="12dp"
         android:scaleType="centerInside"
         tools:background="@drawable/circle_indicator_gray"

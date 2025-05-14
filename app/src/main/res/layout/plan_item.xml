@@ -12,8 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="60dp"
         android:background="@color/item_background"
+        android:minHeight="60dp"
         android:padding="16dp">
 
         <TextView
@@ -23,9 +23,9 @@
             android:text="@string/plan_name_sum"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewNextPaymentDate"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewNotificationsOn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewNotificationsOn" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textViewNextPaymentDate"
@@ -42,43 +42,45 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="4dp"
-            android:contentDescription="@string/bell"
-            android:src="@drawable/ic_bell"
-            app:tint="@color/primary"
             android:clickable="true"
+            android:contentDescription="@string/bell_on"
+            android:src="@drawable/ic_bell"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primary"
+            tools:ignore="DuplicateClickableBoundsCheck,TouchTargetSizeCheck" />
 
         <ImageView
             android:id="@+id/imageViewNotificationsOff"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="4dp"
-            android:contentDescription="@string/bell"
-            android:src="@drawable/ic_bell_off"
-            app:tint="@color/light_red"
             android:clickable="true"
+            android:contentDescription="@string/bell_off"
+            android:src="@drawable/ic_bell_off"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/light_red"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Уведомления"-->
-<!--            android:textSize="10sp"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/switchNotification"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/switchNotification"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/switchNotification" />-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Уведомления"-->
+        <!--            android:textSize="10sp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@+id/switchNotification"-->
+        <!--            app:layout_constraintEnd_toStartOf="@+id/switchNotification"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/switchNotification" />-->
 
-<!--        <androidx.appcompat.widget.SwitchCompat-->
-<!--            android:id="@+id/switchNotification"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <androidx.appcompat.widget.SwitchCompat-->
+        <!--            android:id="@+id/switchNotification"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

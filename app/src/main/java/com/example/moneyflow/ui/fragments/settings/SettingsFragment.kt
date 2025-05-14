@@ -89,6 +89,5 @@ class SettingsFragment : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-
     }
 }

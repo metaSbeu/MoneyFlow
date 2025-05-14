@@ -45,9 +45,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 startActivity(WalletAddActivity.newIntent(requireContext()))
             }
         )
-        adapter.selectAll()
-        viewmodel.wallets.observe(viewLifecycleOwner) {
-            adapter.wallets = it
+        adapter.selectAll() // По умолчанию выделяем "Все счета"
+        viewmodel.wallets.observe(viewLifecycleOwner) { wallets ->
+            adapter.wallets = wallets
+            // Автоматически выбираем единственный кошелек, если он есть
+            if (wallets.size == 1 && selectedWallet == null) {
+                val singleWallet = wallets.first()
+                adapter.deselectAll()
+                adapter.selectWallet(singleWallet)
+                selectedWallet = singleWallet
+            }
         }
 
         viewmodel.overallBalance.observe(viewLifecycleOwner) { balance ->
@@ -58,7 +65,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.recyclerViewWallets.adapter = adapter
 
         binding.textViewChooseAll.setOnClickListener {
-            val walletBalance = viewmodel.overallBalance.value ?: 0.0
             adapter.selectAll()
             selectedWallet = null
         }
@@ -183,7 +189,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        binding.cardViewAllOperations.setOnClickListener {
+        binding.cardViewBalance.setOnClickListener {
             val intent = if (selectedWallet == null) {
                 TransactionListActivity.newIntentAllWallets(requireContext())
             } else {

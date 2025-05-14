@@ -47,20 +47,22 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
             android:maxLength="12"
-            android:inputType="textCapSentences" />
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="140dp"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

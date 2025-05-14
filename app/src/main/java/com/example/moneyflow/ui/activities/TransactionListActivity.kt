@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.*
@@ -178,6 +180,12 @@ class TransactionListActivity : AppCompatActivity() {
         }
 
         val pieData = PieData(dataSet)
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toDouble().formatWithSpaces(this@TransactionListActivity)
+            }
+        }
+
         pieChart.data = pieData
 
         pieChart.animateY(1000, Easing.EaseInOutQuad)
@@ -289,14 +297,19 @@ class TransactionListActivity : AppCompatActivity() {
     private fun observeViewModels() {
         viewModel.transactions.observe(this) { transactions ->
             adapter.transactions = transactions
-            setupPieChart(transactions)
+            if (transactions.isNotEmpty()) {
+                binding.pieChart.visibility = View.VISIBLE
+                setupPieChart(transactions)
+            } else {
+                binding.pieChart.visibility = View.GONE
+                binding.pieChart.clear()
+            }
         }
 
         viewModel.wallet.observe(this) { updatedWallet ->
             setupWallet(updatedWallet)
         }
     }
-
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -36,6 +36,7 @@
             android:id="@+id/recyclerViewWalletIcons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/categories_list"
             android:paddingHorizontal="16dp"
             android:paddingTop="16dp"
             android:scrollbars="vertical"
@@ -64,7 +65,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:maxLength="30" />
+                android:maxLength="30"
+                tools:ignore="VisualLintTextFieldSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +78,8 @@
             android:text="@string/save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textFieldNewCategoryName" />
+            app:layout_constraintTop_toBottomOf="@+id/textFieldNewCategoryName"
+            tools:ignore="TextContrastCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

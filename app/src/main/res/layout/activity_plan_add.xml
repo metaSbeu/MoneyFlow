@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Создание регулярного расхода"
+        android:text="@string/create_regular_expense"
         android:textAlignment="center"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -32,9 +32,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
-            android:maxLength="75"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences" />
+            android:inputType="textCapSentences"
+            android:maxLength="75"
+            tools:ignore="VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:hint="Сумма"
+        android:hint="@string/sum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textFieldName">
@@ -52,9 +53,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPlanSum"
             android:layout_width="match_parent"
-            android:maxLength="10"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:maxLength="10"
+            tools:ignore="VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,11 +65,12 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Какого числа каждого месяца напоминать о платеже?"
+        android:text="@string/month_hint"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/textFieldDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldPlanSum" />
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPlanSum"
+        tools:ignore="TextSizeCheck" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textFieldDate"
@@ -75,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="Число"
+        android:hint="@string/number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView">
 
@@ -91,11 +94,12 @@
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="140dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:foreground="?android:attr/selectableItemBackground"
-        android:layout_height="wrap_content"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
