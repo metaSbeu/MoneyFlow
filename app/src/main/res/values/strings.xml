@@ -44,7 +44,7 @@
     <string name="notifications_settings">Настройки уведомлений</string>
     <string name="change_wallet">Изменить счет</string>
     <string name="name">Название</string>
-    <string name="category_create_title">Создание категории расходов</string>
+    <string name="category_create_title">Создание категории</string>
     <string name="edit_category">Изменить категорию</string>
     <string name="category_edit_title">Редактирование категории</string>
     <string name="icon">Иконка</string>
@@ -76,13 +76,14 @@
         <item>EUR</item>
     </string-array>
 
-    <string name="light_theme">Light</string>
-    <string name="dark_theme">Dark</string>
-    <string name="system_default_theme">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system_default">System</string>
+
     <string-array name="themes">
-        <item>@string/system_default_theme</item>
-        <item>@string/light_theme</item>
-        <item>@string/dark_theme</item>
+        <item>@string/theme_light</item>  <!-- position 0 -->
+        <item>@string/theme_dark</item>   <!-- position 1 -->
+        <item>@string/theme_system_default</item> <!-- position 2 -->
     </string-array>
 
     <string name="confirm_pin_title">Подтвердите PIN-код</string>
@@ -121,5 +122,30 @@
     <string name="planned_expenses">Запланированные расходы</string>
     <string name="bank_icon">Bank icon</string>
     <string name="bell_off">Bell off</string>
+    <string name="payment_notification_text">Внесите оплату за %s в размере %s</string>
+    <string name="daily_transactions_add_notification_text">Не забудьте внести покупки за сегодня</string>
+    <string name="add">Добавить</string>
+    <string name="create_new_plan">Создать новый план</string>
+    <string name="empty"><![CDATA[<пусто>]]></string>
+    <string name="create_new_wallet">Создать новый счет</string>
+    <string name="remove_wallet">Удалить счет</string>
+    <string name="confirm_delete_wallet">Вы уверены, что хотите удалить счет \'%1$s\'? Также удалятся все транзакции, записанные на этот счет!</string>
+    <string name="delete">Удалить</string>
+    <string name="january">январе</string>
+    <string name="february">феврале</string>
+    <string name="march">марте</string>
+    <string name="april">апреле</string>
+    <string name="may">мае</string>
+    <string name="june">июне</string>
+    <string name="july">июле</string>
+    <string name="august">августе</string>
+    <string name="september">сентябре</string>
+    <string name="october">октябре</string>
+    <string name="november">ноябре</string>
+    <string name="december">декабре</string>
+    <string name="choose_one_wallet">Выберите один счет</string>
+    <string name="set_notification_permission_to_get_it">Разрешите уведомления, чтобы получать напоминания о планах</string>
+    <string name="allow">Разрешить</string>
+    <string name="you_turned_notifications_off">Вы отключили уведомления. Вы можете включить их в настройках приложения.</string>
 
 </resources>

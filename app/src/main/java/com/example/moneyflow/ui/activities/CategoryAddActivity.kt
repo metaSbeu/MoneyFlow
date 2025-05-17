@@ -6,15 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.databinding.ActivityCategoryAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.CategoryAddViewModel
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class CategoryAddActivity : AppCompatActivity() {
 
@@ -41,8 +37,8 @@ class CategoryAddActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
 
-        viewModel.defaultIcons.observe(this) {
-            adapter.categories = viewModel.getDefaultCategoryIcons()
+        viewModel.defaultIcons.observe(this) { defaultIcons ->
+            adapter.updateCategories(defaultIcons)
         }
 
         binding.recyclerViewCategories.adapter = adapter

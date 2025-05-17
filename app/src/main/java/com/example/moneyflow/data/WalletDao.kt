@@ -31,5 +31,4 @@ interface WalletDao {
 
     @androidx.room.Update
     fun update(wallet: Wallet): Completable
-
 }

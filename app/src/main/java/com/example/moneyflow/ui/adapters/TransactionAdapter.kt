@@ -11,25 +11,43 @@ import com.example.moneyflow.R
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.IconResolver
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.time.Duration.Companion.nanoseconds
 
 class TransactionAdapter(
     private val onItemClick: (Transaction) -> Unit
-): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     var transactions = listOf<TransactionWithCategory>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
+        private set
+
+    fun updateTransactions(newTransactions: List<TransactionWithCategory>) {
+        val diffCallback = object : androidx.recyclerview.widget.DiffUtil.Callback() {
+            override fun getOldListSize() = transactions.size
+            override fun getNewListSize() = newTransactions.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return transactions[oldItemPosition].transaction.id ==
+                        newTransactions[newItemPosition].transaction.id
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return transactions[oldItemPosition] == newTransactions[newItemPosition]
+            }
         }
+
+        val diffResult = androidx.recyclerview.widget.DiffUtil.calculateDiff(diffCallback)
+        transactions = newTransactions
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): TransactionViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.transaction_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.transaction_item, parent, false)
         return TransactionViewHolder(view)
     }
 
@@ -40,12 +58,7 @@ class TransactionAdapter(
         val (transaction, category) = transactions[position]
         val context = holder.itemView.context
 
-        // Загрузка иконки категории по имени
-        val iconResId = context.resources.getIdentifier(
-            category.icon,
-            "drawable",
-            context.packageName
-        )
+        val iconResId = IconResolver.resolve(category.icon)
 
         holder.imageViewIcon.setImageResource(iconResId)
 
@@ -60,13 +73,14 @@ class TransactionAdapter(
 
         val note = transaction.note
         holder.textViewComment.text = if (note.isNullOrBlank()) {
-            holder.itemView.context.getString(R.string.comment_s, "<пусто>")
+            holder.itemView.context.getString(R.string.comment_s, context.getString(R.string.empty))
         } else {
             holder.itemView.context.getString(R.string.comment_s, note)
         }
 
-        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) // Пример формата
-        val formattedDate = dateFormat.format(transaction.createdAt) // Преобразование временной метки в строку
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val formattedDate =
+            dateFormat.format(transaction.createdAt)
 
         holder.textViewDate.text = formattedDate
 
@@ -80,15 +94,17 @@ class TransactionAdapter(
         holder.itemView.setOnClickListener {
             onItemClick(transaction)
         }
-    }    override fun getItemCount(): Int {
+    }
+
+    override fun getItemCount(): Int {
         return transactions.size
     }
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageViewIcon = itemView.findViewById<ImageView>(R.id.imageViewCategoryIcon)
-        val textViewCategory = itemView.findViewById<TextView>(R.id.textViewCategoryName)
-        val textViewAmount = itemView.findViewById<TextView>(R.id.textViewSum)
-        val textViewComment = itemView.findViewById<TextView>(R.id.textViewComment)
-        val textViewDate = itemView.findViewById<TextView>(R.id.textViewDate)
+        val imageViewIcon: ImageView = itemView.findViewById<ImageView>(R.id.imageViewCategoryIcon)
+        val textViewCategory: TextView = itemView.findViewById<TextView>(R.id.textViewCategoryName)
+        val textViewAmount: TextView = itemView.findViewById<TextView>(R.id.textViewSum)
+        val textViewComment: TextView = itemView.findViewById<TextView>(R.id.textViewComment)
+        val textViewDate: TextView = itemView.findViewById<TextView>(R.id.textViewDate)
     }
 }

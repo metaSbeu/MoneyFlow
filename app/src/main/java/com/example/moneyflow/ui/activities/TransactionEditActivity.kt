@@ -10,26 +10,22 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
-import com.example.moneyflow.data.Plan
 import com.example.moneyflow.data.Transaction
 import com.example.moneyflow.data.Wallet
-import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionEditViewModel
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import android.text.TextWatcher
 import android.text.Editable
+import com.example.moneyflow.utils.IconResolver
 import java.text.NumberFormat
 
 class TransactionEditActivity : AppCompatActivity() {
@@ -187,7 +183,8 @@ class TransactionEditActivity : AppCompatActivity() {
     }
 
     private fun updateWalletInTransaction(wallet: Wallet) {
-        val iconResId = baseContext.getDrawableResId(wallet.icon)
+//        val iconResId = baseContext.getDrawableResId(wallet.icon)
+        val iconResId = IconResolver.resolve(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
@@ -262,8 +259,8 @@ class TransactionEditActivity : AppCompatActivity() {
             val expenseCategories = categories.filter { !it.isIncome }
             val incomeCategories = categories.filter { it.isIncome }
 
-            expenseAdapter.categories = expenseCategories
-            incomeAdapter.categories = incomeCategories
+            expenseAdapter.updateCategories(expenseCategories)
+            incomeAdapter.updateCategories(incomeCategories)
 
             viewModel.transaction.value?.let { transaction ->
                 val targetCategories =
@@ -298,10 +295,11 @@ class TransactionEditActivity : AppCompatActivity() {
         binding.textViewOldComment.text = "Комментарий: ${transaction.note ?: "нет"}"
 
         binding.textViewOldCategoryName.text = category.name
-        var iconResId = baseContext.getDrawableResId(category.icon)
+//        var iconResId = baseContext.getDrawableResId(category.icon)
+        var iconResId = IconResolver.resolve(category.icon)
         binding.imageViewCategoryOldIcon.setImageResource(iconResId)
 
-        iconResId = baseContext.getDrawableResId(wallet.icon)
+        iconResId = IconResolver.resolve(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formattedWalletBalance = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)

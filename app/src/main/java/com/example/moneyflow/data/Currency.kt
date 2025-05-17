@@ -5,4 +5,3 @@ data class Currency(
     val usd: Double,
     val eur: Double
 )
-

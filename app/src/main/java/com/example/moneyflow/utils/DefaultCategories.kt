@@ -23,4 +23,27 @@ object DefaultCategories {
         Category(name = "Кэшбэк", icon = "ic_cashback", isIncome = true),
         Category(name = "Другое", icon = "ic_questionmark", isIncome = true)
     )
+
+    val defaultCategoryIcons = listOf(
+        Category(name = "", icon = "ic_movie", isIncome = false),
+        Category(name = "", icon = "ic_game", isIncome = false),
+        Category(name = "", icon = "ic_sport", isIncome = false),
+        Category(name = "", icon = "ic_food", isIncome = false),
+        Category(name = "", icon = "ic_pet", isIncome = false),
+        Category(name = "", icon = "ic_fruit", isIncome = false),
+        Category(name = "", icon = "ic_clothes", isIncome = false),
+        Category(name = "", icon = "ic_shoe", isIncome = false),
+        Category(name = "", icon = "ic_diamond", isIncome = false),
+        Category(name = "", icon = "ic_furniture", isIncome = false),
+        Category(name = "", icon = "ic_music", isIncome = false),
+        Category(name = "", icon = "ic_computer", isIncome = false),
+        Category(name = "", icon = "ic_bicycle", isIncome = false),
+        Category(name = "", icon = "ic_wifi", isIncome = false),
+        Category(name = "", icon = "ic_car", isIncome = false),
+        Category(name = "", icon = "ic_plane", isIncome = false),
+        Category(name = "", icon = "ic_tooth", isIncome = false),
+        Category(name = "", icon = "ic_finance", isIncome = false),
+        Category(name = "", icon = "ic_family", isIncome = false),
+        Category(name = "", icon = "ic_train_bus", isIncome = false),
+    )
 }

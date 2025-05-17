@@ -53,7 +53,7 @@ class CategoryEditActivity : AppCompatActivity() {
             isIncome = false
         )
 
-        adapter.categories = IconsManager.getAllCategoryExpenseIcons()
+        adapter.updateCategories(IconsManager.getAllCategoryExpenseIcons())
 
         binding.recyclerViewCategories.adapter = adapter
 

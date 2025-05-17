@@ -9,8 +9,6 @@ import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
@@ -20,7 +18,7 @@ import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionAddViewModel
 import com.example.moneyflow.utils.Formatter.convertToRub
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
-import com.example.moneyflow.utils.getDrawableResId
+import com.example.moneyflow.utils.IconResolver
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 
@@ -149,15 +147,9 @@ class TransactionAddActivity : AppCompatActivity() {
             val incomeCategories = categories.filter { it.isIncome }
 
             if (isIncomeSelected) {
-                categoriesAdapter.categories = incomeCategories
+                categoriesAdapter.updateCategories(incomeCategories)
             } else {
-                categoriesAdapter.categories = expenseCategories
-            }
-
-            val defaultCategory =
-                if (isIncomeSelected) incomeCategories.firstOrNull() else expenseCategories.firstOrNull()
-            if (defaultCategory != null) {
-                selectedCategory = defaultCategory
+                categoriesAdapter.updateCategories(expenseCategories)
             }
         }
 
@@ -169,7 +161,8 @@ class TransactionAddActivity : AppCompatActivity() {
 
         viewModel.wallet.observe(this) { wallet ->
             val formatted = wallet.balance.formatWithSpaces(this)
-            val iconResId = baseContext.getDrawableResId(wallet.icon)
+//            val iconResId = baseContext.getDrawableResId(wallet.icon)
+            val iconResId = IconResolver.resolve(wallet.icon)
             binding.imageViewWalletIcon.setImageResource(iconResId)
             binding.textViewWalletNameAndBalance.text = getString(
                 R.string.wallet_name_wallet_balance,
@@ -216,7 +209,7 @@ class TransactionAddActivity : AppCompatActivity() {
                 isIncomeSelected = checkedId == R.id.buttonIncome
                 viewModel.categories.value?.let { categories ->
                     val filteredCategories = categories.filter { it.isIncome == isIncomeSelected }
-                    categoriesAdapter.categories = filteredCategories
+                    categoriesAdapter.updateCategories(filteredCategories)
                     categoriesAdapter.isIncome = isIncomeSelected
                 }
             }

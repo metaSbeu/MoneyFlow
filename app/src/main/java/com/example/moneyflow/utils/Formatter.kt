@@ -14,12 +14,11 @@ object Formatter {
         val convertedValue = when (selectedCurrency) {
             "USD" -> this * usdRate
             "EUR" -> this * eurRate
-            else -> this // RUB или по умолчанию
+            else -> this
         }
 
-        // Устанавливаем пробел как разделитель тысяч
         val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
-            groupingSeparator = ' '  // Устанавливаем пробел в качестве разделителя
+            groupingSeparator = ' '
         }
 
         val formatter = DecimalFormat("#,###.##", symbols)
@@ -38,7 +37,7 @@ object Formatter {
         return when (PreferenceManager.getSelectedCurrency(context)) {
             "USD" -> amount / PreferenceManager.getSavedUsdRate(context)
             "EUR" -> amount / PreferenceManager.getSavedEurRate(context)
-            else -> amount // RUB
+            else -> amount
         }
     }
 }

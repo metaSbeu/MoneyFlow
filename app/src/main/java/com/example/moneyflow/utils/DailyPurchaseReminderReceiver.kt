@@ -1,10 +1,12 @@
 package com.example.moneyflow.utils
 
+import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.moneyflow.R
@@ -12,6 +14,8 @@ import com.example.moneyflow.ui.activities.AuthActivity
 import java.util.Calendar
 
 class DailyPurchaseReminderReceiver : BroadcastReceiver() {
+
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     override fun onReceive(context: Context, intent: Intent?) {
         if (!PreferenceManager.isNotificationType2Enabled(context)) return
 
@@ -28,15 +32,14 @@ class DailyPurchaseReminderReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, "purchase_reminder")
             .setSmallIcon(R.drawable.logo_flow)
-            .setContentTitle("Напоминание")
-            .setContentText("Не забудьте внести покупки за сегодня")
+            .setContentTitle(context.getString(R.string.notification))
+            .setContentText(context.getString(R.string.daily_transactions_add_notification_text))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
         NotificationManagerCompat.from(context).notify(10000, builder.build())
 
-        // Запланировать следующее уведомление
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val nextReminderTime = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()

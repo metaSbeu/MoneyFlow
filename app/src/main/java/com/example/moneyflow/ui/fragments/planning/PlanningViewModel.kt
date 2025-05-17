@@ -48,13 +48,11 @@ class PlanningViewModel(application: Application) : AndroidViewModel(application
         val disposable = database.planDao().getPlans()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { plans ->
-                    val monthSum = plans
-                        .sumOf { it.sum }
-                    _monthSum.value = monthSum
-                }
-            )
+            .subscribe { plans ->
+                val monthSum = plans
+                    .sumOf { it.sum }
+                _monthSum.value = monthSum
+            }
         compositeDisposable.add(disposable)
     }
 

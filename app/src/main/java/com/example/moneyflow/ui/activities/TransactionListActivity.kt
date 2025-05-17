@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,10 +19,10 @@ import com.example.moneyflow.R
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
-import com.example.moneyflow.utils.getDrawableResId
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
 import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
+import com.example.moneyflow.utils.IconResolver
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -72,6 +71,7 @@ class TransactionListActivity : AppCompatActivity() {
                     viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.INCOME)
                     isIncomeSelected = true
                 }
+
                 FILTER_EXPENSE -> {
                     changeBackgroundColor(binding.cardViewExpenses)
                     viewModel.filterTransactionsByType(TransactionListViewModel.FilterType.EXPENSE)
@@ -151,7 +151,7 @@ class TransactionListActivity : AppCompatActivity() {
         pieChart.setUsePercentValues(false)
         pieChart.description.isEnabled = false
         pieChart.isDrawHoleEnabled = true
-        pieChart.setNoDataText("Не добавлено ни одной транзакции")
+        pieChart.setNoDataText("Диаграмма недоступна.Не добавлено ни одной транзакции")
         pieChart.setHoleColor(ContextCompat.getColor(this, R.color.background))
         pieChart.setDrawCenterText(true)
         pieChart.legend.isEnabled = false
@@ -175,7 +175,8 @@ class TransactionListActivity : AppCompatActivity() {
             xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             valueLinePart1OffsetPercentage = 80f
             valueTextColor = valueTextColorMF
-            valueLineColor = ContextCompat.getColor(this@TransactionListActivity, R.color.item_background)
+            valueLineColor =
+                ContextCompat.getColor(this@TransactionListActivity, R.color.item_background)
             valueLineWidth = 1f
         }
 
@@ -274,10 +275,12 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun setupWallet(wallet: Wallet) {
-        val iconResId = baseContext.getDrawableResId(wallet.icon)
+//        val iconResId = baseContext.getDrawableResId(wallet.icon)
+        val iconResId = IconResolver.resolve(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces(this)
-        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
+        binding.textViewWalletName.text =
+            getString(R.string.wallet_main_info, wallet.name, formatted)
     }
 
     private fun setupAllWallets() {
@@ -296,20 +299,15 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun observeViewModels() {
         viewModel.transactions.observe(this) { transactions ->
-            adapter.transactions = transactions
-            if (transactions.isNotEmpty()) {
-                binding.pieChart.visibility = View.VISIBLE
-                setupPieChart(transactions)
-            } else {
-                binding.pieChart.visibility = View.GONE
-                binding.pieChart.clear()
-            }
+            adapter.updateTransactions(transactions)
+            setupPieChart(transactions)
         }
 
         viewModel.wallet.observe(this) { updatedWallet ->
             setupWallet(updatedWallet)
         }
     }
+
     private fun setUpInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -48,20 +48,22 @@ class PlanningFragment : Fragment() {
                 if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
                     Snackbar.make(
                         binding.root,
-                        "Разрешите уведомления, чтобы получать напоминания о планах",
+                        getString(R.string.set_notification_permission_to_get_it),
                         Snackbar.LENGTH_LONG
                     )
-                        .setAction("Разрешить") {
-                            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        .setAction(getString(R.string.allow)) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                            }
                         }
                         .show()
                 } else {
                     Snackbar.make(
                         binding.root,
-                        "Вы отключили уведомления. Вы можете включить их в настройках приложения.",
+                        getString(R.string.you_turned_notifications_off),
                         Snackbar.LENGTH_LONG
                     )
-                        .setAction("Настройки") {
+                        .setAction(getString(R.string.settings)) {
                             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                                 putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                             }
@@ -103,11 +105,11 @@ class PlanningFragment : Fragment() {
 
     fun observeViewmodel() {
         viewModel.plans.observe(viewLifecycleOwner) {
-            adapter.plans = it
+            adapter.updatePlans(it)
         }
         viewModel.monthSum.observe(viewLifecycleOwner) {
             val formattedSum = it.formatWithSpaces(requireContext())
-            binding.textViewMonthSum.text = "$formattedSum"
+            binding.textViewMonthSum.text = formattedSum
         }
     }
 }
