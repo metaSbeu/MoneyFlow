@@ -159,7 +159,6 @@
     <string name="scholarship">Scholarship</string>
     <string name="cashback">Cashback</string>
 
-
     <string-array name="currencies">
         <item>RUB</item>
         <item>USD</item>
@@ -171,6 +170,7 @@
         <item>@string/theme_dark</item>
         <item>@string/theme_system_default</item>
     </string-array>
+
     <string name="cash">Cash</string>
     <string name="_1">1</string>
     <string name="_2">2</string>

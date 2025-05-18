@@ -70,9 +70,9 @@
     <string name="next_payment">Следующий платеж: %1$s</string>
     <string name="exact_alarm_permission_required">Для напоминаний нужно разрешение на точные уведомления. Пожалуйста, включите его в настройках.</string>
 
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="theme_system_default">System</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+    <string name="theme_system_default">Системная</string>
 
     <string-array name="themes">
         <item>@string/theme_light</item>
