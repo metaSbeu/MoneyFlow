@@ -71,6 +71,13 @@ object IconResolver {
         "ic_finance" to R.drawable.ic_finance,
         "ic_family" to R.drawable.ic_family,
         "ic_train_bus" to R.drawable.ic_train_bus,
+
+        "ic_checkbook" to R.drawable.ic_checkbook,
+        "ic_safe" to R.drawable.ic_safe,
+        "ic_piggy_bank" to R.drawable.ic_piggy_bank,
+        "ic_credit_card" to R.drawable.ic_credit_card,
+        "ic_wallet" to R.drawable.ic_wallet,
+        "ic_btc" to R.drawable.ic_btc
     )
 
     fun resolve(iconName: String): Int {

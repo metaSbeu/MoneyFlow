@@ -2,6 +2,16 @@ package com.example.moneyflow.utils
 
 object DefaultWalletIcons {
     val all = listOf(
+        "ic_credit_card",
+        "ic_cash",
+        "ic_btc",
+        "ic_piggy_bank",
+        "ic_wallet",
+        "ic_safe",
+        "ic_checkbook"
+    )
+
+    val oldIcons = listOf(
         "logo_sber",
         "logo_alfa",
         "logo_t_bank",
