@@ -192,7 +192,7 @@
                     android:focusable="true"
                     android:padding="10dp"
                     android:src="@drawable/ic_pencil"
-                    app:tint="@color/my_light_primary"
+                    app:tint="@color/light_blue"
                     tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setNavigationBarColor() {
-        val navigationBarColor = ContextCompat.getColor(this, R.color.background)
+        val navigationBarColor = ContextCompat.getColor(this, R.color.light_red)
         window.navigationBarColor = navigationBarColor
     }
 

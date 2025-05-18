@@ -5,7 +5,7 @@
 
 
         <item name="android:colorBackground">@color/my_light_background</item>
-        <item name="colorPrimary">@color/my_light_primary</item>
+        <item name="colorPrimary">@color/light_blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
@@ -26,7 +26,14 @@
     <color name="text_color_primary">#000</color>
     <color name="adapter_bg_unchecked">#A4A4A4</color>
     <color name="adapter_bg_checked">#BBDEFB</color>
-    <color name="bottom_navigation_background">#EFEFEF</color>
+
+    <color name="bottom_navigation_background">#eff2f7</color>
+    <color name="bottom_navigation_icon_background">#c2e6fe</color>
 
     <attr name="cardBackgroundColor" format="reference|color" />
+
+    <color name="bottom_navigation_text_color_active">#1a5b80</color>
+    <color name="bottom_navigation_text_color_inactive">#424649</color>
+    <color name="bottom_navigation_icon_color_active">#004a76</color>
+    <color name="bottom_navigation_icon_color_inactive">#454746</color>
 </resources>
