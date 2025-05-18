@@ -22,9 +22,9 @@ class WalletEditViewModel(application: Application) : AndroidViewModel(applicati
         val disposable = database.walletDao().update(wallet)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .subscribe {
                 _shouldCloseScreen.value = true
-            })
+            }
         compositeDisposable.add(disposable)
     }
 

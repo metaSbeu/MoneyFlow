@@ -6,16 +6,13 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
-import com.example.moneyflow.utils.IconsManager
 import com.example.moneyflow.databinding.ActivityCategoryEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.CategoryEditViewModel
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
+import com.example.moneyflow.utils.IconsManager
 
 class CategoryEditActivity : AppCompatActivity() {
 
@@ -31,10 +28,15 @@ class CategoryEditActivity : AppCompatActivity() {
         binding = ActivityCategoryEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         viewModel = ViewModelProvider(this)[CategoryEditViewModel::class.java]
 
-        val categoryFromIntent = intent.getSerializableExtra(EXTRA_CATEGORY) as? Category
+        val categoryFromIntent =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                intent.getSerializableExtra(EXTRA_CATEGORY, Category::class.java)
+            } else {
+                @Suppress("DEPRECATION") intent.getSerializableExtra(EXTRA_CATEGORY) as? Category
+            }
+
         if (categoryFromIntent != null) {
             selectedCategory = categoryFromIntent
             binding.editTextNewName.setText(categoryFromIntent.name)
@@ -46,11 +48,7 @@ class CategoryEditActivity : AppCompatActivity() {
         adapter = CategoryAdapter(
             {
                 selectedCategory = selectedCategory.copy(icon = it.icon)
-//                adapter.notifyDataSetChanged()
-            },
-            {},
-            showAddButton = false,
-            isIncome = false
+            }, {}, showAddButton = false, isIncome = false
         )
 
         adapter.updateCategories(IconsManager.getAllCategoryExpenseIcons())
@@ -61,10 +59,7 @@ class CategoryEditActivity : AppCompatActivity() {
             val newName = binding.editTextNewName.text.toString().trim()
             val newIcon = selectedCategory.icon
             val newCategory = Category(
-                selectedCategory.id,
-                newName,
-                newIcon,
-                selectedCategory.isIncome
+                selectedCategory.id, newName, newIcon, selectedCategory.isIncome
             )
             viewModel.updateCategory(newCategory)
         }
@@ -80,14 +75,11 @@ class CategoryEditActivity : AppCompatActivity() {
     }
 
     private fun showDeleteConfirmationDialog(category: Category) {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.removal))
+        AlertDialog.Builder(this).setTitle(getString(R.string.removal))
             .setMessage(getString(R.string.category_delete_confirmation_alert))
             .setPositiveButton(getString(R.string.remove)) { _, _ ->
                 viewModel.deleteCategory(category)
-            }
-            .setNegativeButton(getString(R.string.cancel), null)
-            .show()
+            }.setNegativeButton(getString(R.string.cancel), null).show()
     }
 
     companion object {

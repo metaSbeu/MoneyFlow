@@ -36,7 +36,8 @@ class PlanAddActivity : AppCompatActivity() {
             val dayText = binding.editTextDateNumber.text.toString()
 
             if (name.isEmpty() || sumText.isEmpty() || dayText.isEmpty()) {
-                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -44,12 +45,14 @@ class PlanAddActivity : AppCompatActivity() {
             val day = dayText.toIntOrNull()
 
             if (sum == null || day == null || day !in 1..31) {
-                Toast.makeText(this, "Некорректные данные", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.incorrect_data), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (sum <= 0) {
-                Toast.makeText(this, "Сумма плана должна быть больше 0", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, getString(R.string.sum_must_be_more_than_zero), Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 

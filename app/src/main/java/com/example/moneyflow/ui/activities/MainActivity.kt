@@ -16,6 +16,7 @@ import com.example.moneyflow.ui.fragments.planning.PlanningFragment
 import com.example.moneyflow.ui.fragments.settings.SettingsFragment
 import com.example.moneyflow.ui.viewmodels.MainViewModel
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

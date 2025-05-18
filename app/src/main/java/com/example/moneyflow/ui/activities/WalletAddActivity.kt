@@ -38,11 +38,9 @@ class WalletAddActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[WalletAddViewModel::class.java]
 
         val adapter = BankIconAdapter(
-            icons = DefaultWalletIcons.all,
-            onIconClick = { resId ->
+            icons = DefaultWalletIcons.all, onIconClick = { resId ->
                 selectedIconResId = resId
-            }
-        )
+            })
 
         binding.recyclerViewWalletIcons.adapter = adapter
 
@@ -53,38 +51,34 @@ class WalletAddActivity : AppCompatActivity() {
             val balanceText = binding.editTextBalance.text.toString().trim()
 
             if (name.isEmpty()) {
-                Toast.makeText(this, "Введите название кошелька", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.type_wallet_name), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             if (balanceText.isEmpty()) {
-                Toast.makeText(this, "Введите баланс кошелька", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.type_wallet_balance), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             val balance = balanceText.toDoubleOrNull()
             if (balance == null) {
                 Toast.makeText(
-                    this,
-                    "Введите корректный баланс",
-                    Toast.LENGTH_SHORT
+                    this, getString(R.string.type_correct_balance), Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
             }
 
             if (selectedIconResId == null) {
                 Toast.makeText(
-                    this,
-                    "Выберите иконку кошелька",
-                    Toast.LENGTH_SHORT
+                    this, getString(R.string.choose_wallet_icon), Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
             }
 
             val wallet = Wallet(
-                name = name,
-                balance = balance,
-                icon = selectedIconResId!!
+                name = name, balance = balance, icon = selectedIconResId!!
             )
 
             viewModel.addWallet(wallet)
@@ -98,13 +92,9 @@ class WalletAddActivity : AppCompatActivity() {
 
     private fun setupBalanceEditTextValidation() {
         binding.editTextBalance.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Not needed
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
 
             override fun afterTextChanged(s: Editable?) {
                 s?.let { editable ->

@@ -22,10 +22,8 @@ class PlanningViewModel(application: Application) : AndroidViewModel(application
     val monthSum: LiveData<Double> = _monthSum
 
     fun refreshPlans() {
-        val disposable = database.planDao().getPlans()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+        val disposable = database.planDao().getPlans().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({
                 _plans.value = it
                 getMonthSum()
             }, {
@@ -36,21 +34,16 @@ class PlanningViewModel(application: Application) : AndroidViewModel(application
 
     fun setNotificationActive(plan: Plan, isActive: Boolean) {
         val disposable = database.planDao().update(plan.copy(isNotificationActive = isActive))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
 
             }
         compositeDisposable.add(disposable)
     }
 
     fun getMonthSum() {
-        val disposable = database.planDao().getPlans()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { plans ->
-                val monthSum = plans
-                    .sumOf { it.sum }
+        val disposable = database.planDao().getPlans().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { plans ->
+                val monthSum = plans.sumOf { it.sum }
                 _monthSum.value = monthSum
             }
         compositeDisposable.add(disposable)

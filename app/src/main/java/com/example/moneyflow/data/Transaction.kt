@@ -28,13 +28,10 @@ data class Transaction(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     val categoryId: Int,
     val walletId: Int,
-
     val sum: Double,
     val isIncome: Boolean,
-
     val note: String?,
     val createdAt: Long = System.currentTimeMillis()
 ) : Serializable

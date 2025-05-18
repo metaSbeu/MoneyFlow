@@ -1,4 +1,5 @@
 package com.example.moneyflow.ui.viewmodels
+
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -6,9 +7,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moneyflow.data.ApiFactory.apiService
+import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.utils.DefaultCategories
 import com.example.moneyflow.utils.DefaultWallets
-import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.utils.PreferenceManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -44,7 +45,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _changePinState = MutableLiveData<ChangePinState>(ChangePinState.IDLE)
     val changePinState: LiveData<ChangePinState> get() = _changePinState
 
-    private var oldPinAttempt: String = ""
     private var newPinAttempt: String = ""
 
     init {
@@ -55,13 +55,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun getCurrency() {
         val disposable = apiService.getCurrencyRates()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({ response ->
                 val usdRate = response.rates["USD"]
                 val eurRate = response.rates["EUR"]
                 Log.d("CurrencyRates", "USD: $usdRate, EUR: $eurRate")
 
-                // Сохраняем значения
                 PreferenceManager.saveCurrencyRates(getApplication(), usdRate, eurRate)
 
             }, { error ->
@@ -124,34 +122,28 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         val defaultIncomeCategories = DefaultCategories.defaultIncomeCategories
         val default = defaultExpenseCategories + defaultIncomeCategories
 
-        val disposable = database.categoryDao().getCount()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapCompletable { count ->
+        val disposable = database.categoryDao().getCount().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).flatMapCompletable { count ->
                 if (count == 0) {
                     database.categoryDao().insertAll(default)
                 } else {
                     Completable.complete()
                 }
-            }
-            .subscribe()
+            }.subscribe()
         compositeDisposable.add(disposable)
     }
 
     fun insertDefaultWallets() {
         val defaultWallets = DefaultWallets.defaultWallets
 
-        val disposable = database.walletDao().getCount()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapCompletable { count ->
+        val disposable = database.walletDao().getCount().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).flatMapCompletable { count ->
                 if (count == 0) {
                     database.walletDao().insertAll(defaultWallets)
                 } else {
                     Completable.complete()
                 }
-            }
-            .subscribe()
+            }.subscribe()
         compositeDisposable.add(disposable)
     }
 
@@ -168,6 +160,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 _password.value = ""
                 _passwordState.value = PasswordState.EMPTY
             }
+
             SetupState.CONFIRMATION -> {
                 if (pin == firstPinAttempt) {
                     PreferenceManager.setPinCode(getApplication(), pin)
@@ -180,6 +173,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     firstPinAttempt = ""
                 }
             }
+
             else -> Unit
         }
     }
@@ -198,49 +192,46 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         _changePinState.value = ChangePinState.ENTER_NEW_PIN
                         _password.value = ""
                         _passwordState.value = PasswordState.EMPTY
-                        // Обновите заголовок в AuthActivity
                     } else {
                         _passwordState.value = PasswordState.INCORRECT
                         _showError.value = true
                         _password.value = ""
                         _passwordState.value = PasswordState.EMPTY
-                        // Сообщите пользователю о неверном PIN-коде (можно через LiveData)
                     }
                 }
             }
+
             ChangePinState.ENTER_NEW_PIN -> {
                 if (_password.value?.length == PASSWORD_LENGTH) {
                     newPinAttempt = _password.value!!
                     _changePinState.value = ChangePinState.CONFIRM_NEW_PIN
                     _password.value = ""
                     _passwordState.value = PasswordState.EMPTY
-                    // Обновите заголовок
                 }
             }
+
             ChangePinState.CONFIRM_NEW_PIN -> {
                 if (_password.value?.length == PASSWORD_LENGTH) {
                     if (_password.value == newPinAttempt) {
                         PreferenceManager.setPinCode(getApplication(), newPinAttempt)
-                        // Сообщите об успешной смене PIN-кода (через LiveData)
                         _changePinState.value = ChangePinState.SUCCESS
-                        _navigateToMain.value = true // Или просто finish() AuthActivity
+                        _navigateToMain.value = true
                     } else {
                         _passwordState.value = PasswordState.INCORRECT
                         _showError.value = true
                         _password.value = ""
                         _passwordState.value = PasswordState.EMPTY
-                        // Сообщите, что новые PIN-коды не совпадают
-                        _changePinState.value = ChangePinState.ENTER_NEW_PIN // Верните на ввод нового PIN-кода
-                        // Обновите заголовок
+                        _changePinState.value = ChangePinState.ENTER_NEW_PIN
                     }
                 }
             }
+
             else -> Unit
         }
     }
 
     enum class SetupState {
-        IDLE, FIRST_ENTRY, CONFIRMATION
+        FIRST_ENTRY, CONFIRMATION
     }
 
     enum class PasswordState {

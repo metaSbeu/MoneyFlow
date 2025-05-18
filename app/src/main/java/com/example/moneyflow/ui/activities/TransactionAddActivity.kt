@@ -58,21 +58,17 @@ class TransactionAddActivity : AppCompatActivity() {
         }
 
         binding.buttonSave.setOnClickListener {
-            val category = selectedCategory
-            if (category == null) {
-                Toast.makeText(this, "Выберите категорию", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
             val sumText = binding.editTextSum.text.toString()
             if (sumText.isBlank()) {
-                Toast.makeText(this, "Введите сумму", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.enter_sum), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val sum = sumText.toDoubleOrNull()
             if (sum == null || sum <= 0) {
-                Toast.makeText(this, "Введите корректную сумму больше 0", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, getString(R.string.sum_must_be_more_than_zero), Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -98,22 +94,18 @@ class TransactionAddActivity : AppCompatActivity() {
 
     private fun setupSumEditTextValidation() {
         binding.editTextSum.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Not needed
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
 
             override fun afterTextChanged(s: Editable?) {
                 s?.let { editable ->
                     val text = editable.toString()
                     if (text.startsWith("0") && text.length > 1 && !text.startsWith("0.")) {
-                        editable.delete(0, 1) // Удаляем лидирующий 0, если он не является началом десятичной части
+                        editable.delete(0, 1)
                     }
                     if (text == ".") {
-                        editable.clear() // Запрещаем ввод только точки
+                        editable.clear()
                     }
                 }
             }
@@ -121,19 +113,13 @@ class TransactionAddActivity : AppCompatActivity() {
     }
 
     fun setupAdapters() {
-        categoriesAdapter = CategoryAdapter(
-            onItemClick = {
-                selectedCategory = it
-            },
-            onAddClick = {
-                startActivity(CategoryAddActivity.newIntent(this, isIncomeSelected))
-            },
-            showAddButton = true,
-            isIncome = false,
-            onFirstCategorySelected = {
-                selectedCategory = it
-            }
-        )
+        categoriesAdapter = CategoryAdapter(onItemClick = {
+            selectedCategory = it
+        }, onAddClick = {
+            startActivity(CategoryAddActivity.newIntent(this, isIncomeSelected))
+        }, showAddButton = true, isIncome = false, onFirstCategorySelected = {
+            selectedCategory = it
+        })
     }
 
     override fun onResume() {
@@ -161,22 +147,16 @@ class TransactionAddActivity : AppCompatActivity() {
 
         viewModel.wallet.observe(this) { wallet ->
             val formatted = wallet.balance.formatWithSpaces(this)
-//            val iconResId = baseContext.getDrawableResId(wallet.icon)
             val iconResId = IconResolver.resolve(wallet.icon)
             binding.imageViewWalletIcon.setImageResource(iconResId)
             binding.textViewWalletNameAndBalance.text = getString(
-                R.string.wallet_name_wallet_balance,
-                wallet.name,
-                formatted
+                R.string.wallet_name_wallet_balance, wallet.name, formatted
             )
         }
     }
 
     fun datePicker() {
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker().setTitleText(getString(R.string.select_date)).build()
         datePicker.show(supportFragmentManager, "tag")
 
         datePicker.addOnPositiveButtonClickListener { selection ->
@@ -186,7 +166,7 @@ class TransactionAddActivity : AppCompatActivity() {
 
             val locale = resources.configuration.locales[0]
             val dateFormat = SimpleDateFormat("d MMM", locale)
-            val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
+            val formattedDate = getString(R.string.date, dateFormat.format(calendar.time))
 
             binding.textViewDate.text = formattedDate
         }
@@ -196,7 +176,7 @@ class TransactionAddActivity : AppCompatActivity() {
         val today = java.util.Calendar.getInstance()
         val locale = resources.configuration.locales[0]
         val dateFormat = SimpleDateFormat("d MMM", locale)
-        val formattedDate = "Дата: ${dateFormat.format(today.time)}"
+        val formattedDate = getString(R.string.date, dateFormat.format(today.time))
         binding.textViewDate.text = formattedDate
     }
 

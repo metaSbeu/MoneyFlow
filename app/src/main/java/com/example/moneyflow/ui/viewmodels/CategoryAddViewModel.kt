@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.data.MainDatabase
+import com.example.moneyflow.utils.DefaultCategories
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -22,46 +23,19 @@ class CategoryAddViewModel(application: Application) : AndroidViewModel(applicat
     val defaultIcons: LiveData<List<Category>> get() = _defaultIcons
 
     init {
-        _defaultIcons.value = getDefaultCategoryIcons()
+        _defaultIcons.value = DefaultCategories.defaultCategoryIcons
     }
 
     fun addCategory(category: Category) {
         val disposable = database.categoryDao().insert(category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    _shouldCloseScreen.value = true
-                }
-            )
+            .subscribe {
+                _shouldCloseScreen.value = true
+            }
         compositeDisposable.add(disposable)
     }
-
-    fun getDefaultCategoryIcons(): List<Category> {
-        return listOf<Category>(
-            Category(name = "", icon = "ic_movie", isIncome = false),
-            Category(name = "", icon = "ic_game", isIncome = false),
-            Category(name = "", icon = "ic_sport", isIncome = false),
-            Category(name = "", icon = "ic_food", isIncome = false),
-            Category(name = "", icon = "ic_pet", isIncome = false),
-            Category(name = "", icon = "ic_fruit", isIncome = false),
-            Category(name = "", icon = "ic_clothes", isIncome = false),
-            Category(name = "", icon = "ic_shoe", isIncome = false),
-            Category(name = "", icon = "ic_diamond", isIncome = false),
-            Category(name = "", icon = "ic_furniture", isIncome = false),
-            Category(name = "", icon = "ic_music", isIncome = false),
-            Category(name = "", icon = "ic_computer", isIncome = false),
-            Category(name = "", icon = "ic_bicycle", isIncome = false),
-            Category(name = "", icon = "ic_wifi", isIncome = false),
-            Category(name = "", icon = "ic_car", isIncome = false),
-            Category(name = "", icon = "ic_plane", isIncome = false),
-            Category(name = "", icon = "ic_tooth", isIncome = false),
-            Category(name = "", icon = "ic_finance", isIncome = false),
-            Category(name = "", icon = "ic_family", isIncome = false),
-            Category(name = "", icon = "ic_train_bus", isIncome = false),
-        )
-    }
-
+    
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()

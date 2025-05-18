@@ -20,6 +20,7 @@ import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 import java.text.NumberFormat
 import java.util.Locale
 
+@Suppress("DEPRECATION")
 class PlanEditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlanEditBinding
@@ -34,12 +35,12 @@ class PlanEditActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupInsets()
         setupBottomViewKeyboardVisibilityListener(binding.bottomButtonsContainer)
-        setupSumEditTextValidation() // Добавляем валидацию для поля суммы
+        setupSumEditTextValidation()
 
         planToEdit = intent.getSerializableExtra(EXTRA_PLAN) as? Plan
         planToEdit?.let { plan ->
             binding.editTextName.setText(plan.name)
-            binding.editTextPlanSum.setText(formatDoubleToString(plan.sum)) // Форматируем сумму
+            binding.editTextPlanSum.setText(formatDoubleToString(plan.sum))
             binding.editTextDateNumber.setText(plan.targetNotificationDayOfMonth.toString())
         }
 
@@ -49,7 +50,8 @@ class PlanEditActivity : AppCompatActivity() {
             val dayText = binding.editTextDateNumber.text.toString()
 
             if (name.isEmpty() || sumText.isEmpty() || dayText.isEmpty()) {
-                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -57,20 +59,20 @@ class PlanEditActivity : AppCompatActivity() {
             val day = dayText.toIntOrNull()
 
             if (sum == null || day == null || day !in 1..31) {
-                Toast.makeText(this, "Некорректные данные", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.incorrect_data), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (sum <= 0) {
-                Toast.makeText(this, "Сумма плана должна быть больше 0", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, getString(R.string.sum_must_be_more_than_zero), Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
             planToEdit?.let { existingPlan ->
                 val updatedPlan = existingPlan.copy(
-                    name = name,
-                    sum = sum,
-                    targetNotificationDayOfMonth = day
+                    name = name, sum = sum, targetNotificationDayOfMonth = day
                 )
                 viewModel.editPlan(updatedPlan)
             }
@@ -91,13 +93,9 @@ class PlanEditActivity : AppCompatActivity() {
 
     private fun setupSumEditTextValidation() {
         binding.editTextPlanSum.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Not needed
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 s?.let { editable ->
@@ -120,14 +118,11 @@ class PlanEditActivity : AppCompatActivity() {
     }
 
     private fun showDeleteConfirmationDialog(plan: Plan) {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.removal))
-            .setMessage("Вы уверены что хотите удалить запланированный расход?")
+        AlertDialog.Builder(this).setTitle(getString(R.string.removal))
+            .setMessage(getString(R.string.you_sure_you_want_to_delete_plan))
             .setPositiveButton(getString(R.string.remove)) { _, _ ->
                 viewModel.removePlan(plan)
-            }
-            .setNegativeButton(getString(R.string.cancel), null)
-            .show()
+            }.setNegativeButton(getString(R.string.cancel), null).show()
     }
 
     private fun setupInsets() {

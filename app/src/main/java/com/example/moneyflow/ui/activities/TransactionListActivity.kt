@@ -3,7 +3,6 @@ package com.example.moneyflow.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -16,12 +15,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
-import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityTransactionListBinding
 import com.example.moneyflow.ui.adapters.TransactionAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionListViewModel
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.utils.IconResolver
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
@@ -30,8 +29,10 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
+@Suppress("DEPRECATION")
 class TransactionListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransactionListBinding
@@ -63,7 +64,6 @@ class TransactionListActivity : AppCompatActivity() {
             viewModel.loadTransactions()
         }
 
-        // Проверяем, были ли переданы фильтры через Intent
         intent.getStringExtra(EXTRA_FILTER_TYPE)?.let { filterType ->
             when (filterType) {
                 FILTER_INCOME -> {
@@ -89,14 +89,12 @@ class TransactionListActivity : AppCompatActivity() {
         observeViewModels()
         binding.recyclerViewTransactions.adapter = adapter
 
-        // Обработка кнопки фильтрации по категории
         viewModel.categories.observe(this) { categories ->
             binding.buttonFilter.setOnClickListener {
                 showCategoryFilterDialog(categories)
             }
         }
 
-        // Обработка кнопки фильтрации по дате
         binding.buttonDate.setOnClickListener {
             showDateRangePicker()
         }
@@ -132,7 +130,6 @@ class TransactionListActivity : AppCompatActivity() {
                 isIncomeSelected = true
             }
         }
-        Log.d(TAG, "onCreate: started")
         setUpInsets()
     }
 
@@ -142,7 +139,6 @@ class TransactionListActivity : AppCompatActivity() {
         wallet?.let {
             viewModel.refreshWallet(it)
         }
-        Log.d(TAG, "onResume: started")
     }
 
     private fun setupPieChart(transactions: List<TransactionWithCategory>) {
@@ -151,7 +147,7 @@ class TransactionListActivity : AppCompatActivity() {
         pieChart.setUsePercentValues(false)
         pieChart.description.isEnabled = false
         pieChart.isDrawHoleEnabled = true
-        pieChart.setNoDataText("Диаграмма недоступна.Не добавлено ни одной транзакции")
+        pieChart.setNoDataText(getString(R.string.piechart_not_available))
         pieChart.setHoleColor(ContextCompat.getColor(this, R.color.background))
         pieChart.setDrawCenterText(true)
         pieChart.legend.isEnabled = false
@@ -163,11 +159,11 @@ class TransactionListActivity : AppCompatActivity() {
 
         if (entries.isEmpty()) {
             pieChart.clear()
-            pieChart.centerText = "Нет данных"
+            pieChart.centerText = getString(R.string.no_data)
             return
         }
 
-        val dataSet = PieDataSet(entries, "Категории транзакций").apply {
+        val dataSet = PieDataSet(entries, getString(R.string.transaction_categories)).apply {
             sliceSpace = 2f
             colors = getPieChartColors()
             valueTextSize = 12f
@@ -233,8 +229,7 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun showDateRangePicker() {
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Выберите диапазон дат")
-            .build()
+            .setTitleText(getString(R.string.choose_date_range)).build()
 
         dateRangePicker.addOnPositiveButtonClickListener { selection ->
             val startMillis = selection.first ?: 0L
@@ -244,7 +239,7 @@ class TransactionListActivity : AppCompatActivity() {
             endDate = Date(endMillis)
 
             updateDateTextView()
-            viewModel.sortTransactionsByDate(false, startDate!!, endDate!!)
+            viewModel.sortTransactionsByDate(startDate!!, endDate!!)
         }
 
         dateRangePicker.show(supportFragmentManager, "DATE_PICKER")
@@ -253,7 +248,7 @@ class TransactionListActivity : AppCompatActivity() {
     private fun updateDateTextView() {
         val startFormatted = formatDate(startDate)
         val endFormatted = formatDate(endDate)
-        binding.textViewDate.text = "Период: $startFormatted - $endFormatted"
+        binding.textViewDate.text = getString(R.string.period, startFormatted, endFormatted)
     }
 
     private fun formatDate(date: Date?): String {
@@ -262,20 +257,17 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun showCategoryFilterDialog(categories: List<String>) {
-        val updatedCategories = listOf("Все категории") + categories
+        val updatedCategories = listOf(getString(R.string.all_categories)) + categories
         val categoryArray = updatedCategories.toTypedArray()
 
-        AlertDialog.Builder(this)
-            .setTitle("Выберите категорию")
+        AlertDialog.Builder(this).setTitle(getString(R.string.choose_category))
             .setItems(categoryArray) { _, which ->
                 val selectedCategory = updatedCategories[which]
-                viewModel.filterTransactionsByCategory(selectedCategory)
-            }
-            .show()
+                viewModel.filterTransactionsByCategory(selectedCategory, this)
+            }.show()
     }
 
     private fun setupWallet(wallet: Wallet) {
-//        val iconResId = baseContext.getDrawableResId(wallet.icon)
         val iconResId = IconResolver.resolve(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces(this)
@@ -318,13 +310,11 @@ class TransactionListActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_WALLET = "wallet"
-        const val TAG = "TAG"
         private const val EXTRA_FILTER_TYPE = "filter_type"
         private const val FILTER_INCOME = "income"
         private const val FILTER_EXPENSE = "expense"
 
         fun newIntent(context: Context, wallet: Wallet): Intent {
-            Log.d(TAG, "newIntent called with wallet: $wallet")
             val intent = Intent(context, TransactionListActivity::class.java)
             intent.putExtra(EXTRA_WALLET, wallet)
             return intent

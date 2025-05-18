@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,8 +14,9 @@ import com.example.moneyflow.data.Wallet
 import com.example.moneyflow.databinding.ActivityWalletEditBinding
 import com.example.moneyflow.ui.adapters.BankIconAdapter
 import com.example.moneyflow.ui.viewmodels.WalletEditViewModel
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
+import com.example.moneyflow.utils.DefaultWalletIcons
 
+@Suppress("DEPRECATION")
 class WalletEditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWalletEditBinding
@@ -35,40 +35,12 @@ class WalletEditActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[WalletEditViewModel::class.java]
 
         initialWallet = intent.getSerializableExtra(EXTRA_WALLET) as Wallet
-        selectedIconResId = initialWallet.icon // Инициализируем выбранную иконку
+        selectedIconResId = initialWallet.icon
 
         adapter = BankIconAdapter(
-            icons = listOf(
-                "logo_sber",
-                "logo_alfa",
-                "logo_t_bank",
-                "logo_vtb",
-                "logo_raiffaisen",
-                "logo_yandex",
-                "logo_vk_pay",
-                "logo_bitcoin",
-                "logo_chelinvest",
-                "logo_ozon",
-                "logo_wb",
-                "logo_qiwi",
-                "logo_webmoney",
-                "logo_paypal",
-                "logo_mts",
-                "logo_otkritie",
-                "logo_ubrir",
-                "logo_rosselhoz",
-                "logo_sovkom",
-                "logo_corona",
-                "logo_deutsche_bank",
-                "logo_pb",
-                "logo_renessans",
-                "logo_uralsib",
-                "ic_cash"
-            ),
-            onIconClick = { resId ->
+            icons = DefaultWalletIcons.all, onIconClick = { resId ->
                 selectedIconResId = resId
-            },
-            preselectedIcon = initialWallet.icon // Передаем предустановленную иконку адаптеру
+            }, preselectedIcon = initialWallet.icon
         )
         binding.recyclerViewWalletIcons.adapter = adapter
 
@@ -78,12 +50,14 @@ class WalletEditActivity : AppCompatActivity() {
             val newName = binding.editTextNewName.text.toString().trim()
 
             if (newName.isEmpty()) {
-                Toast.makeText(this, "Введите название кошелька", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.type_wallet_name), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             if (selectedIconResId == null) {
-                Toast.makeText(this, "Выберите иконку кошелька", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.choose_wallet_icon), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 

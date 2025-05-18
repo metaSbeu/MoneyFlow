@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
-import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Plan
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

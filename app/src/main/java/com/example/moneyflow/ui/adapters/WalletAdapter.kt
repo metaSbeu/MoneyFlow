@@ -74,8 +74,7 @@ class WalletAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int
+        holder: RecyclerView.ViewHolder, position: Int
     ) {
         val context = holder.itemView.context
         if (holder is WalletViewHolder) {

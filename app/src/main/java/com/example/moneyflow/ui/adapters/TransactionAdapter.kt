@@ -28,8 +28,7 @@ class TransactionAdapter(
             override fun getNewListSize() = newTransactions.size
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return transactions[oldItemPosition].transaction.id ==
-                        newTransactions[newItemPosition].transaction.id
+                return transactions[oldItemPosition].transaction.id == newTransactions[newItemPosition].transaction.id
             }
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -43,8 +42,7 @@ class TransactionAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): TransactionViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.transaction_item, parent, false)
@@ -52,8 +50,7 @@ class TransactionAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: TransactionViewHolder,
-        position: Int
+        holder: TransactionViewHolder, position: Int
     ) {
         val (transaction, category) = transactions[position]
         val context = holder.itemView.context
@@ -79,8 +76,7 @@ class TransactionAdapter(
         }
 
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        val formattedDate =
-            dateFormat.format(transaction.createdAt)
+        val formattedDate = dateFormat.format(transaction.createdAt)
 
         holder.textViewDate.text = formattedDate
 

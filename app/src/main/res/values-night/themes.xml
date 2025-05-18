@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
@@ -28,5 +29,5 @@
     <color name="adapter_bg_checked">#5C84F2</color>
     <color name="bottom_navigation_background">#000000</color>
 
-    <attr name="cardBackgroundColor" format="reference|color"/>
+    <attr name="cardBackgroundColor" format="reference|color" />
 </resources>

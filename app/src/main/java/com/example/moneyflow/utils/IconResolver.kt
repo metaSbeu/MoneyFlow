@@ -71,7 +71,7 @@ object IconResolver {
         "ic_finance" to R.drawable.ic_finance,
         "ic_family" to R.drawable.ic_family,
         "ic_train_bus" to R.drawable.ic_train_bus,
-        )
+    )
 
     fun resolve(iconName: String): Int {
         return iconMap[iconName] ?: R.drawable.ic_questionmark

@@ -147,5 +147,34 @@
     <string name="set_notification_permission_to_get_it">Разрешите уведомления, чтобы получать напоминания о планах</string>
     <string name="allow">Разрешить</string>
     <string name="you_turned_notifications_off">Вы отключили уведомления. Вы можете включить их в настройках приложения.</string>
+    <string name="all_categories">Все категории</string>
+    <string name="permission_required">Разрешение необходимо</string>
+    <string name="please_allow_accurate_notifications">Для корректной работы напоминаний, пожалуйста, разрешите точные напоминания в настройках.</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string name="daily_transactions_add_notification">Ежедневное напоминание внести покупки</string>
+    <string name="daily_notifications_about_plans">Daily notifications about plans</string>
+    <string name="type_category_name">Введите название категории</string>
+    <string name="choose_category_icon">Выберите иконку категории</string>
+    <string name="please_fill_all_fields">Пожалуйста, заполните все поля</string>
+    <string name="incorrect_data">Некорректные данные</string>
+    <string name="sum_must_be_more_than_zero">Сумма плана должна быть больше 0</string>
+    <string name="you_sure_you_want_to_delete_plan">Вы уверены что хотите удалить запланированный расход?</string>
+    <string name="choose_category">Выберите категорию</string>
+    <string name="enter_sum">Введите сумму</string>
+    <string name="date">Дата: %1$s</string>
+    <string name="date_tr_edit">Дата: %1$s</string>
+    <string name="comment_tr_edit">Комментарий: %1$s</string>
+    <string name="no">нет</string>
+    <string name="sum_with_currency">%1$s%2$s</string>
+    <string name="choose_wallet">Выберите кошелек</string>
+    <string name="choose_date_range">Выберите диапазон дат</string>
+    <string name="piechart_not_available">Диаграмма недоступна.Не добавлено ни одной транзакции</string>
+    <string name="no_data">Нет данных</string>
+    <string name="transaction_categories">Категории транзакций</string>
+    <string name="type_wallet_name">Введите название кошелька</string>
+    <string name="choose_wallet_icon">Выберите иконку кошелька</string>
+    <string name="type_wallet_balance">Введите баланс кошелька</string>
+    <string name="type_correct_balance">Введите корректный баланс</string>
+    <string name="select_date">Select date</string>
 
 </resources>

@@ -1,9 +1,11 @@
 package com.example.moneyflow.ui.activities
 
-import android.os.Bundle
 import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -19,14 +21,12 @@ import com.example.moneyflow.databinding.ActivityTransactionEditBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.TransactionEditViewModel
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.IconResolver
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.text.TextWatcher
-import android.text.Editable
-import com.example.moneyflow.utils.IconResolver
-import java.text.NumberFormat
 
 class TransactionEditActivity : AppCompatActivity() {
 
@@ -54,7 +54,7 @@ class TransactionEditActivity : AppCompatActivity() {
 
         observeViewModel()
         setupAdapters()
-        setupSumEditTextValidation() // Добавляем валидацию для поля суммы
+        setupSumEditTextValidation()
 
         binding.recyclerViewExpenseCategories.adapter = expenseAdapter
         binding.recyclerViewIncomeCategories.adapter = incomeAdapter
@@ -62,13 +62,15 @@ class TransactionEditActivity : AppCompatActivity() {
         binding.buttonSave.setOnClickListener {
             val sumText = binding.editTextNewSum.text.toString()
             if (sumText.isBlank()) {
-                Toast.makeText(this, "Введите сумму", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.enter_sum), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val sum = sumText.toDoubleOrNull()
             if (sum == null || sum <= 0) {
-                Toast.makeText(this, "Введите корректную сумму больше 0", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, getString(R.string.sum_must_be_more_than_zero), Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -95,13 +97,9 @@ class TransactionEditActivity : AppCompatActivity() {
 
     private fun setupSumEditTextValidation() {
         binding.editTextNewSum.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Not needed
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 s?.let { editable ->
@@ -118,10 +116,7 @@ class TransactionEditActivity : AppCompatActivity() {
     }
 
     fun datePicker() {
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date").build()
         datePicker.show(supportFragmentManager, "tag")
 
         datePicker.addOnPositiveButtonClickListener { selection ->
@@ -131,7 +126,7 @@ class TransactionEditActivity : AppCompatActivity() {
 
             val locale = resources.configuration.locales[0]
             val dateFormat = SimpleDateFormat("d MMM", locale)
-            val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
+            val formattedDate = getString(R.string.date, dateFormat.format(calendar.time))
 
             binding.textViewDate.text = formattedDate
         }
@@ -145,7 +140,7 @@ class TransactionEditActivity : AppCompatActivity() {
 
             val locale = resources.configuration.locales[0]
             val dateFormat = SimpleDateFormat("d MMM", locale)
-            val formattedDate = "Дата: ${dateFormat.format(calendar.time)}"
+            val formattedDate = getString(R.string.date, dateFormat.format(calendar.time))
             binding.textViewDate.text = formattedDate
             selectedDateInMillis = dateInMillis
         }
@@ -156,69 +151,50 @@ class TransactionEditActivity : AppCompatActivity() {
             val walletNames = wallets.map { it.name }
             val currentWalletId = viewModel.transaction.value?.walletId ?: 0
 
-            AlertDialog.Builder(this)
-                .setTitle("Выберите кошелек")
+            AlertDialog.Builder(this).setTitle(getString(R.string.choose_wallet))
                 .setSingleChoiceItems(
                     walletNames.toTypedArray(),
-                    wallets.indexOfFirst { it.id == currentWalletId }
-                ) { dialog, which ->
+                    wallets.indexOfFirst { it.id == currentWalletId }) { dialog, which ->
                     val selectedWallet = wallets[which]
                     updateWalletInTransaction(selectedWallet)
                     dialog.dismiss()
-                }
-                .setNegativeButton("Отмена", null)
-                .show()
+                }.setNegativeButton(getString(R.string.cancel), null).show()
         }
     }
 
     private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.removal))
-            .setMessage("Вы уверены что хотите удалить запланированный расход?")
+        AlertDialog.Builder(this).setTitle(getString(R.string.removal))
+            .setMessage(getString(R.string.you_sure_you_want_to_delete_plan))
             .setPositiveButton(getString(R.string.remove)) { _, _ ->
                 viewModel.deleteTransaction(transactionId)
-            }
-            .setNegativeButton(getString(R.string.cancel), null)
-            .show()
+            }.setNegativeButton(getString(R.string.cancel), null).show()
     }
 
     private fun updateWalletInTransaction(wallet: Wallet) {
-//        val iconResId = baseContext.getDrawableResId(wallet.icon)
         val iconResId = IconResolver.resolve(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces(this)
-        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formatted)
+        binding.textViewWalletName.text =
+            getString(R.string.wallet_main_info, wallet.name, formatted)
         viewModel.setSelectedWalletId(wallet.id)
     }
 
     fun setupAdapters() {
-        expenseAdapter = CategoryAdapter(
-            onItemClick = {
-                selectedCategory = it
-            },
-            onAddClick = {
-                startActivity(CategoryAddActivity.newIntent(this, false))
-            },
-            showAddButton = true,
-            isIncome = false,
-            onFirstCategorySelected = {
-                selectedCategory = it
-            }
-        )
+        expenseAdapter = CategoryAdapter(onItemClick = {
+            selectedCategory = it
+        }, onAddClick = {
+            startActivity(CategoryAddActivity.newIntent(this, false))
+        }, showAddButton = true, isIncome = false, onFirstCategorySelected = {
+            selectedCategory = it
+        })
 
-        incomeAdapter = CategoryAdapter(
-            onItemClick = {
-                selectedCategory = it
-            },
-            onAddClick = {
-                startActivity(CategoryAddActivity.newIntent(this, true))
-            },
-            showAddButton = true,
-            isIncome = true,
-            onFirstCategorySelected = {
-                selectedCategory = it
-            }
-        )
+        incomeAdapter = CategoryAdapter(onItemClick = {
+            selectedCategory = it
+        }, onAddClick = {
+            startActivity(CategoryAddActivity.newIntent(this, true))
+        }, showAddButton = true, isIncome = true, onFirstCategorySelected = {
+            selectedCategory = it
+        })
     }
 
     override fun onResume() {
@@ -229,7 +205,7 @@ class TransactionEditActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.transaction.observe(this) { transaction ->
             val numberFormat = NumberFormat.getInstance(Locale.getDefault())
-            numberFormat.isGroupingUsed = false // Отключаем группировку разрядов
+            numberFormat.isGroupingUsed = false
             binding.editTextNewSum.setText(numberFormat.format(transaction.sum))
             binding.editTextNewComment.setText(transaction.note)
 
@@ -266,8 +242,7 @@ class TransactionEditActivity : AppCompatActivity() {
                 val targetCategories =
                     if (transaction.isIncome) incomeCategories else expenseCategories
                 selectedCategory = targetCategories.find { it.id == transaction.categoryId }
-                    ?: targetCategories.firstOrNull()
-                            ?: return@let
+                    ?: targetCategories.firstOrNull() ?: return@let
             }
         }
 
@@ -281,28 +256,30 @@ class TransactionEditActivity : AppCompatActivity() {
     private fun setupOldTransaction(transaction: Transaction, wallet: Wallet, category: Category) {
         val sign = if (transaction.isIncome) "+" else "-"
         val formattedTransactionSum = transaction.sum.formatWithSpaces(this)
-        binding.textViewOldSum.text = "$sign$formattedTransactionSum"
+        binding.textViewOldSum.text =
+            getString(R.string.sum_with_currency, sign, formattedTransactionSum)
         binding.textViewOldSum.setTextColor(
             ContextCompat.getColor(
-                this,
-                if (transaction.isIncome) R.color.light_green else R.color.light_red
+                this, if (transaction.isIncome) R.color.light_green else R.color.light_red
             )
         )
 
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        binding.textViewOldDate.text = "Дата: ${dateFormat.format(Date(transaction.createdAt))}"
+        binding.textViewOldDate.text =
+            getString(R.string.date_tr_edit, dateFormat.format(Date(transaction.createdAt)))
 
-        binding.textViewOldComment.text = "Комментарий: ${transaction.note ?: "нет"}"
+        binding.textViewOldComment.text =
+            getString(R.string.comment_tr_edit, transaction.note ?: getString(R.string.no))
 
         binding.textViewOldCategoryName.text = category.name
-//        var iconResId = baseContext.getDrawableResId(category.icon)
         var iconResId = IconResolver.resolve(category.icon)
         binding.imageViewCategoryOldIcon.setImageResource(iconResId)
 
         iconResId = IconResolver.resolve(wallet.icon)
         binding.imageViewWalletIcon.setImageResource(iconResId)
         val formattedWalletBalance = wallet.balance.formatWithSpaces(this)
-        binding.textViewWalletName.text = getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)
+        binding.textViewWalletName.text =
+            getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)
     }
 
     companion object {
