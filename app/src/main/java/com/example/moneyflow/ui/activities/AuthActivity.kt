@@ -215,8 +215,8 @@ class AuthActivity : AppCompatActivity() {
 
     fun insertDefaultDbData() {
         if (!PreferenceManager.areDefaultCategoriesAdded(this)) {
-            viewModel.insertDefaultCategories()
-            viewModel.insertDefaultWallets()
+            viewModel.insertDefaultCategories(this)
+            viewModel.insertDefaultWallets(this)
             PreferenceManager.setDefaultCategories(this)
         }
     }

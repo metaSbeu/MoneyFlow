@@ -117,9 +117,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun insertDefaultCategories() {
-        val defaultExpenseCategories = DefaultCategories.defaultExpenseCategories
-        val defaultIncomeCategories = DefaultCategories.defaultIncomeCategories
+    fun insertDefaultCategories(context: Context) {
+        val defaultExpenseCategories = DefaultCategories.getDefaultExpenseCategories(context)
+        val defaultIncomeCategories = DefaultCategories.getDefaultIncomeCategories(context)
         val default = defaultExpenseCategories + defaultIncomeCategories
 
         val disposable = database.categoryDao().getCount().subscribeOn(Schedulers.io())
@@ -133,8 +133,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         compositeDisposable.add(disposable)
     }
 
-    fun insertDefaultWallets() {
-        val defaultWallets = DefaultWallets.defaultWallets
+    fun insertDefaultWallets(context: Context) {
+        val defaultWallets = DefaultWallets.getDefaultWallets(context)
 
         val disposable = database.walletDao().getCount().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).flatMapCompletable { count ->
