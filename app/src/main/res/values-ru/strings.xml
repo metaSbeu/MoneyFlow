@@ -157,7 +157,7 @@
     <string name="choose_category_icon">Выберите иконку категории</string>
     <string name="please_fill_all_fields">Пожалуйста, заполните все поля</string>
     <string name="incorrect_data">Некорректные данные</string>
-    <string name="sum_must_be_more_than_zero">Сумма плана должна быть больше 0</string>
+    <string name="sum_must_be_more_than_zero">Сумма должна быть больше 0</string>
     <string name="you_sure_you_want_to_delete_plan">Вы уверены что хотите удалить запланированный расход?</string>
     <string name="choose_category">Выберите категорию</string>
     <string name="enter_sum">Введите сумму</string>

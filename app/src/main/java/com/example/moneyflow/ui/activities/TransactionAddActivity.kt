@@ -133,9 +133,9 @@ class TransactionAddActivity : AppCompatActivity() {
             val incomeCategories = categories.filter { it.isIncome }
 
             if (isIncomeSelected) {
-                categoriesAdapter.updateCategories(incomeCategories)
+                categoriesAdapter.categories = incomeCategories
             } else {
-                categoriesAdapter.updateCategories(expenseCategories)
+                categoriesAdapter.categories = expenseCategories
             }
         }
 
@@ -189,7 +189,7 @@ class TransactionAddActivity : AppCompatActivity() {
                 isIncomeSelected = checkedId == R.id.buttonIncome
                 viewModel.categories.value?.let { categories ->
                     val filteredCategories = categories.filter { it.isIncome == isIncomeSelected }
-                    categoriesAdapter.updateCategories(filteredCategories)
+                    categoriesAdapter.categories = filteredCategories
                     categoriesAdapter.isIncome = isIncomeSelected
                 }
             }

@@ -235,8 +235,8 @@ class TransactionEditActivity : AppCompatActivity() {
             val expenseCategories = categories.filter { !it.isIncome }
             val incomeCategories = categories.filter { it.isIncome }
 
-            expenseAdapter.updateCategories(expenseCategories)
-            incomeAdapter.updateCategories(incomeCategories)
+            expenseAdapter.categories = expenseCategories
+            incomeAdapter.categories = incomeCategories
 
             viewModel.transaction.value?.let { transaction ->
                 val targetCategories =

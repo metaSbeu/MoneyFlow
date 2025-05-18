@@ -38,7 +38,7 @@ class CategoryAddActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
 
         viewModel.defaultIcons.observe(this) { defaultIcons ->
-            adapter.updateCategories(defaultIcons)
+            adapter.categories = defaultIcons
         }
 
         binding.recyclerViewCategories.adapter = adapter

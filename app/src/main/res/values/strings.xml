@@ -129,7 +129,7 @@
     <string name="choose_category_icon">Select category icon</string>
     <string name="please_fill_all_fields">Please fill in all fields</string>
     <string name="incorrect_data">Incorrect data</string>
-    <string name="sum_must_be_more_than_zero">The plan amount must be greater than 0</string>
+    <string name="sum_must_be_more_than_zero">Sum must be greater than 0</string>
     <string name="you_sure_you_want_to_delete_plan">Are you sure you want to delete the planned expense?</string>
     <string name="choose_category">Select category</string>
     <string name="enter_sum">Enter the amount</string>

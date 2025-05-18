@@ -31,25 +31,12 @@ object DefaultCategories {
     }
 
     val defaultCategoryIcons = listOf(
-        Category(name = "", icon = "ic_movie", isIncome = false),
-        Category(name = "", icon = "ic_game", isIncome = false),
-        Category(name = "", icon = "ic_sport", isIncome = false),
-        Category(name = "", icon = "ic_food", isIncome = false),
-        Category(name = "", icon = "ic_pet", isIncome = false),
-        Category(name = "", icon = "ic_fruit", isIncome = false),
-        Category(name = "", icon = "ic_clothes", isIncome = false),
-        Category(name = "", icon = "ic_shoe", isIncome = false),
-        Category(name = "", icon = "ic_diamond", isIncome = false),
-        Category(name = "", icon = "ic_furniture", isIncome = false),
-        Category(name = "", icon = "ic_music", isIncome = false),
-        Category(name = "", icon = "ic_computer", isIncome = false),
-        Category(name = "", icon = "ic_bicycle", isIncome = false),
-        Category(name = "", icon = "ic_wifi", isIncome = false),
-        Category(name = "", icon = "ic_car", isIncome = false),
-        Category(name = "", icon = "ic_plane", isIncome = false),
-        Category(name = "", icon = "ic_tooth", isIncome = false),
-        Category(name = "", icon = "ic_finance", isIncome = false),
-        Category(name = "", icon = "ic_family", isIncome = false),
-        Category(name = "", icon = "ic_train_bus", isIncome = false),
-    )
+        "ic_health", "ic_leisure", "ic_home", "ic_cafe", "ic_education", "ic_gift", "ic_grocery", "ic_questionmark",
+        "ic_salary", "ic_investments", "ic_student", "ic_cashback",
+        "ic_movie", "ic_game", "ic_sport", "ic_food", "ic_pet", "ic_fruit", "ic_clothes", "ic_shoe",
+        "ic_diamond", "ic_furniture", "ic_music", "ic_computer", "ic_bicycle", "ic_wifi", "ic_car",
+        "ic_plane", "ic_tooth", "ic_finance", "ic_family", "ic_train_bus"
+    ).distinct().map { iconName ->
+        Category(name = "", icon = iconName, isIncome = false)
+    }
 }
