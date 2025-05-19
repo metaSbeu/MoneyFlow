@@ -1,5 +1,6 @@
 package com.example.moneyflow.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
+import com.example.moneyflow.utils.IconResolver
 
 class CategoryAdapter(
     private val onItemClick: (Category) -> Unit,
@@ -18,11 +20,12 @@ class CategoryAdapter(
     private val onFirstCategorySelected: ((Category) -> Unit)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val TYPE_CATEGORY = 0
-    private val TYPE_ADD_BUTTON = 1
+    private val typeCategory = 0
+    private val typeAddButton = 1
 
     private var selectedPosition = RecyclerView.NO_POSITION
     var categories = listOf<Category>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             if (value.isNotEmpty()) {
@@ -35,14 +38,14 @@ class CategoryAdapter(
         }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position < categories.size) TYPE_CATEGORY else TYPE_ADD_BUTTON
+        return if (position < categories.size) typeCategory else typeAddButton
     }
 
     override fun getItemCount(): Int = categories.size + if (showAddButton) 1 else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == TYPE_CATEGORY) {
+        return if (viewType == typeCategory) {
             CategoryViewHolder(inflater.inflate(R.layout.category_item, parent, false))
         } else {
             AddButtonViewHolder(inflater.inflate(R.layout.category_item, parent, false))
@@ -60,19 +63,12 @@ class CategoryAdapter(
         val category = categories[position]
         val context = holder.itemView.context
 
-        // Установка названия категории
         holder.textViewName.text = category.name
 
-        // Загрузка иконки по имени
-        val iconResId = context.resources.getIdentifier(
-            category.icon,
-            "drawable",
-            context.packageName
-        )
+        val iconResId = IconResolver.resolve(category.icon)
 
         holder.icon.setImageResource(iconResId)
 
-        // Выделение выбранной категории
         val backgroundRes = if (position == selectedPosition) {
             R.drawable.circle_indicator_blue
         } else {
@@ -89,8 +85,7 @@ class CategoryAdapter(
     private fun bindAddButtonViewHolder(holder: AddButtonViewHolder) {
         val context = holder.itemView.context
 
-//        holder.textViewName.text = context.getString(R.string.create)
-        holder.textViewName.text = "Добавить"
+        holder.textViewName.text = context.getString(R.string.add)
         holder.icon.setImageResource(R.drawable.ic_add_white)
         holder.icon.background = ContextCompat.getDrawable(context, R.drawable.circle_indicator_gray)
 

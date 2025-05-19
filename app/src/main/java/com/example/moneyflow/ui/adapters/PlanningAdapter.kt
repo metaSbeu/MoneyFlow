@@ -5,10 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
-import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Plan
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -19,14 +20,29 @@ class PlanningAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var plans = listOf<Plan>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+        private set
 
     companion object {
         private const val TYPE_PLAN = 0
         private const val TYPE_ADD_BUTTON = 1
+    }
+
+    fun updatePlans(newPlans: List<Plan>) {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = plans.size
+            override fun getNewListSize() = newPlans.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return plans[oldItemPosition].id == newPlans[newItemPosition].id
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return plans[oldItemPosition] == newPlans[newItemPosition]
+            }
+        })
+
+        plans = newPlans
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -43,7 +59,7 @@ class PlanningAdapter(
             PlansViewHolder(view)
         } else {
             val view =
-                inflater.inflate(R.layout.wallet_item, parent, false) // Используем правильный макет
+                inflater.inflate(R.layout.wallet_item, parent, false)
             AddButtonViewHolder(view)
         }
     }
@@ -52,6 +68,7 @@ class PlanningAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
+        val context = holder.itemView.context
         if (holder is PlansViewHolder) {
             val plan = plans[position]
             val formattedSum = plan.sum.formatWithSpaces(holder.itemView.context)
@@ -99,8 +116,9 @@ class PlanningAdapter(
             holder.itemView.setOnClickListener {
                 onItemClick(plan)
             }
+
         } else if (holder is AddButtonViewHolder) {
-            holder.textViewName.text = "Создать новый план"
+            holder.textViewName.text = context.getString(R.string.create_new_plan)
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
             holder.itemView.setOnClickListener {

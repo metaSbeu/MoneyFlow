@@ -11,7 +11,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -30,21 +29,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.moneyflow.R
-import com.example.moneyflow.data.ApiFactory.apiService
 import com.example.moneyflow.databinding.ActivityAuthBinding
 import com.example.moneyflow.ui.viewmodels.AuthViewModel
 import com.example.moneyflow.utils.DailyNotificationReceiver
 import com.example.moneyflow.utils.DailyPurchaseReminderReceiver
 import com.example.moneyflow.utils.PreferenceManager
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.Calendar
-import java.util.Date
 import java.util.concurrent.Executor
 
+@Suppress("DEPRECATION")
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthBinding
@@ -109,40 +106,30 @@ class AuthActivity : AppCompatActivity() {
 
     private fun applyAppTheme() {
         when (PreferenceManager.getSelectedTheme(this)) {
-            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            "Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            getString(R.string.theme_light) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            getString(R.string.theme_dark) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            getString(R.string.theme_system_default) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
-
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleDailyNotification() {
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            !alarmManager.canScheduleExactAlarms()
-        ) {
-            AlertDialog.Builder(this)
-                .setTitle("Разрешение необходимо")
-                .setMessage("Для корректной работы напоминаний, пожалуйста, разрешите точные напоминания в настройках.")
-                .setPositiveButton("Открыть настройки") { _, _ ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            AlertDialog.Builder(this).setTitle(getString(R.string.permission_required))
+                .setMessage(getString(R.string.please_allow_accurate_notifications))
+                .setPositiveButton(getString(R.string.open_settings)) { _, _ ->
                     val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                        data = Uri.parse("package:$packageName")
+                        data = "package:$packageName".toUri()
                     }
                     startActivity(intent)
-                }
-                .setNegativeButton("Отмена", null)
-                .show()
+                }.setNegativeButton(getString(R.string.cancel), null).show()
             return
         }
 
-        // Основной код для уведомлений
         val intent = Intent(this, DailyNotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val calendar = Calendar.getInstance().apply {
@@ -157,12 +144,9 @@ class AuthActivity : AppCompatActivity() {
         }
 
         alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            pendingIntent
+            AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent
         )
 
-        // Второе уведомление (напоминание о покупках)
         val reminderIntent = Intent(this, DailyPurchaseReminderReceiver::class.java)
         val reminderPendingIntent = PendingIntent.getBroadcast(
             this,
@@ -183,30 +167,24 @@ class AuthActivity : AppCompatActivity() {
         }
 
         alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            reminderCalendar.timeInMillis,
-            reminderPendingIntent
+            AlarmManager.RTC_WAKEUP, reminderCalendar.timeInMillis, reminderPendingIntent
         )
     }
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            "daily_reminder",
-            "Daily notifications",
-            NotificationManager.IMPORTANCE_DEFAULT
+            "daily_reminder", "Daily notifications", NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "Daily notifications about plans"
+            description = getString(R.string.daily_notifications_about_plans)
         }
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
 
         val purchaseChannel = NotificationChannel(
-            "purchase_reminder",
-            "Purchase Reminder",
-            NotificationManager.IMPORTANCE_DEFAULT
+            "purchase_reminder", "Purchase Reminder", NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "Ежедневное напоминание внести покупки"
+            description = getString(R.string.daily_transactions_add_notification)
         }
         manager.createNotificationChannel(purchaseChannel)
 
@@ -236,8 +214,8 @@ class AuthActivity : AppCompatActivity() {
 
     fun insertDefaultDbData() {
         if (!PreferenceManager.areDefaultCategoriesAdded(this)) {
-            viewModel.insertDefaultCategories()
-            viewModel.insertDefaultWallets()
+            viewModel.insertDefaultCategories(this)
+            viewModel.insertDefaultWallets(this)
             PreferenceManager.setDefaultCategories(this)
         }
     }
@@ -248,8 +226,7 @@ class AuthActivity : AppCompatActivity() {
                 "AuthActivity",
                 "Password State: $state, Password Length: ${viewModel.password.value?.length}, isSetupMode: $isSetupMode, Mode: ${
                     intent.getIntExtra(
-                        EXTRA_MODE,
-                        MODE_AUTH
+                        EXTRA_MODE, MODE_AUTH
                     )
                 }"
             )
@@ -257,21 +234,12 @@ class AuthActivity : AppCompatActivity() {
                 AuthViewModel.PasswordState.EMPTY -> clearAllIndicators()
                 AuthViewModel.PasswordState.IN_PROGRESS -> refreshIndicators(true)
                 AuthViewModel.PasswordState.COMPLETE -> {
-                    Log.d("AuthActivity", "Password COMPLETE triggered")
                     when (intent.getIntExtra(EXTRA_MODE, MODE_AUTH)) {
                         MODE_CHANGE_PIN -> viewModel.handlePinChange(this)
                         else -> {
                             if (isSetupMode) {
-                                Log.d(
-                                    "AuthActivity",
-                                    "Handling setup mode with pin: ${viewModel.password.value}"
-                                )
                                 viewModel.handleSetupMode(viewModel.password.value ?: "")
                             } else {
-                                Log.d(
-                                    "AuthActivity",
-                                    "Checking password: ${viewModel.password.value}"
-                                )
                                 viewModel.checkPassword(this)
                             }
                         }
@@ -333,7 +301,7 @@ class AuthActivity : AppCompatActivity() {
                 val errorMessageResId = when (viewModel.changePinState.value) {
                     AuthViewModel.ChangePinState.ENTER_OLD_PIN -> R.string.incorrect_old_pin
                     AuthViewModel.ChangePinState.CONFIRM_NEW_PIN -> R.string.pins_dont_match
-                    else -> R.string.pin_codes_dont_match // Для режима setup
+                    else -> R.string.pin_codes_dont_match
                 }
                 Toast.makeText(this, getString(errorMessageResId), Toast.LENGTH_SHORT).show()
                 if (viewModel.changePinState.value != AuthViewModel.ChangePinState.SUCCESS) {
@@ -366,7 +334,7 @@ class AuthActivity : AppCompatActivity() {
 
     private fun handleCorrectPassword() {
         switchIndicatorToGreen()
-        indicators.forEach { animateIndicatorsScale(it) } // Анимация при успешном вводе
+        indicators.forEach { animateIndicatorsScale(it) }
         vibrate(100)
     }
 
@@ -407,8 +375,7 @@ class AuthActivity : AppCompatActivity() {
         scaleDownY.duration = 500
 
         val shake = ObjectAnimator.ofFloat(
-            view, "translationX",
-            0f, 15f, -15f, 10f, -10f, 5f, -5f, 0f
+            view, "translationX", 0f, 15f, -15f, 10f, -10f, 5f, -5f, 0f
         )
         shake.duration = 600
 
@@ -494,12 +461,11 @@ class AuthActivity : AppCompatActivity() {
     private fun fingerprintAuth() {
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(
-            this, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
+            this, executor, object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     switchIndicatorToGreen()
-                    indicators.forEach { animateIndicatorsScale(it) } // Анимация при успехе биометрии
+                    indicators.forEach { animateIndicatorsScale(it) }
                     startActivity(MainActivity.newIntent(this@AuthActivity))
                     finish()
                 }
@@ -514,10 +480,8 @@ class AuthActivity : AppCompatActivity() {
                 }
             })
 
-        promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.auth_title))
-            .setNegativeButtonText(getString(R.string.auth_negative_button_text))
-            .build()
+        promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle(getString(R.string.auth_title))
+            .setNegativeButtonText(getString(R.string.auth_negative_button_text)).build()
 
         binding.buttonFingerprint.setOnClickListener {
             vibrate(50)

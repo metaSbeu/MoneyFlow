@@ -1,24 +1,29 @@
 package com.example.moneyflow.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
-import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.data.Wallet
+import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.example.moneyflow.utils.IconResolver
 
+@SuppressLint("NotifyDataSetChanged")
 class WalletAdapter(
     private val onItemClick: (Wallet) -> Unit,
     private val onAddClick: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object{
-        private val TYPE_WALLET = 0
-        internal val TYPE_ADD_BUTTON = 1
+    companion object {
+        private const val TYPE_WALLET = 0
+        internal const val TYPE_ADD_BUTTON = 1
     }
 
     private var selectedPosition = RecyclerView.NO_POSITION
@@ -71,33 +76,28 @@ class WalletAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int
+        holder: RecyclerView.ViewHolder, position: Int
     ) {
+        val context = holder.itemView.context
         if (holder is WalletViewHolder) {
-            val context = holder.itemView.context
             val wallet = wallets[position]
             val formatted = wallet.balance.formatWithSpaces(holder.itemView.context)
-            holder.textViewWalletNameAndBalance.text =
-                holder.itemView.context.getString(
-                    R.string.wallet_main_info,
-                    wallet.name,
-                    formatted
-                )
-
-            val iconResId = context.resources.getIdentifier(
-                wallet.icon,
-                "drawable",
-                context.packageName
+            holder.textViewWalletNameAndBalance.text = holder.itemView.context.getString(
+                R.string.wallet_main_info, wallet.name, formatted
             )
+
+            val iconResId = IconResolver.resolve(wallet.icon)
 
             if (iconResId != 0) {
                 holder.imageViewIcon.setImageResource(iconResId)
+                ImageViewCompat.setImageTintList(
+                    holder.imageViewIcon,
+                    ContextCompat.getColorStateList(context, R.color.text_color_primary)
+                )
             } else {
                 holder.imageViewIcon.setImageResource(R.drawable.ic_bank)
             }
 
-            // Установка выделенного фона
             holder.cardRoot.setBackgroundResource(
                 when {
                     isAllSelected -> R.drawable.bg_wallet_selected
@@ -108,15 +108,18 @@ class WalletAdapter(
 
             holder.itemView.setOnClickListener {
                 isAllSelected = false
+                val adapterPosition = holder.adapterPosition
+                if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+
                 val prevSelected = selectedPosition
-                selectedPosition = position
+                selectedPosition = adapterPosition
                 notifyItemChanged(prevSelected)
                 notifyItemChanged(selectedPosition)
-                onItemClick(wallet)
+                onItemClick(wallets[adapterPosition])
             }
 
         } else if (holder is AddButtonViewHolder) {
-            holder.textViewName.text = "Создать новый счет"
+            holder.textViewName.text = context.getString(R.string.create_new_wallet)
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
 
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)

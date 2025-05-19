@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="16dp"
+        android:text="@string/notification_settings"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -13,28 +28,30 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="16dp">
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:background="@color/item_background"
             android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@color/item_background">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Уведомления о предстоящих расходах"
+                android:text="@string/daily_notifications"
                 android:textSize="18sp" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchType1"
+                style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.Material3.CompoundButton.MaterialSwitch" />
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -44,28 +61,28 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="16dp">
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:background="@color/item_background"
             android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@color/item_background">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Напоминания о добавлении транзакций"
+                android:text="@string/transaction_add_notifications"
                 android:textSize="18sp" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchType2"
+                style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.CompoundButton.MaterialSwitch" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

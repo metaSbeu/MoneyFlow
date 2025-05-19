@@ -44,12 +44,12 @@ class TransactionAddViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun getWalletById(walletId: Int) {
-        val disposable =  database.walletDao().getWalletById(walletId)
+        val disposable = database.walletDao().getWalletById(walletId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .subscribe {
                 _wallet.value = it
-            })
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -57,9 +57,9 @@ class TransactionAddViewModel(application: Application) : AndroidViewModel(appli
         val disposable = database.walletDao().update(wallet)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .subscribe {
 
-            })
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -68,7 +68,6 @@ class TransactionAddViewModel(application: Application) : AndroidViewModel(appli
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ wallet ->
-                // Вычисляем новый баланс в зависимости от типа транзакции
                 val newBalance = if (transaction.isIncome) {
                     wallet.balance + transaction.sum
                 } else {
@@ -78,7 +77,6 @@ class TransactionAddViewModel(application: Application) : AndroidViewModel(appli
                 val updatedWallet = wallet.copy(balance = newBalance)
                 updateWalletBalance(updatedWallet)
 
-                // Сохраняем транзакцию
                 val transactionDisposable = database.transactionDao().insert(transaction)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

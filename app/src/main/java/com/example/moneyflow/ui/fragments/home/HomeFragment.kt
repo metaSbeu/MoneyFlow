@@ -1,6 +1,5 @@
 package com.example.moneyflow.ui.fragments.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -16,7 +15,6 @@ import com.example.moneyflow.ui.activities.TransactionListActivity
 import com.example.moneyflow.ui.activities.WalletAddActivity
 import com.example.moneyflow.ui.activities.WalletEditActivity
 import com.example.moneyflow.ui.adapters.WalletAdapter
-import com.example.moneyflow.utils.Formatter
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
 import com.example.moneyflow.utils.SwipeCallback
 import java.time.LocalDate
@@ -35,19 +33,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
 
         viewmodel = ViewModelProvider(this)[HomeViewModel::class.java]
-        adapter = WalletAdapter(
-            { wallet ->
-                adapter.deselectAll()
-                adapter.selectWallet(wallet)
-                selectedWallet = wallet
-            },
-            {
-                startActivity(WalletAddActivity.newIntent(requireContext()))
-            }
-        )
+        adapter = WalletAdapter({ wallet ->
+            adapter.deselectAll()
+            adapter.selectWallet(wallet)
+            selectedWallet = wallet
+        }, {
+            startActivity(WalletAddActivity.newIntent(requireContext()))
+        })
         adapter.selectAll()
-        viewmodel.wallets.observe(viewLifecycleOwner) {
-            adapter.wallets = it
+        viewmodel.wallets.observe(viewLifecycleOwner) { wallets ->
+
+            adapter.wallets = wallets
+
+            if (wallets.size == 1 && selectedWallet == null) {
+                val singleWallet = wallets.first()
+                adapter.deselectAll()
+                adapter.selectWallet(singleWallet)
+                selectedWallet = singleWallet
+            }
         }
 
         viewmodel.overallBalance.observe(viewLifecycleOwner) { balance ->
@@ -58,7 +61,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.recyclerViewWallets.adapter = adapter
 
         binding.textViewChooseAll.setOnClickListener {
-            val walletBalance = viewmodel.overallBalance.value ?: 0.0
             adapter.selectAll()
             selectedWallet = null
         }
@@ -70,19 +72,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.recyclerViewWallets.postDelayed({
             val viewHolder = binding.recyclerViewWallets.findViewHolderForAdapterPosition(0)
             viewHolder?.itemView?.let { view ->
-                // Анимация свайпа влево и назад
-                view.animate()
-                    .translationX(-100f)
-                    .setDuration(200)
-                    .withEndAction {
-                        view.animate()
-                            .translationX(0f)
-                            .setDuration(200)
-                            .start()
-                    }
-                    .start()
+                view.animate().translationX(-100f).setDuration(200).withEndAction {
+                    view.animate().translationX(0f).setDuration(200).start()
+                }.start()
             }
-        }, 800) // Подождать, чтобы элементы успели отрисоваться
+        }, 800)
 
     }
 
@@ -104,66 +98,52 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun showDeleteConfirmationDialog(position: Int) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Удалить счет")
-            .setMessage("Вы уверены, что хотите удалить счет '${adapter.wallets[position].name}'? Также удалятся все транзакции этого счета!")
-            .setPositiveButton("Удалить") { _, _ ->
-                // Удаляем счет
+        AlertDialog.Builder(requireContext()).setTitle(getString(R.string.remove_wallet))
+            .setMessage(getString(R.string.confirm_delete_wallet, adapter.wallets[position].name))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 viewmodel.deleteWallet(adapter.wallets[position])
                 selectedWallet = null
                 adapter.selectAll()
-            }
-            .setNegativeButton("Отмена") { _, _ ->
-                // Возвращаем элемент на место
+            }.setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 adapter.notifyItemChanged(position)
-            }
-            .setOnCancelListener {
-                // На случай если пользователь закрыл диалог (например, тапнул вне окна)
+            }.setOnCancelListener {
                 adapter.notifyItemChanged(position)
-            }
-            .show()
+            }.show()
     }
 
     private fun setupItemTouchHelper() {
-        val itemTouchHelper = ItemTouchHelper(
-            SwipeCallback(
-                adapter,
-                { position ->
-                    val wallet = adapter.wallets[position]
-                    startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
-                },
-                { position ->
-                    showDeleteConfirmationDialog(position)
+        val itemTouchHelper = ItemTouchHelper(SwipeCallback(adapter, { position ->
+            val wallet = adapter.wallets[position]
+            startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
+        }, { position ->
+            showDeleteConfirmationDialog(position)
 
-                }
-            )
-        )
+        }))
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
     }
 
     private fun getCurrentMonth(): String {
         val month = LocalDate.now().month
         return when (month) {
-            Month.JANUARY -> "январе"
-            Month.FEBRUARY -> "феврале"
-            Month.MARCH -> "марте"
-            Month.APRIL -> "апреле"
-            Month.MAY -> "мае"
-            Month.JUNE -> "июне"
-            Month.JULY -> "июле"
-            Month.AUGUST -> "августе"
-            Month.SEPTEMBER -> "сентябре"
-            Month.OCTOBER -> "октябре"
-            Month.NOVEMBER -> "ноябре"
-            Month.DECEMBER -> "декабре"
+            Month.JANUARY -> getString(R.string.january)
+            Month.FEBRUARY -> getString(R.string.february)
+            Month.MARCH -> getString(R.string.march)
+            Month.APRIL -> getString(R.string.april)
+            Month.MAY -> getString(R.string.may)
+            Month.JUNE -> getString(R.string.june)
+            Month.JULY -> getString(R.string.july)
+            Month.AUGUST -> getString(R.string.august)
+            Month.SEPTEMBER -> getString(R.string.september)
+            Month.OCTOBER -> getString(R.string.october)
+            Month.NOVEMBER -> getString(R.string.november)
+            Month.DECEMBER -> getString(R.string.december)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewmodel.refreshWalletsList() // Обновляем список кошельков
+        viewmodel.refreshWalletsList()
 
-        // Если есть выбранный кошелек, запрашиваем его актуальные данные
         selectedWallet?.let {
             viewmodel.getWalletById(it.id).observe(viewLifecycleOwner) { updatedWallet ->
                 updatedWallet?.let {
@@ -176,14 +156,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupClickListeners() {
         binding.cardViewAddTransaction.setOnClickListener {
             if (selectedWallet == null) {
-                Toast.makeText(requireContext(), "Выберите один счет", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.choose_one_wallet), Toast.LENGTH_SHORT
+                ).show()
             } else {
                 val intent = TransactionAddActivity.newIntent(requireContext(), selectedWallet!!.id)
                 startActivity(intent)
             }
         }
 
-        binding.cardViewAllOperations.setOnClickListener {
+        binding.cardViewBalance.setOnClickListener {
             val intent = if (selectedWallet == null) {
                 TransactionListActivity.newIntentAllWallets(requireContext())
             } else {
@@ -209,6 +192,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             startActivity(intent)
         }
-
     }
 }

@@ -1,0 +1,194 @@
+<resources>
+    <string name="app_name">Money Flow</string>
+    <string name="exit">Выйти</string>
+    <string name="user_avatar">User avatar</string>
+    <string name="_1" translatable="false">1</string>
+    <string name="_2" translatable="false">2</string>
+    <string name="_3" translatable="false">3</string>
+    <string name="_4" translatable="false">4</string>
+    <string name="_5" translatable="false">5</string>
+    <string name="_6" translatable="false">6</string>
+    <string name="_7" translatable="false">7</string>
+    <string name="_8" translatable="false">8</string>
+    <string name="_9" translatable="false">9</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="erase_button">Стереть символ</string>
+    <string name="fingerprint_button">Отпечаток пальца</string>
+    <string name="authentication_error_message">Ошибка аутентификации: %1$s</string>
+    <string name="authentication_succeeded_message">Аутентификация успешна!</string>
+    <string name="authentication_failed_message">Аутентификация не пройдена</string>
+    <string name="auth_title">Вход в Money Flow</string>
+    <string name="auth_negative_button_text">Ввести пароль</string>
+    <string name="username">Имя пользователя</string>
+    <string name="wallet">Счет: %s</string>
+    <string name="balance">Общий баланс: %s</string>
+    <string name="all_expenses">Траты</string>
+    <string name="current_month">В %s</string>
+    <string name="sum_currency" translatable="false">%d %s</string>
+    <string name="all_incomes">Пополнения</string>
+    <string name="add_transaction">Добавить транзакцию</string>
+    <string name="available_wallets">Доступные счета</string>
+    <string name="wallet_icon">Иконка кошелька</string>
+    <string name="home">Домой</string>
+    <string name="planning">Планирование</string>
+    <string name="settings">Настройки</string>
+    <string name="expense">Расход</string>
+    <string name="income">Доход</string>
+    <string name="sum">Сумма</string>
+    <string name="comment">Комментарий</string>
+    <string name="period">Период: %s - %s</string>
+    <string name="transaction_history">История транзакций</string>
+    <string name="Theme">Тема</string>
+    <string name="currency">Валюта</string>
+    <string name="change_pin">Изменить PIN-код</string>
+    <string name="notifications_settings">Настройки уведомлений</string>
+    <string name="change_wallet">Изменить счет</string>
+    <string name="name">Название</string>
+    <string name="category_create_title">Создание категории</string>
+    <string name="edit_category">Изменить категорию</string>
+    <string name="category_edit_title">Редактирование категории</string>
+    <string name="icon">Иконка</string>
+    <string name="new_name">Новое название</string>
+    <string name="delete_category">Удалить категорию</string>
+    <string name="save">Сохранить</string>
+    <string name="category_delete_confirmation_alert">При удалении категории так же удалятся все связанные с ней транзакции со всех счетов. Вы уверены?</string>
+    <string name="removal">Удаление</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="current_wallet">Выбранный счет</string>
+    <string name="all_wallets">Все счета</string>
+    <string name="wallet_main_info" translatable="false">%s: %s</string>
+    <string name="wallet_edit_title">Редактирование счета</string>
+    <string name="transaction_edit_title">Редактирование транзакции</string>
+    <string name="wallet_name_wallet_balance" translatable="false">%s: %s</string>
+    <string name="choose_all">Выбрать все</string>
+    <string name="expenses_sum" translatable="false">%s</string>
+    <string name="expenses">Расходы</string>
+    <string name="incomes">Доходы</string>
+    <string name="comment_s">Комментарий: %s</string>
+    <string name="setup_pin_title">Установите PIN-код для авторизации</string>
+    <string name="next_payment">Следующий платеж: %1$s</string>
+    <string name="exact_alarm_permission_required">Для напоминаний нужно разрешение на точные уведомления. Пожалуйста, включите его в настройках.</string>
+
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+    <string name="theme_system_default">Системная</string>
+
+    <string-array name="themes">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_system_default</item>
+    </string-array>
+
+    <string-array name="currencies">
+        <item>RUB</item>
+        <item>USD</item>
+        <item>EUR</item>
+    </string-array>
+
+    <string name="confirm_pin_title">Подтвердите PIN-код</string>
+    <string name="enter_pin_title">Введите PIN-код</string>
+    <string name="enter_old_pin">Введите старый PIN-код</string>
+    <string name="enter_new_pin">Введите новый PIN-код</string>
+    <string name="confirm_new_pin_title">Подтвердите новый PIN-код</string>
+    <string name="pin_changed_successfully">PIN-код успешно изменен</string>
+    <string name="incorrect_old_pin">Неверный старый PIN-код</string>
+    <string name="pins_dont_match">PIN-коды не совпадают</string>
+    <string name="pin_codes_dont_match">Неверный PIN-код</string>
+    <string name="plan_name_sum" translatable="false">%s: %s</string>
+    <string name="bell_on">Уведомление включено</string>
+    <string name="main_title">Обзор финансов</string>
+    <string name="notification">Уведомление</string>
+    <string name="daily_notifications">Уведомления о предстоящих расходах</string>
+    <string name="transaction_add_notifications">Напоминания о добавлении транзакций</string>
+    <string name="create_regular_expense">Создание регулярного расхода</string>
+    <string name="month_hint">Какого числа каждого месяца напоминать о платеже?</string>
+    <string name="number">Число</string>
+    <string name="edit_regular_expense">Редактирование регулярного расхода</string>
+    <string name="date_s">Дата: %s</string>
+    <string name="new_sum">Новая сумма</string>
+    <string name="new_comment">Новый комментарий</string>
+    <string name="choose">"   Выбрать"</string>
+    <string name="period_not_chosen">Период не выбран</string>
+    <string name="filter_by_category">Фильтр по категории</string>
+    <string name="filter_by_date">Фильтр по дате</string>
+    <string name="categories_list">Список категорий</string>
+    <string name="balance_standard">Баланс</string>
+    <string name="new_wallet_creating">Создание нового счета</string>
+    <string name="category_icon">Иконка категории</string>
+    <string name="go_to_transaction_list">Перейти в историю транзакций</string>
+    <string name="expense_planning">Планирование расходов</string>
+    <string name="month_expenses">Ежемесячные траты</string>
+    <string name="planned_expenses">Запланированные расходы</string>
+    <string name="bank_icon">Иконка счета</string>
+    <string name="bell_off">Уведомление выключено</string>
+    <string name="payment_notification_text">Внесите оплату за %s в размере %s</string>
+    <string name="daily_transactions_add_notification_text">Не забудьте внести покупки за сегодня</string>
+    <string name="add">Добавить</string>
+    <string name="create_new_plan">Создать новый план</string>
+    <string name="empty"><![CDATA[<пусто>]]></string>
+    <string name="create_new_wallet">Создать новый счет</string>
+    <string name="remove_wallet">Удалить счет</string>
+    <string name="confirm_delete_wallet">Вы уверены, что хотите удалить счет \'%1$s\'? Также удалятся все транзакции, записанные на этот счет!</string>
+    <string name="delete">Удалить</string>
+    <string name="january">январе</string>
+    <string name="february">феврале</string>
+    <string name="march">марте</string>
+    <string name="april">апреле</string>
+    <string name="may">мае</string>
+    <string name="june">июне</string>
+    <string name="july">июле</string>
+    <string name="august">августе</string>
+    <string name="september">сентябре</string>
+    <string name="october">октябре</string>
+    <string name="november">ноябре</string>
+    <string name="december">декабре</string>
+    <string name="choose_one_wallet">Выберите один счет</string>
+    <string name="set_notification_permission_to_get_it">Разрешите уведомления, чтобы получать напоминания о планах</string>
+    <string name="allow">Разрешить</string>
+    <string name="you_turned_notifications_off">Вы отключили уведомления. Вы можете включить их в настройках приложения.</string>
+    <string name="all_categories">Все категории</string>
+    <string name="permission_required">Разрешение необходимо</string>
+    <string name="please_allow_accurate_notifications">Для корректной работы уведомлений, пожалуйста, разрешите точные уведомления в настройках.</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string name="daily_transactions_add_notification">Ежедневное напоминание внести покупки</string>
+    <string name="daily_notifications_about_plans">Ежедневные уведомления о планах</string>
+    <string name="type_category_name">Введите название категории</string>
+    <string name="choose_category_icon">Выберите иконку категории</string>
+    <string name="please_fill_all_fields">Пожалуйста, заполните все поля</string>
+    <string name="incorrect_data">Некорректные данные</string>
+    <string name="sum_must_be_more_than_zero">Сумма должна быть больше 0</string>
+    <string name="you_sure_you_want_to_delete_plan">Вы уверены что хотите удалить запланированный расход?</string>
+    <string name="choose_category">Выберите категорию</string>
+    <string name="enter_sum">Введите сумму</string>
+    <string name="date">Дата: %1$s</string>
+    <string name="date_tr_edit">Дата: %1$s</string>
+    <string name="comment_tr_edit">Комментарий: %1$s</string>
+    <string name="no">нет</string>
+    <string name="sum_with_currency" translatable="false">%1$s%2$s</string>
+    <string name="choose_wallet">Выберите кошелек</string>
+    <string name="choose_date_range">Выберите диапазон дат</string>
+    <string name="piechart_not_available">Диаграмма недоступна.Не добавлено ни одной транзакции</string>
+    <string name="no_data">Нет данных</string>
+    <string name="transaction_categories">Категории транзакций</string>
+    <string name="type_wallet_name">Введите название кошелька</string>
+    <string name="choose_wallet_icon">Выберите иконку кошелька</string>
+    <string name="type_wallet_balance">Введите баланс кошелька</string>
+    <string name="type_correct_balance">Введите корректный баланс</string>
+    <string name="select_date">Выбрать дату</string>
+
+    <string name="health">Здоровье</string>
+    <string name="leisure">Развлечения</string>
+    <string name="cafe">Кафе</string>
+    <string name="education">Образование</string>
+    <string name="gift">Подарки</string>
+    <string name="grocery">Продукты</string>
+    <string name="other">Другое</string>
+    <string name="salary">Зарплата</string>
+    <string name="investments">Инвестиции</string>
+    <string name="scholarship">Стипендия</string>
+    <string name="cashback">Кэшбэк</string>
+    <string name="cash">Наличные</string>
+    <string name="overview">Обзор</string>
+    <string name="notification_settings">Настройки уведомлений</string>
+</resources>

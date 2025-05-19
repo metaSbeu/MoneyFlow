@@ -29,9 +29,7 @@ class PlanningFragment : Fragment() {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_planning, container, false)
     }
@@ -48,49 +46,44 @@ class PlanningFragment : Fragment() {
                 if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
                     Snackbar.make(
                         binding.root,
-                        "Разрешите уведомления, чтобы получать напоминания о планах",
+                        getString(R.string.set_notification_permission_to_get_it),
                         Snackbar.LENGTH_LONG
-                    )
-                        .setAction("Разрешить") {
+                    ).setAction(getString(R.string.allow)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                         }
-                        .show()
+                    }.show()
                 } else {
                     Snackbar.make(
                         binding.root,
-                        "Вы отключили уведомления. Вы можете включить их в настройках приложения.",
+                        getString(R.string.you_turned_notifications_off),
                         Snackbar.LENGTH_LONG
-                    )
-                        .setAction("Настройки") {
-                            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-                            }
-                            startActivity(intent)
+                    ).setAction(getString(R.string.settings)) {
+                        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                         }
-                        .show()
+                        startActivity(intent)
+                    }.show()
                 }
             }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.POST_NOTIFICATIONS
+                    requireContext(), android.Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
 
-        adapter = PlanningAdapter(
-            {
-                startActivity(PlanAddActivity.newIntent(requireContext()))
-            },
-            { plan, isActive ->
-                viewModel.setNotificationActive(plan, isActive)
-            }, {
-                startActivity(PlanEditActivity.newIntent(requireContext(), it))
-            })
+        adapter = PlanningAdapter({
+            startActivity(PlanAddActivity.newIntent(requireContext()))
+        }, { plan, isActive ->
+            viewModel.setNotificationActive(plan, isActive)
+        }, {
+            startActivity(PlanEditActivity.newIntent(requireContext(), it))
+        })
 
         observeViewmodel()
         binding.recyclerViewPlans.adapter = adapter
@@ -103,11 +96,11 @@ class PlanningFragment : Fragment() {
 
     fun observeViewmodel() {
         viewModel.plans.observe(viewLifecycleOwner) {
-            adapter.plans = it
+            adapter.updatePlans(it)
         }
         viewModel.monthSum.observe(viewLifecycleOwner) {
             val formattedSum = it.formatWithSpaces(requireContext())
-            binding.textViewMonthSum.text = "$formattedSum"
+            binding.textViewMonthSum.text = formattedSum
         }
     }
 }

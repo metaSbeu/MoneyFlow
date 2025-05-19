@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
@@ -23,12 +23,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Включаем поддержку edge-to-edge и отключаем автоматические отступы
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
         setUpInsets()
-        setNavigationBarColor()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -54,31 +58,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val navigationBarsInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+        // Устанавливаем отступы вручную
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-            v.setPadding(
-                systemBarsInsets.left,
-                systemBarsInsets.top,
-                systemBarsInsets.right,
-                navigationBarsInsets.bottom
+            // Применяем отступы к основному контейнеру (кроме bottom)
+            view.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                0
             )
+
+            // Применяем отступ снизу только к нижней навигации
+            binding.bottomNavigationView.setPadding(
+                binding.bottomNavigationView.paddingLeft,
+                binding.bottomNavigationView.paddingTop,
+                binding.bottomNavigationView.paddingRight,
+                systemBars.bottom
+            )
+
             WindowInsetsCompat.CONSUMED
         }
     }
 
-    private fun setNavigationBarColor() {
-        val navigationBarColor = ContextCompat.getColor(this, R.color.background)
-        window.navigationBarColor = navigationBarColor
-    }
-
     companion object {
         fun newIntent(context: Context): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            return intent
+            return Intent(context, MainActivity::class.java)
         }
     }
 }
-
-

@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="12dp"
+        android:contentDescription="@string/bank_icon"
         android:scaleType="centerInside"
         tools:background="@drawable/circle_indicator_gray"
-        tools:src="@drawable/logo_alfa" />
+        tools:src="@drawable/ic_btc" />
 </FrameLayout>

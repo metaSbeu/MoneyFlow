@@ -1,7 +1,6 @@
 package com.example.moneyflow.ui.activities
 
 import android.os.Bundle
-import android.widget.Switch
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,11 +18,9 @@ class NotificationsSettingsActivity : AppCompatActivity() {
         val switchType1 = findViewById<MaterialSwitch>(R.id.switchType1)
         val switchType2 = findViewById<MaterialSwitch>(R.id.switchType2)
 
-        // Установка текущих значений
         switchType1.isChecked = PreferenceManager.isNotificationType1Enabled(this)
         switchType2.isChecked = PreferenceManager.isNotificationType2Enabled(this)
 
-        // Слушатели переключателей
         switchType1.setOnCheckedChangeListener { _, isChecked ->
             PreferenceManager.setNotificationType1Enabled(this, isChecked)
         }

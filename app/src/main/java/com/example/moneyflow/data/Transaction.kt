@@ -1,6 +1,9 @@
 package com.example.moneyflow.data
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(
@@ -25,13 +28,10 @@ data class Transaction(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     val categoryId: Int,
     val walletId: Int,
-
     val sum: Double,
     val isIncome: Boolean,
-
     val note: String?,
     val createdAt: Long = System.currentTimeMillis()
 ) : Serializable

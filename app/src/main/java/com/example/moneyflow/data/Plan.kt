@@ -6,6 +6,7 @@ import java.io.Serializable
 
 @Entity(tableName = "plans")
 data class Plan(
+
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,

@@ -103,5 +103,4 @@ object PreferenceManager {
     fun setNotificationType2Enabled(context: Context, enabled: Boolean) {
         getPrefs(context).edit { putBoolean(KEY_NOTIFICATION_TYPE2, enabled) }
     }
-
 }

@@ -70,6 +70,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck"
                     tools:text="+50 000 ₽"
                     tools:textColor="@color/light_green" />
 
@@ -79,18 +80,19 @@
                     android:layout_height="wrap_content"
                     android:maxWidth="250dp"
                     android:paddingEnd="4dp"
-                    android:text="Комментарий: %s"
+                    android:text="@string/comment_s"
                     android:textColor="@color/text_color_primary"
                     app:layout_constraintEnd_toStartOf="@+id/textViewOldSum"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/textViewOldCategoryName"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewOldCategoryName" />
+                    app:layout_constraintTop_toBottomOf="@+id/textViewOldCategoryName"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/textViewOldDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Дата: %s"
+                    android:text="@string/date_s"
                     android:textColor="@color/text_color_primary"
                     app:layout_constraintStart_toStartOf="@+id/textViewOldCategoryName"
                     app:layout_constraintTop_toBottomOf="@+id/textViewOldComment" />
@@ -190,7 +192,8 @@
                     android:focusable="true"
                     android:padding="10dp"
                     android:src="@drawable/ic_pencil"
-                    app:tint="@color/my_light_primary" />
+                    app:tint="@color/light_blue"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -200,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="23dp"
-            android:hint="Новая сумма"
+            android:hint="@string/new_sum"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +214,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:maxLength="10" />
+                android:maxLength="10"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,7 +225,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="23dp"
-            android:hint="Новый комментарий"
+            android:hint="@string/new_comment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -231,7 +235,8 @@
                 android:id="@+id/editTextNewComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -240,11 +245,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Дата: 20.02.2025"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/buttonDate"
             app:layout_constraintStart_toEndOf="@+id/buttonDate"
-            app:layout_constraintTop_toTopOf="@id/buttonDate" />
+            app:layout_constraintTop_toTopOf="@id/buttonDate"
+            tools:text="Дата: 20.02.2025" />
 
         <Button
             android:id="@+id/buttonDate"
@@ -254,12 +259,13 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:contentDescription="@null"
-            android:text="   Выбрать"
+            android:text="@string/choose"
             app:icon="@drawable/ic_calendar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textFieldNewComment"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="TextContrastCheck" />
 
         <Button
             android:id="@+id/buttonSave"

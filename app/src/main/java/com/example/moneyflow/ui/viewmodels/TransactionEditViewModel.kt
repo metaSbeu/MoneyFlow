@@ -29,7 +29,6 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
     val categories: LiveData<List<Category>> get() = _categories
 
     private val _selectedWalletId = MutableLiveData<Int?>()
-    val selectedWalletId: LiveData<Int?> get() = _selectedWalletId
 
     fun setSelectedWalletId(walletId: Int) {
         _selectedWalletId.value = walletId
@@ -115,30 +114,25 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun deleteTransaction(transactionId: Int) {
-        // 1. Получаем транзакцию для удаления
         val getTransactionDisposable = database.transactionDao().getTransactionById(transactionId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ transaction ->
-                // 2. Получаем связанный кошелек
                 val getWalletDisposable = database.walletDao().getWalletById(transaction.walletId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ wallet ->
-                        // 3. Вычисляем новый баланс
                         val newBalance = if (transaction.isIncome) {
                             wallet.balance - transaction.sum
                         } else {
                             wallet.balance + transaction.sum
                         }
 
-                        // 4. Обновляем баланс кошелька
                         val updateWalletDisposable =
                             database.walletDao().update(wallet.copy(balance = newBalance))
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
-                                    // 5. После успешного обновления баланса удаляем транзакцию
                                     val deleteTransactionDisposable =
                                         database.transactionDao().remove(transactionId)
                                             .subscribeOn(Schedulers.io())
@@ -189,7 +183,6 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
                 val amountDiff = newSum - oldSum
 
                 if (oldWallet.id != newWallet.id) {
-                    // Перевод между кошельками
                     val updatedOldWallet = if (currentTransaction.isIncome) {
                         oldWallet.copy(balance = oldWallet.balance - oldSum)
                     } else {
@@ -205,7 +198,6 @@ class TransactionEditViewModel(application: Application) : AndroidViewModel(appl
                     updateWalletBalanceInternal(updatedOldWallet)
                     updateWalletBalanceInternal(updatedNewWallet)
                 } else {
-                    // Кошелек тот же, но сумма изменилась
                     val updatedWallet = if (transaction.isIncome) {
                         newWallet.copy(balance = newWallet.balance + amountDiff)
                     } else {

@@ -4,7 +4,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="blue">#2160F3</color>
-    <color name="my_light_primary">#5C84F2</color>
+    <color name="light_blue">#5C84F2</color>
     <color name="very_light_blue">#97AAE2</color>
     <color name="my_light_background">#EFEFEF</color>
 
@@ -41,5 +41,5 @@
     <color name="teal_700">#FF018786</color>
 
     <color name="card_background_light">#FFFFFF</color>
-    <color name="card_background_dark">#1a1a1a</color>
+    <color name="card_background_dark">#1e1f21</color>
 </resources>

@@ -18,7 +18,7 @@
             android:layout_marginHorizontal="16dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="16dp"
-            android:text="Планирование расходов"
+            android:text="@string/expense_planning"
             android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +40,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:background="@color/item_background"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:padding="16dp"
                 tools:ignore="RtlSymmetry">
@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ежемесячные траты"
+                    android:text="@string/month_expenses"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -57,8 +57,8 @@
                     android:id="@+id/textViewMonthSum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="21 800 ₽"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:text="21 800 ₽" />
 
             </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Запланированные расходы"
+            android:text="@string/planned_expenses"
             android:textAlignment="center"
             android:textSize="20sp"
             app:layout_constraintTop_toBottomOf="@id/cardViewExpenses" />
@@ -80,9 +80,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/plan_item"
+            app:layout_constraintTop_toBottomOf="@id/textViewPlannedExpenses"
             tools:itemCount="4"
-            app:layout_constraintTop_toBottomOf="@id/textViewPlannedExpenses" />
+            tools:listitem="@layout/plan_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

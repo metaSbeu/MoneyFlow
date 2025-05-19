@@ -1,10 +1,12 @@
 package com.example.moneyflow.ui.viewmodels
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.moneyflow.R
 import com.example.moneyflow.data.MainDatabase
 import com.example.moneyflow.data.TransactionWithCategory
 import com.example.moneyflow.data.Wallet
@@ -38,9 +40,9 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
         val disposable = database.walletDao().getWalletById(wallet.id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .subscribe {
                 _wallet.value = it
-            })
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -57,7 +59,7 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
                     allTransactions = transactions
                     val uniqueCategories = transactions.mapNotNull { it.category.name }.distinct()
                     _categories.value = uniqueCategories
-                    reapplyFilters() // Применяем фильтры после загрузки данных
+                    reapplyFilters()
                     Log.d(TAG, "loadTransactions: success, count = ${transactions.size}")
                 },
                 { error ->
@@ -67,12 +69,13 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
         compositeDisposable.add(disposable)
     }
 
-    fun filterTransactionsByCategory(category: String) {
-        currentCategoryFilter = if (category == "Все категории") null else category
+    fun filterTransactionsByCategory(category: String, context: Context) {
+        currentCategoryFilter =
+            if (category == context.getString(R.string.all_categories)) null else category
         reapplyFilters()
     }
 
-    fun sortTransactionsByDate(isAscending: Boolean, startDate: Date, endDate: Date) {
+    fun sortTransactionsByDate(startDate: Date, endDate: Date) {
         currentDateFilterStart = startDate
         currentDateFilterEnd = endDate
         reapplyFilters()
@@ -86,19 +89,16 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
     private fun reapplyFilters() {
         var filteredTransactions = allTransactions
 
-        // Фильтрация по типу (доход/расход)
         filteredTransactions = when (currentFilterType) {
             FilterType.ALL -> filteredTransactions
             FilterType.INCOME -> filteredTransactions.filter { it.transaction.isIncome }
             FilterType.EXPENSE -> filteredTransactions.filter { !it.transaction.isIncome }
         }
 
-        // Фильтрация по категории
         currentCategoryFilter?.let { category ->
             filteredTransactions = filteredTransactions.filter { it.category.name == category }
         }
 
-        // Фильтрация по дате
         if (currentDateFilterStart != null && currentDateFilterEnd != null) {
             filteredTransactions = filteredTransactions.filter {
                 it.transaction.createdAt in currentDateFilterStart!!.time..currentDateFilterEnd!!.time

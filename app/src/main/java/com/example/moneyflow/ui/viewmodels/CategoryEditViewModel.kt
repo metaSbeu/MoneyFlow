@@ -22,11 +22,9 @@ class CategoryEditViewModel(application: Application) : AndroidViewModel(applica
         val disposable = database.categoryDao().update(category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    _shouldCloseScreen.value = true
-                }
-            )
+            .subscribe {
+                _shouldCloseScreen.value = true
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -34,11 +32,9 @@ class CategoryEditViewModel(application: Application) : AndroidViewModel(applica
         val disposable = database.categoryDao().delete(category.id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    _shouldCloseScreen.value = true
-                }
-            )
+            .subscribe {
+                _shouldCloseScreen.value = true
+            }
         compositeDisposable.add(disposable)
     }
 

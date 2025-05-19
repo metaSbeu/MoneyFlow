@@ -6,15 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
 import com.example.moneyflow.databinding.ActivityCategoryAddBinding
 import com.example.moneyflow.ui.adapters.CategoryAdapter
 import com.example.moneyflow.ui.viewmodels.CategoryAddViewModel
-import com.example.moneyflow.utils.setupBottomViewKeyboardVisibilityListener
 
 class CategoryAddActivity : AppCompatActivity() {
 
@@ -35,14 +32,13 @@ class CategoryAddActivity : AppCompatActivity() {
         adapter = CategoryAdapter(
             {
                 selectedCategory = it
-            },
-            {}, showAddButton = false, isIncome = isIncome!!
+            }, {}, showAddButton = false, isIncome = isIncome!!
         )
 
         viewModel = ViewModelProvider(this)[CategoryAddViewModel::class.java]
 
-        viewModel.defaultIcons.observe(this) {
-            adapter.categories = viewModel.getDefaultCategoryIcons()
+        viewModel.defaultIcons.observe(this) { defaultIcons ->
+            adapter.categories = defaultIcons
         }
 
         binding.recyclerViewCategories.adapter = adapter
@@ -51,13 +47,15 @@ class CategoryAddActivity : AppCompatActivity() {
             val name = binding.editTextName.text.toString().trim()
 
             if (name.isBlank()) {
-                Toast.makeText(this, "Введите название категории", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.type_category_name), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             val selected = selectedCategory
             if (selected == null) {
-                Toast.makeText(this, "Выберите иконку категории", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.choose_category_icon), Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 

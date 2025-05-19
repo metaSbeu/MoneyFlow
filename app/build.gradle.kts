@@ -42,24 +42,26 @@ android {
 dependencies {
 
     implementation(libs.androidx.annotation)
+
     // Room
-    val room_version = "2.7.0"
-    implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-rxjava3:$room_version")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.rxjava3)
 
     // RxJava
-    implementation ("io.reactivex.rxjava3:rxandroid:3.0.2")
-    implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
+    implementation (libs.rxandroid)
+    implementation (libs.rxjava)
 
-    implementation ("androidx.biometric:biometric-ktx:1.4.0-alpha02")
-    implementation ("androidx.work:work-runtime-ktx:2.9.0")
+    implementation (libs.androidx.biometric.ktx)
+    implementation (libs.androidx.work.runtime.ktx)
+
     // MPAndroid chart
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation (libs.mpandroidchart)
 
-    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
-    implementation ("com.squareup.retrofit2:adapter-rxjava3:2.11.0")
+    // Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.adapter.rxjava3)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

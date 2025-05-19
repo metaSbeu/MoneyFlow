@@ -7,12 +7,13 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.ui.adapters.BankIconAdapter.BankIconViewHolder
+import com.example.moneyflow.utils.IconResolver
 
 class BankIconAdapter(
     private val icons: List<String>,
     private val onIconClick: (String) -> Unit,
-    private val preselectedIcon: String? = null
-): RecyclerView.Adapter<BankIconViewHolder>() {
+    preselectedIcon: String? = null
+) : RecyclerView.Adapter<BankIconViewHolder>() {
 
     private var selectedPosition = RecyclerView.NO_POSITION
 
@@ -23,30 +24,22 @@ class BankIconAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): BankIconViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.icon_item, parent, false)
         return BankIconViewHolder(view)
     }
 
     override fun onBindViewHolder(
-        holder: BankIconViewHolder,
-        position: Int
+        holder: BankIconViewHolder, position: Int
     ) {
         val iconName = icons[position]
-        val context = holder.itemView.context
 
-        val iconResId = context.resources.getIdentifier(
-            iconName,
-            "drawable",
-            context.packageName
-        )
-
+        val iconResId = IconResolver.resolve(iconName)
         holder.icon.setImageResource(iconResId)
 
         if (position == selectedPosition) {
-            holder.icon.setBackgroundResource(R.drawable.circle_indicator_light_blue)
+            holder.icon.setBackgroundResource(R.drawable.circle_indicator_blue)
         } else {
             holder.icon.setBackgroundResource(R.drawable.circle_indicator_light_gray)
         }
@@ -65,7 +58,7 @@ class BankIconAdapter(
         return icons.size
     }
 
-    class BankIconViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class BankIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.imageViewIBankIcon)
     }
 }

@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="16dp"
+        android:text="@string/settings"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewTheme"
         android:layout_width="match_parent"
@@ -13,13 +28,13 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="16dp">
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:background="@color/item_background"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
 
@@ -49,13 +64,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp">
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:background="@color/item_background"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
 
@@ -85,15 +100,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:background="@color/item_background"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
 
@@ -111,15 +126,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:background="@color/item_background"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
 

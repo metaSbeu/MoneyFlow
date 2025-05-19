@@ -29,12 +29,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _monthIncomes = MutableLiveData<Double>()
     val monthIncomes: LiveData<Double> get() = _monthIncomes
 
-    private val _wallet = MutableLiveData<Wallet?>() // Изменили на MutableLiveData<Wallet?>
-    val wallet: LiveData<Wallet?> get() = _wallet // Добавили публичный getter
+    private val _wallet = MutableLiveData<Wallet?>()
+    val wallet: LiveData<Wallet?> get() = _wallet
 
     fun getMonthBalance() {
         val disposable = database.transactionDao().getTransactions().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe({ transactions ->
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { transactions ->
                 var expSum = 0.0
                 var incSum = 0.0
                 for (transaction in transactions) {
@@ -47,14 +47,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 }
                 _monthExpenses.value = expSum
                 _monthIncomes.value = incSum
-            })
+            }
         compositeDisposable.add(disposable)
     }
 
     fun isInCurrentMonth(createdAt: Long): Boolean {
         val calendar = Calendar.getInstance()
 
-        // Начало месяца
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -62,9 +61,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         calendar.set(Calendar.MILLISECOND, 0)
         val startOfMonth = calendar.timeInMillis
 
-        // Конец месяца
-        calendar.add(Calendar.MONTH, 1) // Перейти на следующий месяц
-        calendar.set(Calendar.DAY_OF_MONTH, 1) // Первый день следующего месяца
+        calendar.add(Calendar.MONTH, 1)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
@@ -94,24 +92,24 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteWallet(wallet: Wallet) {
         val disposable = database.walletDao().delete(wallet.id).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe({
+            .observeOn(AndroidSchedulers.mainThread()).subscribe {
                 refreshWalletsList()
-            })
+            }
         compositeDisposable.add(disposable)
     }
 
-    fun getWalletById(walletId: Int): LiveData<Wallet?> { // Изменили возвращаемый тип на LiveData<Wallet?>
+    fun getWalletById(walletId: Int): LiveData<Wallet?> {
         val disposable = database.walletDao().getWalletById(walletId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ wallet ->
-                _wallet.value = wallet // Обновляем _wallet при получении данных
+                _wallet.value = wallet
             }, { error ->
                 Log.e("HomeViewModel", "Error fetching wallet by ID: $walletId", error)
-                _wallet.value = null // Обрабатываем ошибку, устанавливая значение null
+                _wallet.value = null
             })
         compositeDisposable.add(disposable)
-        return _wallet // Возвращаем LiveData
+        return _wallet
     }
 
     override fun onCleared() {
