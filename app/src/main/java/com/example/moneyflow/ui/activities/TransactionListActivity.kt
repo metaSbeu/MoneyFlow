@@ -172,7 +172,7 @@ class TransactionListActivity : AppCompatActivity() {
             valueLinePart1OffsetPercentage = 80f
             valueTextColor = valueTextColorMF
             valueLineColor =
-                ContextCompat.getColor(this@TransactionListActivity, R.color.item_background)
+                ContextCompat.getColor(this@TransactionListActivity, R.color.text_color_primary)
             valueLineWidth = 1f
         }
 

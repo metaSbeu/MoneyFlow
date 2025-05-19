@@ -39,7 +39,7 @@ class BankIconAdapter(
         holder.icon.setImageResource(iconResId)
 
         if (position == selectedPosition) {
-            holder.icon.setBackgroundResource(R.drawable.circle_indicator_light_blue)
+            holder.icon.setBackgroundResource(R.drawable.circle_indicator_blue)
         } else {
             holder.icon.setBackgroundResource(R.drawable.circle_indicator_light_gray)
         }

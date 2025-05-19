@@ -188,4 +188,6 @@
     <string name="expenses_sum">%s</string>
     <string name="plan_name_sum">%s: %s</string>
     <string name="sum_with_currency">%1$s%2$s</string>
+    <string name="overview">Overview</string>
+    <string name="notification_settings">Notification settings</string>
 </resources>

@@ -9,11 +9,11 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
-
+        <item name="android:navigationBarColor">@color/light_red</item>
     </style>
 
     <style name="Theme.MoneyFlow.AuthScreen" parent="Base.Theme.MoneyFlow">
-        <item name="colorPrimary">@color/my_light_background</item>
+        <item name="colorPrimary">@color/background</item>
     </style>
 
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
@@ -23,11 +23,12 @@
     <color name="item_background">#FFFFFF</color>
     <color name="circle_background">#A4A4A4</color>
     <color name="primary">#5C84F2</color>
+    <color name="secondary">#92ACF4</color>
     <color name="text_color_primary">#000</color>
     <color name="adapter_bg_unchecked">#A4A4A4</color>
     <color name="adapter_bg_checked">#BBDEFB</color>
 
-    <color name="bottom_navigation_background">#eff2f7</color>
+    <color name="bottom_navigation_background">#FFFFFF</color>
     <color name="bottom_navigation_icon_background">#c2e6fe</color>
 
     <attr name="cardBackgroundColor" format="reference|color" />

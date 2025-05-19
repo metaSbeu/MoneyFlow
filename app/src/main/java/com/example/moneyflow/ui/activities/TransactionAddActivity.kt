@@ -9,6 +9,8 @@ import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
@@ -94,9 +96,9 @@ class TransactionAddActivity : AppCompatActivity() {
 
     private fun setupSumEditTextValidation() {
         binding.editTextSum.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 s?.let { editable ->
@@ -149,6 +151,10 @@ class TransactionAddActivity : AppCompatActivity() {
             val formatted = wallet.balance.formatWithSpaces(this)
             val iconResId = IconResolver.resolve(wallet.icon)
             binding.imageViewWalletIcon.setImageResource(iconResId)
+            ImageViewCompat.setImageTintList(
+                binding.imageViewWalletIcon,
+                ContextCompat.getColorStateList(this, R.color.text_color_primary)
+            )
             binding.textViewWalletNameAndBalance.text = getString(
                 R.string.wallet_name_wallet_balance, wallet.name, formatted
             )
@@ -156,7 +162,9 @@ class TransactionAddActivity : AppCompatActivity() {
     }
 
     fun datePicker() {
-        val datePicker = MaterialDatePicker.Builder.datePicker().setTitleText(getString(R.string.select_date)).build()
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker().setTitleText(getString(R.string.select_date))
+                .build()
         datePicker.show(supportFragmentManager, "tag")
 
         datePicker.addOnPositiveButtonClickListener { selection ->

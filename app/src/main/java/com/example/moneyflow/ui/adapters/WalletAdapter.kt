@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Wallet
@@ -88,6 +90,10 @@ class WalletAdapter(
 
             if (iconResId != 0) {
                 holder.imageViewIcon.setImageResource(iconResId)
+                ImageViewCompat.setImageTintList(
+                    holder.imageViewIcon,
+                    ContextCompat.getColorStateList(context, R.color.text_color_primary)
+                )
             } else {
                 holder.imageViewIcon.setImageResource(R.drawable.ic_bank)
             }

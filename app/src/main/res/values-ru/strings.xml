@@ -189,4 +189,6 @@
     <string name="scholarship">Стипендия</string>
     <string name="cashback">Кэшбэк</string>
     <string name="cash">Наличные</string>
+    <string name="overview">Обзор</string>
+    <string name="notification_settings">Настройки уведомлений</string>
 </resources>
