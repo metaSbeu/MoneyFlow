@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,8 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Включаем поддержку edge-to-edge и отключаем автоматические отступы
-        enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -58,24 +57,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpInsets() {
-        // Устанавливаем отступы вручную
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-            // Применяем отступы к основному контейнеру (кроме bottom)
             view.setPadding(
                 systemBars.left,
                 systemBars.top,
                 systemBars.right,
-                0
+                systemBars.bottom
             )
 
-            // Применяем отступ снизу только к нижней навигации
             binding.bottomNavigationView.setPadding(
                 binding.bottomNavigationView.paddingLeft,
                 binding.bottomNavigationView.paddingTop,
                 binding.bottomNavigationView.paddingRight,
-                systemBars.bottom
+                0
             )
 
             WindowInsetsCompat.CONSUMED

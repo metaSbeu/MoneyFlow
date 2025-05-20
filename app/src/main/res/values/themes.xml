@@ -9,7 +9,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
-        <item name="android:navigationBarColor">@color/light_red</item>
+        <item name="android:navigationBarColor">@color/primary</item>
     </style>
 
     <style name="Theme.MoneyFlow.AuthScreen" parent="Base.Theme.MoneyFlow">

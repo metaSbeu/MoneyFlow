@@ -25,7 +25,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         app:itemPaddingTop="6dp"
-        app:itemPaddingBottom="2dp"
+
         android:background="@color/bottom_navigation_background"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:itemIconTint="@color/bottom_navigation_icon_color"
