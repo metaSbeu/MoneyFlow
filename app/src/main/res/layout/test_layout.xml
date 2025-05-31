@@ -1,186 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7FAFA">
+    tools:context=".ui.activities.TransactionListActivity">
 
-    <TextView
-        android:id="@+id/textView2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/public_sans"
-        android:paddingTop="24dp"
-        android:paddingBottom="8dp"
-        android:text="@string/overview"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_card"
-        android:orientation="vertical"
-        android:padding="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textViewBalance"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/public_sans_medium"
-            android:text="@string/balance"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/public_sans_bold"
-            android:textSize="24sp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@string/planning"
+            android:textAlignment="center"
+            android:textSize="22sp"
             android:textStyle="bold"
-            tools:text="$1,234.56" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/cardViewExpenses"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_card"
-        android:orientation="vertical"
-        android:padding="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/cardViewIncomes"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/public_sans_medium"
-            android:text="@string/expenses"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textViewExpenses"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/public_sans_bold"
-            android:textSize="24sp"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="8dp"
+            android:text="@string/month_expenses"
+            android:textSize="22sp"
             android:textStyle="bold"
-            tools:text="$1,111.11" />
-    </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <LinearLayout
-        android:id="@+id/cardViewIncomes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_card"
-        android:orientation="vertical"
-        android:padding="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cardViewExpenses"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_card"
+            android:orientation="vertical"
+            android:padding="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/public_sans_medium"
+                android:text="@string/total"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewMonthSum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/public_sans_bold"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="$1,234.56" />
+        </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/textViewPlannedExpenses"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/public_sans_medium"
-            android:text="@string/incomes"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textViewIncomes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/public_sans_bold"
-            android:textSize="24sp"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/planned_expenses"
+            android:textSize="22sp"
             android:textStyle="bold"
-            tools:text="$2,345.67" />
-    </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:layout_editor_absoluteX="0dp" />
 
-    <TextView
-        android:id="@+id/textViewWallets"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:fontFamily="@font/public_sans"
-        android:paddingTop="32dp"
-        android:text="@string/wallets"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewExpenses" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPlans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/textViewPlannedExpenses"
+            tools:itemCount="4"
+            tools:listitem="@layout/test_item" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewWallets"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWallets"
-        tools:itemCount="3"
-        tools:listitem="@layout/wallet_item" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/cardViewAddTransaction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/public_sans_bold"
-        android:text="Add Transaction"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewWallets" />
 
-    <Button
-        android:id="@+id/textViewTransactionList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:fontFamily="@font/public_sans_bold"
-        android:layout_marginTop="8dp"
-        android:text="View History"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewAddTransaction" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:fontFamily="@font/public_sans_bold"
-        android:layout_marginTop="8dp"
-        android:text="Create Wallet"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTransactionList" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

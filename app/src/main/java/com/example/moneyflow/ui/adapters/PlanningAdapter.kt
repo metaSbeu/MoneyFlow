@@ -1,15 +1,20 @@
 package com.example.moneyflow.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout // Важно: убедитесь, что этот импорт есть
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat // Важно: убедитесь, что этот импорт есть
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Plan
 import com.example.moneyflow.utils.Formatter.formatWithSpaces
+import com.google.android.material.materialswitch.MaterialSwitch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -58,12 +63,12 @@ class PlanningAdapter(
             val view = inflater.inflate(R.layout.plan_item, parent, false)
             PlansViewHolder(view)
         } else {
-            val view =
-                inflater.inflate(R.layout.wallet_item, parent, false)
+            val view = inflater.inflate(R.layout.wallet_item, parent, false)
             AddButtonViewHolder(view)
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int
@@ -75,12 +80,10 @@ class PlanningAdapter(
             holder.textViewPlanName.text =
                 holder.itemView.context.getString(R.string.plan_name_sum, plan.name, formattedSum)
 
-            if (plan.isNotificationActive) {
-                holder.imageViewNotificationsOn.visibility = View.VISIBLE
-                holder.imageViewNotificationsOff.visibility = View.GONE
-            } else {
-                holder.imageViewNotificationsOn.visibility = View.GONE
-                holder.imageViewNotificationsOff.visibility = View.VISIBLE
+            holder.switchNotification.setOnCheckedChangeListener(null)
+            holder.switchNotification.isChecked = plan.isNotificationActive
+            holder.switchNotification.setOnCheckedChangeListener { _, isChecked ->
+                onNotificationToggle(plan, isChecked)
             }
 
             val targetDay = plan.targetNotificationDayOfMonth
@@ -91,7 +94,11 @@ class PlanningAdapter(
             val nextPaymentDate: LocalDate = if (currentDate.dayOfMonth <= targetDay) {
                 LocalDate.of(currentYear, currentMonth, targetDay)
             } else {
-                LocalDate.of(currentYear, currentMonth + 1, targetDay)
+                if (currentMonth == 12) {
+                    LocalDate.of(currentYear + 1, 1, targetDay)
+                } else {
+                    LocalDate.of(currentYear, currentMonth + 1, targetDay)
+                }
             }
 
             val formatter = DateTimeFormatter.ofPattern("d MMMM", java.util.Locale.getDefault())
@@ -100,27 +107,29 @@ class PlanningAdapter(
             holder.textViewNextPaymentDate.text =
                 holder.itemView.context.getString(R.string.next_payment, formattedDate)
 
-
-            holder.imageViewNotificationsOn.setOnClickListener {
-                onNotificationToggle(plan, false)
-                holder.imageViewNotificationsOn.visibility = View.GONE
-                holder.imageViewNotificationsOff.visibility = View.VISIBLE
-            }
-
-            holder.imageViewNotificationsOff.setOnClickListener {
-                onNotificationToggle(plan, true)
-                holder.imageViewNotificationsOn.visibility = View.VISIBLE
-                holder.imageViewNotificationsOff.visibility = View.GONE
-            }
-
             holder.itemView.setOnClickListener {
                 onItemClick(plan)
             }
 
         } else if (holder is AddButtonViewHolder) {
+            holder.textViewBalance.visibility = View.GONE
+
+            val params = holder.textViewName.layoutParams as LinearLayout.LayoutParams
+            params.height = LinearLayout.LayoutParams.MATCH_PARENT
+            params.weight = 0f
+            holder.textViewName.layoutParams = params
+            holder.textViewName.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            holder.textViewName.gravity = android.view.Gravity.CENTER_VERTICAL
+
             holder.textViewName.text = context.getString(R.string.create_new_plan)
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
+            ImageViewCompat.setImageTintList(
+                holder.imageViewIcon,
+                ContextCompat.getColorStateList(context, R.color.black)
+            )
+
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
+
             holder.itemView.setOnClickListener {
                 onAddClick()
             }
@@ -134,14 +143,12 @@ class PlanningAdapter(
     class PlansViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewPlanName: TextView = itemView.findViewById(R.id.textViewPlanName)
         val textViewNextPaymentDate: TextView = itemView.findViewById(R.id.textViewNextPaymentDate)
-        val imageViewNotificationsOn: ImageView =
-            itemView.findViewById(R.id.imageViewNotificationsOn)
-        val imageViewNotificationsOff: ImageView =
-            itemView.findViewById(R.id.imageViewNotificationsOff)
+        val switchNotification: MaterialSwitch = itemView.findViewById(R.id.switchNotification)
     }
 
     class AddButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageViewIcon: ImageView = itemView.findViewById(R.id.imageViewWalletIcon)
         val textViewName: TextView = itemView.findViewById(R.id.textViewWalletName)
+        val textViewBalance: TextView = itemView.findViewById(R.id.textViewWalletBalance)
     }
 }
