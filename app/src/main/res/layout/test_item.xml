@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardRoot"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#F7FAFA"
-    android:orientation="horizontal"
-    android:paddingVertical="12dp">
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_marginTop="4dp"
+    android:orientation="vertical"
+    tools:ignore="TextSizeCheck">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imageViewCategoryIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circle_indicator_gray"
+        android:contentDescription="@string/category_icon"
+        android:padding="10dp"
+        android:src="@drawable/ic_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/textViewCategory"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="4dp"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewCategoryIcon"
+        app:layout_constraintStart_toStartOf="@+id/imageViewCategoryIcon"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewCategoryIcon"
+        tools:ignore="VisualLintBounds"
+        tools:text="жжжжжжжжжжжжжжж" />
 
-        <TextView
-            android:id="@+id/textViewPlanName"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:text="$123.45"
-            android:textSize="16sp"
-            android:fontFamily="@font/public_sans_medium"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp" />
-
-        <TextView
-            android:id="@+id/textViewNextPaymentDate"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:text="Cash"
-            android:textSize="16sp"
-            android:fontFamily="@font/public_sans_regular"
-            android:textColor="@color/light_green"
-            android:layout_marginStart="16dp" />
-    </LinearLayout>
-
-    <com.google.android.material.materialswitch.MaterialSwitch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,7 +37,7 @@
     <string name="change_wallet">Change wallet</string>
     <string name="name">Name</string>
     <string name="category_create_title">Create a category</string>
-    <string name="edit_category">Change a category</string>
+    <string name="edit_category">Edit a category</string>
     <string name="category_edit_title">Editing a category</string>
     <string name="icon">Icon</string>
     <string name="new_name">New name</string>
@@ -192,4 +192,8 @@
     <string name="notification_settings">Notification settings</string>
     <string name="wallets">Wallets</string>
     <string name="total">Total</string>
+    <string name="authorization">Authorization</string>
+    <string name="wallet_single">Wallet</string>
+    <string name="categories">Categories</string>
+    <string name="add_category">Add category</string>
 </resources>

@@ -7,67 +7,79 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.CategoryEditActivity">
 
+    <ImageButton
+        android:id="@+id/buttonFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/background"
+        android:src="@drawable/ic_cross"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/category_edit_title"
+        android:fontFamily="@font/public_sans"
+        android:paddingTop="24dp"
+        android:paddingBottom="8dp"
+        android:text="@string/edit_category"
         android:textAlignment="center"
-        android:textSize="40sp"
+        android:textSize="22sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewIconHint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/icon"
-        app:layout_constraintBottom_toTopOf="@id/recyclerViewCategories"
-        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCategories"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:paddingHorizontal="16dp"
         android:paddingTop="16dp"
-        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewIconHint"
-        app:spanCount="4"
-        tools:itemCount="12"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldCategoryName"
+        app:spanCount="5"
+        tools:itemCount="30"
         tools:listitem="@layout/category_item" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldNewCategoryName"
+        android:id="@+id/textFieldCategoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:hint="@string/new_name"
+        android:hint="@string/name"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewCategories">
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextNewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textCapSentences"
             android:maxLength="12"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:backgroundTint="@color/secondary"
+            android:backgroundTintMode="add"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomButtonsContainer"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -78,11 +90,14 @@
 
         <Button
             android:id="@+id/buttonSave"
-            android:layout_width="140dp"
+            android:layout_width="280dp"
+            app:layout_constraintHorizontal_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans_bold"
             android:text="@string/save"
+            android:textColor="#000000"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +106,7 @@
 
         <ImageButton
             android:id="@+id/buttonDelete"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:background="@color/background"
@@ -100,12 +115,12 @@
             android:padding="8dp"
             android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/buttonSave"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/light_red"
             tools:ignore="TouchTargetSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

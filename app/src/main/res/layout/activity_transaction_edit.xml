@@ -36,7 +36,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/item_background"
+                android:background="@color/background"
                 android:padding="12dp">
 
                 <ImageView
@@ -160,7 +160,7 @@
                 android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/item_background"
+                android:background="@color/background"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="12dp">
@@ -186,7 +186,7 @@
                     android:id="@+id/imageViewChangeWallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/item_background"
+                    android:background="@color/background"
                     android:clickable="true"
                     android:contentDescription="@string/change_wallet"
                     android:focusable="true"

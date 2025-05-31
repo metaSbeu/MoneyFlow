@@ -5,8 +5,8 @@
 
         <item name="android:colorBackground">@color/background</item>
         <item name="android:textColor">@color/text_color_primary</item>
-        <item name="colorPrimary">@color/green_primary</item>
-        <item name="colorBackgroundFloating">@color/green_primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorBackgroundFloating">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
@@ -20,16 +20,15 @@
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
 
     <!-- Theme colors -->
-    <color name="button_text_color">#000000</color>
+    <color name="button_text_color">#0D1A12</color>
     <color name="background">#F7FAFA</color>
+    <color name="secondary_background">#E8F2ED</color>
+    <color name="text_color_primary">#0D1A12</color>
+    <color name="text_color_secondary">#52946B</color>
     <color name="selected_background">#E8F2ED</color>
-    <color name="item_background">#FFFFFF</color>
     <color name="circle_background">#A4A4A4</color>
-    <color name="primary">@color/green_primary</color>
-    <color name="secondary">#92ACF4</color>
-    <color name="adapter_bg_unchecked">#A4A4A4</color>
-    <color name="adapter_bg_checked">#BBDEFB</color>
-
+    <color name="primary">#38DE77</color>
+    <color name="secondary">#E6F0EB</color>
 
     <color name="bottom_navigation_background">#FFFFFF</color>
     <color name="bottom_navigation_icon_background">#c2e6fe</color>

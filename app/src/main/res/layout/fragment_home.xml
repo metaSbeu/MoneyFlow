@@ -182,7 +182,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/green_primary"
+        android:backgroundTint="@color/primary"
         android:contentDescription="@string/add_transaction"
         android:fontFamily="@font/public_sans_bold"
         android:src="@drawable/ic_add_black"
