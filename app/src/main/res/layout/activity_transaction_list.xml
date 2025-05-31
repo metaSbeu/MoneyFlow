@@ -11,123 +11,133 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageButton
+            android:id="@+id/buttonFinish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/background"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@string/transaction_history"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart"
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_card_outlined"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:id="@+id/cardViewBalance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            app:cardCornerRadius="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pieChart">
+            app:layout_constraintTop_toBottomOf="@+id/pieChart"
+            tools:ignore="UseCompoundDrawables">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imageViewWalletIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/wallet_icon"
+                app:tint="@color/text_color_primary"
+                tools:src="@drawable/ic_bank" />
+
+            <TextView
+                android:id="@+id/textViewWalletName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
-                android:gravity="center_vertical"
-                android:minHeight="80dp"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                tools:ignore="UseCompoundDrawables">
+                android:fontFamily="@font/public_sans"
+                android:textSize="20sp"
+                tools:text="Sberbank: 123$" />
 
-                <ImageView
-                    android:id="@+id/imageViewWalletIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/wallet_icon"
-                    tools:src="@drawable/logo_sber" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textViewWalletName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    tools:text="@string/wallet_main_info" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <TextView
             android:id="@+id/cardViewExpenses"
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="50dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="4dp"
-            android:foregroundGravity="center"
-            app:cardBackgroundColor="@color/background"
-            app:cardCornerRadius="16dp"
+            android:background="@drawable/rounded_card_outlined"
+            android:gravity="center"
+            android:text="@string/expenses"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="6dp"
             app:layout_constraintEnd_toStartOf="@id/cardViewIncomes"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="@id/cardViewBalance"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutPeriod"
-            tools:ignore="TextSizeCheck">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutPeriod" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:gravity="center"
-                android:text="@string/expenses"
-                android:textAlignment="center"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <TextView
             android:id="@+id/cardViewIncomes"
             android:layout_width="0dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="4dp"
-            app:cardBackgroundColor="@color/background"
-            app:cardCornerRadius="16dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="@string/incomes"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/rounded_card_outlined"
             app:layout_constraintEnd_toEndOf="@id/cardViewBalance"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/cardViewExpenses"
-            app:layout_constraintTop_toTopOf="@+id/cardViewExpenses"
-            tools:ignore="TextSizeCheck">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/incomes"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toTopOf="@+id/cardViewExpenses" />
 
         <TextView
             android:id="@+id/textViewTransactionHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/transaction_history"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/cardViewBalance" />
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="32dp"
+            android:text="@string/transactions"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewBalance" />
 
         <LinearLayout
             android:id="@+id/linearLayoutPeriod"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/rounded_corners_blue"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/rounded_card"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingHorizontal="8dp"
@@ -142,8 +152,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/period_not_chosen"
-                android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textColor="@color/text_color_primary"
+                android:textSize="16sp"
                 tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
@@ -155,6 +165,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/filter_by_date"
             app:icon="@drawable/ic_calendar"
+            app:iconTint="@color/text_color_primary"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutPeriod"
             app:layout_constraintEnd_toStartOf="@id/buttonFilter"
             app:layout_constraintStart_toEndOf="@id/linearLayoutPeriod"
@@ -167,6 +178,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/filter_by_category"
             app:icon="@drawable/ic_filter"
+            app:iconTint="@color/text_color_primary"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutPeriod"
             app:layout_constraintEnd_toEndOf="@id/cardViewBalance"
             app:layout_constraintStart_toEndOf="@+id/buttonDate"
@@ -180,7 +192,8 @@
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/cardViewExpenses"
-            tools:listitem="@layout/transaction_item" />
+            tools:listitem="@layout/transaction_item"
+            tools:itemCount="2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

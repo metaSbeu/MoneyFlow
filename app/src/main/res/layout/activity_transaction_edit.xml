@@ -9,193 +9,148 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".ui.activities.TransactionEditActivity">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textViewWalletEditTitle"
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/buttonFinish"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/transaction_edit_title"
-            android:textAlignment="center"
-            android:textSize="40sp"
-            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/background"
+            android:src="@drawable/ic_cross"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@string/transaction_edit_title"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/currentTransaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/textViewWalletEditTitle">
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/rounded_card_outlined"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background"
-                android:padding="12dp">
+            <ImageView
+                android:id="@+id/imageViewCategoryOldIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/rounded_card"
+                android:contentDescription="@null"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewOldDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewOldCategoryName"
+                app:tint="@color/text_color_primary"
+                tools:src="@drawable/ic_cafe" />
 
-                <ImageView
-                    android:id="@+id/imageViewCategoryOldIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/text_color_primary"
-                    tools:src="@drawable/ic_cafe" />
+            <TextView
+                android:id="@+id/textViewOldCategoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/text_color_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/imageViewCategoryOldIcon"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Зарплата" />
 
-                <TextView
-                    android:id="@+id/textViewOldCategoryName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:textColor="@color/text_color_primary"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewCategoryOldIcon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Зарплата" />
+            <TextView
+                android:id="@+id/textViewOldSum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewOldDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewOldCategoryName"
+                tools:text="+50 000 ₽"
+                tools:textColor="@color/light_green" />
 
-                <TextView
-                    android:id="@+id/textViewOldSum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="TextContrastCheck"
-                    tools:text="+50 000 ₽"
-                    tools:textColor="@color/light_green" />
+            <TextView
+                android:id="@+id/textViewOldComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxWidth="250dp"
+                android:paddingEnd="4dp"
+                android:text="@string/comment_s"
+                android:textColor="@color/text_color_primary"
+                app:layout_constraintEnd_toStartOf="@+id/textViewOldSum"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textViewOldCategoryName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewOldCategoryName"
+                tools:ignore="RtlSymmetry,VisualLintLongText" />
 
-                <TextView
-                    android:id="@+id/textViewOldComment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="250dp"
-                    android:paddingEnd="4dp"
-                    android:text="@string/comment_s"
-                    android:textColor="@color/text_color_primary"
-                    app:layout_constraintEnd_toStartOf="@+id/textViewOldSum"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/textViewOldCategoryName"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewOldCategoryName"
-                    tools:ignore="RtlSymmetry" />
-
-                <TextView
-                    android:id="@+id/textViewOldDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/date_s"
-                    android:textColor="@color/text_color_primary"
-                    app:layout_constraintStart_toStartOf="@+id/textViewOldCategoryName"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewOldComment" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewIncomeCategories"
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="16dp"
-            android:scrollbars="vertical"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/textViewWallet"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currentTransaction"
-            app:layout_constraintVertical_bias="0.0"
-            app:spanCount="4"
-            tools:itemCount="5"
-            tools:listitem="@layout/category_item" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewExpenseCategories"
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="16dp"
-            android:scrollbars="vertical"
-            android:visibility="gone"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/textViewWallet"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currentTransaction"
-            app:spanCount="4"
-            tools:itemCount="20"
-            tools:listitem="@layout/category_item" />
+            <TextView
+                android:id="@+id/textViewOldDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_s"
+                android:textColor="@color/text_color_primary"
+                app:layout_constraintStart_toStartOf="@+id/textViewOldCategoryName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewOldComment" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/textViewWallet"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:text="@string/current_wallet"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/public_sans_medium"
+            android:text="@string/wallet_single"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewExpenseCategories" />
+            app:layout_constraintTop_toBottomOf="@+id/currentTransaction" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewWallet"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textViewWalletName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            app:cardCornerRadius="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/public_sans_medium"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewChangeWallet"
+            app:layout_constraintTop_toBottomOf="@+id/currentTransaction"
+            tools:text="Cash" />
+
+        <ImageButton
+            android:id="@+id/imageViewChangeWallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@color/background"
+            android:clickable="true"
+            android:contentDescription="@string/change_wallet"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_pencil"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewWalletName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewWallet">
-
-            <LinearLayout
-                android:id="@+id/linearLayout4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <ImageView
-                    android:id="@+id/imageViewWalletIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/wallet_icon"
-                    tools:src="@drawable/logo_sber" />
-
-                <TextView
-                    android:id="@+id/textViewWalletName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="24sp"
-                    tools:text="@string/wallet_main_info" />
-
-                <ImageButton
-                    android:id="@+id/imageViewChangeWallet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:clickable="true"
-                    android:contentDescription="@string/change_wallet"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_pencil"
-                    app:tint="@color/light_blue"
-                    tools:ignore="TouchTargetSizeCheck" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toTopOf="@+id/textViewWalletName"
+            app:tint="@color/primary"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textFieldNewSum"
@@ -204,15 +159,22 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="23dp"
             android:hint="@string/new_sum"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardViewWallet">
+            app:layout_constraintTop_toBottomOf="@+id/textViewWallet">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextNewSum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary"
+                android:backgroundTintMode="add"
                 android:inputType="numberDecimal"
                 android:maxLength="10"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -224,8 +186,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/new_comment"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -235,7 +202,10 @@
                 android:id="@+id/editTextNewComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary"
+                android:backgroundTintMode="add"
                 android:inputType="textPersonName"
+                android:maxLength="75"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -244,59 +214,112 @@
             android:id="@+id/textViewDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/public_sans_medium"
+            android:text="@string/date_s"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/buttonDate"
-            app:layout_constraintStart_toEndOf="@+id/buttonDate"
-            app:layout_constraintTop_toTopOf="@id/buttonDate"
-            tools:text="Дата: 20.02.2025" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonDate" />
 
         <Button
             android:id="@+id/buttonDate"
             style="?attr/materialIconButtonFilledStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:contentDescription="@null"
             android:text="@string/choose"
+            android:textColor="@color/text_color_primary"
             app:icon="@drawable/ic_calendar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:iconTint="@color/text_color_primary"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textFieldNewComment"
-            app:layout_constraintVertical_bias="0.0"
             tools:ignore="TextContrastCheck" />
 
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="140dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewIncomeCategories"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:scrollbars="vertical"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/bottomButtonsContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonDate"
+            app:layout_constraintVertical_bias="0.0"
+            app:spanCount="2"
+            tools:itemCount="5"
+            tools:listitem="@layout/category_item" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewExpenseCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/bottomButtonsContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonDate"
+            app:spanCount="2"
+            tools:itemCount="20"
+            tools:listitem="@layout/category_item" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomButtonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonDate" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/buttonDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:background="@color/background"
-            android:contentDescription="@string/delete_category"
-            android:padding="8dp"
-            android:src="@drawable/ic_delete"
-            app:layout_constraintBottom_toBottomOf="@id/buttonSave"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/buttonSave"
-            app:layout_constraintTop_toTopOf="@+id/buttonSave"
-            app:tint="@color/light_red" />
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:fontFamily="@font/public_sans_bold"
+                android:text="@string/save"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextContrastCheck" />
 
+            <ImageButton
+                android:id="@+id/buttonDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@color/background"
+                android:contentDescription="@string/delete_category"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:padding="8dp"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/buttonSave"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/light_red"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

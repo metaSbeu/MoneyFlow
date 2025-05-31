@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -131,6 +132,9 @@ class TransactionListActivity : AppCompatActivity() {
             }
         }
         setUpInsets()
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onResume() {
@@ -218,13 +222,12 @@ class TransactionListActivity : AppCompatActivity() {
     private fun resetCardViewBackgroundColor() {
         val typedValue = TypedValue()
         theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
-        val backgroundColor = typedValue.data
-        binding.cardViewExpenses.setCardBackgroundColor(backgroundColor)
-        binding.cardViewIncomes.setCardBackgroundColor(backgroundColor)
+        binding.cardViewExpenses.setBackgroundResource(R.drawable.rounded_card_outlined)
+        binding.cardViewIncomes.setBackgroundResource(R.drawable.rounded_card_outlined)
     }
 
-    private fun changeBackgroundColor(cardView: CardView) {
-        cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+    private fun changeBackgroundColor(textView: TextView) {
+        textView.setBackgroundResource(R.drawable.rounded_card)
     }
 
     private fun showDateRangePicker() {

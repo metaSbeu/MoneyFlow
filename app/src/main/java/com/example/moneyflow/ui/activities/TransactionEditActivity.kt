@@ -12,6 +12,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
@@ -93,6 +95,10 @@ class TransactionEditActivity : AppCompatActivity() {
         binding.buttonDate.setOnClickListener {
             datePicker()
         }
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
+        setupInsets()
     }
 
     private fun setupSumEditTextValidation() {
@@ -172,7 +178,7 @@ class TransactionEditActivity : AppCompatActivity() {
 
     private fun updateWalletInTransaction(wallet: Wallet) {
         val iconResId = IconResolver.resolve(wallet.icon)
-        binding.imageViewWalletIcon.setImageResource(iconResId)
+//        binding.imageViewWalletIcon.setImageResource(iconResId)
         val formatted = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text =
             getString(R.string.wallet_main_info, wallet.name, formatted)
@@ -276,10 +282,18 @@ class TransactionEditActivity : AppCompatActivity() {
         binding.imageViewCategoryOldIcon.setImageResource(iconResId)
 
         iconResId = IconResolver.resolve(wallet.icon)
-        binding.imageViewWalletIcon.setImageResource(iconResId)
+//        binding.imageViewWalletIcon.setImageResource(iconResId)
         val formattedWalletBalance = wallet.balance.formatWithSpaces(this)
         binding.textViewWalletName.text =
             getString(R.string.wallet_main_info, wallet.name, formattedWalletBalance)
+    }
+
+    private fun setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
 
     companion object {

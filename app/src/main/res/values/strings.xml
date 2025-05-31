@@ -196,4 +196,6 @@
     <string name="wallet_single">Wallet</string>
     <string name="categories">Categories</string>
     <string name="add_category">Add category</string>
+    <string name="add_wallet">Add wallet</string>
+    <string name="transactions">Transactions</string>
 </resources>
