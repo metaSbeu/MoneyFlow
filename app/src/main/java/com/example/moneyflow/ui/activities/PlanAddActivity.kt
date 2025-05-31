@@ -68,6 +68,10 @@ class PlanAddActivity : AppCompatActivity() {
         viewModel.shouldCloseScreen.observe(this) {
             finish()
         }
+
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupInsets() {
