@@ -6,13 +6,16 @@
     <color name="blue">#2160F3</color>
     <color name="light_blue">#5C84F2</color>
     <color name="very_light_blue">#97AAE2</color>
-    <color name="my_light_background">#EFEFEF</color>
+    <color name="my_light_background">#F7FAFA</color>
 
     <color name="my_dark_primary">#5C84F2</color>
     <color name="my_dark_background">#000000</color>
 
     <color name="gray">#A4A4A4</color>
     <color name="light_gray">#A4A4A4</color>
+
+    <color name="green_primary">#38E078</color>
+    <color name="text_color_primary">#0D1A12</color>
 
     <color name="light_green">#4CAF50</color>
     <color name="light_red">#F44336</color>

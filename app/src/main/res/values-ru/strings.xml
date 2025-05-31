@@ -21,7 +21,7 @@
     <string name="auth_negative_button_text">Ввести пароль</string>
     <string name="username">Имя пользователя</string>
     <string name="wallet">Счет: %s</string>
-    <string name="balance">Общий баланс: %s</string>
+    <string name="balance">Общий баланс</string>
     <string name="all_expenses">Траты</string>
     <string name="current_month">В %s</string>
     <string name="sum_currency" translatable="false">%d %s</string>

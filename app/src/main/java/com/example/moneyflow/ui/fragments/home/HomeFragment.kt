@@ -55,7 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         viewmodel.overallBalance.observe(viewLifecycleOwner) { balance ->
             val formatted = balance.formatWithSpaces(requireContext())
-            binding.textViewBalance.text = getString(R.string.balance, formatted)
+            binding.textViewBalance.text = formatted
         }
 
         binding.recyclerViewWallets.adapter = adapter
@@ -81,10 +81,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupMonthData() {
-        binding.textViewCurrentMonthExpenses.text =
-            getString(R.string.current_month, getCurrentMonth())
-        binding.textViewCurrentMonthIncomes.text =
-            getString(R.string.current_month, getCurrentMonth())
+//        binding.textViewCurrentMonthExpenses.text =
+//            getString(R.string.current_month, getCurrentMonth())
+//        binding.textViewCurrentMonthIncomes.text =
+//            getString(R.string.current_month, getCurrentMonth())
 
         viewmodel.monthExpenses.observe(viewLifecycleOwner) { expenses ->
             val formatted = expenses.formatWithSpaces(requireContext())
@@ -166,7 +166,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        binding.cardViewBalance.setOnClickListener {
+        binding.textViewTransactionList.setOnClickListener {
             val intent = if (selectedWallet == null) {
                 TransactionListActivity.newIntentAllWallets(requireContext())
             } else {
