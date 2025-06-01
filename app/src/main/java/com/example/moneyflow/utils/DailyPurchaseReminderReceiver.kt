@@ -31,7 +31,7 @@ class DailyPurchaseReminderReceiver : BroadcastReceiver() {
         )
 
         val builder = NotificationCompat.Builder(context, "purchase_reminder")
-            .setSmallIcon(R.drawable.logo_flow)
+            .setSmallIcon(R.drawable.logo)
             .setContentTitle(context.getString(R.string.notification))
             .setContentText(context.getString(R.string.daily_transactions_add_notification_text))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

@@ -100,7 +100,7 @@ class DailyNotificationReceiver : BroadcastReceiver() {
 
         val formatted = plan.sum.formatWithSpaces(context)
         val builder = NotificationCompat.Builder(context, "daily_reminder")
-            .setSmallIcon(R.drawable.logo_flow)
+            .setSmallIcon(R.drawable.logo)
             .setContentTitle(context.getString(R.string.notification))
             .setContentText(
                 context.getString(
