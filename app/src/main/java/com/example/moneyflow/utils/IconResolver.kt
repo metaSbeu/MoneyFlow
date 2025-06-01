@@ -19,7 +19,6 @@ object IconResolver {
 
 
         "ic_salary" to R.drawable.ic_salary,
-        "ic_investments" to R.drawable.ic_investments,
         "ic_student" to R.drawable.ic_student,
         "ic_cashback" to R.drawable.ic_cashback,
 
@@ -68,10 +67,8 @@ object IconResolver {
         "ic_car" to R.drawable.ic_car,
         "ic_plane" to R.drawable.ic_plane,
         "ic_tooth" to R.drawable.ic_tooth,
-        "ic_finance" to R.drawable.ic_finance,
-        "ic_family" to R.drawable.ic_family,
         "ic_train_bus" to R.drawable.ic_train_bus,
-
+        "ic_investments" to R.drawable.ic_investments,
         "ic_checkbook" to R.drawable.ic_checkbook,
         "ic_safe" to R.drawable.ic_safe,
         "ic_piggy_bank" to R.drawable.ic_piggy_bank,

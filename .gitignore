@@ -8,3 +8,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/release/baselineProfiles/1/app-release.dm
+/app/release/app-release.apk
+/app/release/baselineProfiles/0/app-release.dm
+/keystore/keystore.jks
+/app/release/output-metadata.json

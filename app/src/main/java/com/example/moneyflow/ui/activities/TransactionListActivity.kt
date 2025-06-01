@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.ViewCompat
@@ -131,6 +131,9 @@ class TransactionListActivity : AppCompatActivity() {
             }
         }
         setUpInsets()
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onResume() {
@@ -159,7 +162,6 @@ class TransactionListActivity : AppCompatActivity() {
 
         if (entries.isEmpty()) {
             pieChart.clear()
-            pieChart.centerText = getString(R.string.no_data)
             return
         }
 
@@ -191,13 +193,13 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun getPieChartColors(): List<Int> {
         return listOf(
+            ContextCompat.getColor(this, R.color.primary),
             ContextCompat.getColor(this, R.color.category_color_1),
-            ContextCompat.getColor(this, R.color.category_color_6),
-            ContextCompat.getColor(this, R.color.category_color_10),
             ContextCompat.getColor(this, R.color.category_color_12),
             ContextCompat.getColor(this, R.color.category_color_3),
             ContextCompat.getColor(this, R.color.category_color_9),
             ContextCompat.getColor(this, R.color.category_color_15),
+            ContextCompat.getColor(this, R.color.category_color_10),
             ContextCompat.getColor(this, R.color.category_color_5),
             ContextCompat.getColor(this, R.color.category_color_16),
             ContextCompat.getColor(this, R.color.category_color_4),
@@ -218,13 +220,12 @@ class TransactionListActivity : AppCompatActivity() {
     private fun resetCardViewBackgroundColor() {
         val typedValue = TypedValue()
         theme.resolveAttribute(R.attr.cardBackgroundColor, typedValue, true)
-        val backgroundColor = typedValue.data
-        binding.cardViewExpenses.setCardBackgroundColor(backgroundColor)
-        binding.cardViewIncomes.setCardBackgroundColor(backgroundColor)
+        binding.cardViewExpenses.setBackgroundResource(R.drawable.rounded_card_outlined)
+        binding.cardViewIncomes.setBackgroundResource(R.drawable.rounded_card_outlined)
     }
 
-    private fun changeBackgroundColor(cardView: CardView) {
-        cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.light_blue))
+    private fun changeBackgroundColor(textView: TextView) {
+        textView.setBackgroundResource(R.drawable.rounded_card)
     }
 
     private fun showDateRangePicker() {

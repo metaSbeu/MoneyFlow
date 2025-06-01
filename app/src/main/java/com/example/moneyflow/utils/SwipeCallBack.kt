@@ -90,7 +90,7 @@ class SwipeCallback(
                 }
                 if (iconEdit == null) {
                     iconEdit = ContextCompat.getDrawable(context, R.drawable.ic_pencil)?.apply {
-                        setTint(ContextCompat.getColor(context, R.color.blue))
+                        setTint(ContextCompat.getColor(context, R.color.primary))
                     }
                 }
             }

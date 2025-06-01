@@ -3,11 +3,11 @@
     <style name="Base.Theme.MoneyFlow" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
-
-        <item name="android:colorBackground">@color/my_light_background</item>
-        <item name="colorPrimary">@color/light_blue</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="colorSecondary">@color/very_light_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:textColor">@color/text_color_primary</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
         <item name="android:navigationBarColor">@color/primary</item>
     </style>
@@ -18,23 +18,27 @@
 
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
 
-    <color name="button_text_color">#000000</color>
-    <color name="background">#EFEFEF</color>
-    <color name="item_background">#FFFFFF</color>
+    <!-- Theme colors -->
+    <color name="button_text_color">#0D1A12</color>
+    <color name="background">#F7FAFA</color>
+    <color name="secondary_background">#E8F2ED</color>
+    <color name="text_color_primary">#0D1A12</color>
+    <color name="text_color_secondary">#52946B</color>
+    <color name="selected_background">#E8F2ED</color>
     <color name="circle_background">#A4A4A4</color>
-    <color name="primary">#5C84F2</color>
-    <color name="secondary">#92ACF4</color>
-    <color name="text_color_primary">#000</color>
-    <color name="adapter_bg_unchecked">#A4A4A4</color>
-    <color name="adapter_bg_checked">#BBDEFB</color>
+    <color name="primary">#38DE77</color>
+    <color name="secondary">#E6F0EB</color>
+    <color name="icon_tint_color">#0D1A12</color>
+    <color name="stroke_color">#D1E5D9</color>
+    <color name="auth_button_text_color">#000</color>
 
     <color name="bottom_navigation_background">#FFFFFF</color>
-    <color name="bottom_navigation_icon_background">#c2e6fe</color>
+    <color name="bottom_navigation_icon_background">#60DC8F</color>
 
     <attr name="cardBackgroundColor" format="reference|color" />
 
-    <color name="bottom_navigation_text_color_active">#1a5b80</color>
-    <color name="bottom_navigation_text_color_inactive">#424649</color>
-    <color name="bottom_navigation_icon_color_active">#004a76</color>
-    <color name="bottom_navigation_icon_color_inactive">#454746</color>
+    <color name="bottom_navigation_text_color_active">#0D1A12</color>
+    <color name="bottom_navigation_text_color_inactive">#52946B</color>
+    <color name="bottom_navigation_icon_color_active">#0D1A12</color>
+    <color name="bottom_navigation_icon_color_inactive">#52946B</color>
 </resources>

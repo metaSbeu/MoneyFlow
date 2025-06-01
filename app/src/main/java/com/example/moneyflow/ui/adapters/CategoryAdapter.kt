@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
@@ -66,15 +67,32 @@ class CategoryAdapter(
         holder.textViewName.text = category.name
 
         val iconResId = IconResolver.resolve(category.icon)
-
         holder.icon.setImageResource(iconResId)
 
-        val backgroundRes = if (position == selectedPosition) {
-            R.drawable.circle_indicator_blue
+        // Изменение констрейнтов в зависимости от текста
+        val iconLayoutParams = holder.icon.layoutParams as ConstraintLayout.LayoutParams
+        if (category.name.isNullOrBlank()) { // Проверяем, пустое ли имя
+            holder.textViewName.visibility = View.GONE // Скрываем TextView
+            iconLayoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            iconLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID // Центрируем иконку
+            iconLayoutParams.horizontalBias = 0.5f // Для центрирования
+            iconLayoutParams.marginEnd = 0 // Убираем отступ
         } else {
-            R.drawable.circle_indicator_gray
+            holder.textViewName.visibility = View.VISIBLE // Показываем TextView
+            iconLayoutParams.endToEnd = ConstraintLayout.LayoutParams.UNSET // Сбрасываем констрейнты
+            iconLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID // Иконка привязана к началу
+            iconLayoutParams.endToStart = holder.textViewName.id // Иконка к началу TextView
+            iconLayoutParams.horizontalBias = 0.5f
+            iconLayoutParams.horizontalChainStyle = ConstraintLayout.LayoutParams.CHAIN_PACKED // Устанавливаем отступ
         }
-        holder.icon.background = ContextCompat.getDrawable(context, backgroundRes)
+        holder.icon.layoutParams = iconLayoutParams // Применяем изменения
+
+        val backgroundRes = if (position == selectedPosition) {
+            R.drawable.category_background_selected
+        } else {
+            R.drawable.category_background
+        }
+        holder.itemView.background = ContextCompat.getDrawable(context, backgroundRes)
 
         holder.itemView.setOnClickListener {
             updateSelection(position)
@@ -86,8 +104,7 @@ class CategoryAdapter(
         val context = holder.itemView.context
 
         holder.textViewName.text = context.getString(R.string.add)
-        holder.icon.setImageResource(R.drawable.ic_add_white)
-        holder.icon.background = ContextCompat.getDrawable(context, R.drawable.circle_indicator_gray)
+        holder.icon.setImageResource(R.drawable.ic_add)
 
         holder.itemView.setOnClickListener { onAddClick() }
     }

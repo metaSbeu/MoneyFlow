@@ -12,72 +12,82 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textViewTitle"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="16dp"
-            android:text="@string/expense_planning"
-            android:textSize="26sp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@string/planning"
+            android:textAlignment="center"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewExpenses"
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="84dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="8dp"
+            android:text="@string/month_expenses"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardCornerRadius="20dp"
+            android:background="@drawable/rounded_card"
+            android:orientation="vertical"
+            android:padding="24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTitle">
+            app:layout_constraintTop_toBottomOf="@+id/title">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/item_background"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="16dp"
-                tools:ignore="RtlSymmetry">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/public_sans_medium"
+                android:text="@string/month_expenses"
+                android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/month_expenses"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewMonthSum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    tools:text="21 800 ₽" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/textViewMonthSum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/public_sans_bold"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="$1,234.56" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewPlannedExpenses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans"
+            android:paddingTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="@string/planned_expenses"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/cardViewExpenses" />
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:layout_editor_absoluteX="0dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPlans"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
             android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/textViewPlannedExpenses"

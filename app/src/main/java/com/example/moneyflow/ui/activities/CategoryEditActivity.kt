@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
 import com.example.moneyflow.data.Category
@@ -45,6 +47,10 @@ class CategoryEditActivity : AppCompatActivity() {
             return
         }
 
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
+
         adapter = CategoryAdapter(
             {
                 selectedCategory = selectedCategory.copy(icon = it.icon)
@@ -71,6 +77,15 @@ class CategoryEditActivity : AppCompatActivity() {
 
         binding.buttonDelete.setOnClickListener {
             showDeleteConfirmationDialog(categoryFromIntent)
+        }
+        setupInsets()
+    }
+
+    private fun setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
     }
 

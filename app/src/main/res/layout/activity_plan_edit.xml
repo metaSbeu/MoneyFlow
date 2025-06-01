@@ -7,15 +7,33 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.WalletAddActivity">
 
+    <ImageButton
+        android:id="@+id/buttonFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/background"
+        android:contentDescription="@string/exit"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:fontFamily="@font/public_sans"
+        android:paddingTop="24dp"
+        android:paddingBottom="8dp"
         android:text="@string/edit_regular_expense"
         android:textAlignment="center"
-        android:textSize="40sp"
+        android:textSize="22sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -25,6 +43,12 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/name"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxStrokeWidth="0dp"
+        android:textColorHint="@color/text_color_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitle">
@@ -33,6 +57,8 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary"
+            android:backgroundTintMode="add"
             android:inputType="textCapSentences"
             android:maxLength="75"
             tools:ignore="VisualLintTextFieldSize" />
@@ -46,6 +72,12 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/sum"
+        app:boxCornerRadiusBottomEnd="12dp"
+        android:textColorHint="@color/text_color_secondary"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textFieldName">
@@ -55,6 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:backgroundTint="@color/secondary"
+            android:backgroundTintMode="add"
             android:maxLength="10"
             tools:ignore="VisualLintTextFieldSize" />
 
@@ -64,12 +98,13 @@
         android:id="@+id/textView"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/month_hint"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldDate"
         app:layout_constraintEnd_toStartOf="@+id/textFieldDate"
+        app:layout_constraintHorizontal_bias="0.355"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldPlanSum"
+        app:layout_constraintTop_toTopOf="@+id/textFieldDate"
         tools:ignore="TextSizeCheck" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -77,15 +112,24 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/number"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        android:textColorHint="@color/text_color_secondary"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPlanSum">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextDateNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary"
+            android:backgroundTintMode="add"
             android:inputType="numberDecimal"
             android:maxLength="2" />
 
@@ -93,7 +137,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomButtonsContainer"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -104,10 +148,14 @@
 
         <Button
             android:id="@+id/buttonSave"
-            android:layout_width="140dp"
+            android:layout_width="280dp"
+            app:layout_constraintHorizontal_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/public_sans_bold"
             android:text="@string/save"
+            android:textColor="#000000"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,14 +164,17 @@
 
         <ImageButton
             android:id="@+id/buttonDelete"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:background="@color/background"
             android:contentDescription="@string/delete_category"
+            android:foreground="?android:attr/selectableItemBackground"
             android:padding="8dp"
             android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/buttonSave"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/light_red"

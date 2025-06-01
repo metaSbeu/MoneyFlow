@@ -33,7 +33,7 @@ class WalletAddActivity : AppCompatActivity() {
         binding = ActivityWalletAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupInsets()
-        setupBottomViewKeyboardVisibilityListener(binding.buttonAdd)
+        setupBottomViewKeyboardVisibilityListener(binding.buttonSave)
 
         viewModel = ViewModelProvider(this)[WalletAddViewModel::class.java]
 
@@ -46,7 +46,7 @@ class WalletAddActivity : AppCompatActivity() {
 
         setupBalanceEditTextValidation()
 
-        binding.buttonAdd.setOnClickListener {
+        binding.buttonSave.setOnClickListener {
             val name = binding.editTextName.text.toString().trim()
             val balanceText = binding.editTextBalance.text.toString().trim()
 
@@ -87,6 +87,10 @@ class WalletAddActivity : AppCompatActivity() {
                     finish()
                 }
             }
+        }
+
+        binding.buttonFinish.setOnClickListener {
+            finish()
         }
     }
 

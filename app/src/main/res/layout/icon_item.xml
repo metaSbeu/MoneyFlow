@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:padding="8dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/category_background"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginBottom="12dp"
+    tools:ignore="TextSizeCheck">
 
     <ImageView
         android:id="@+id/imageViewIBankIcon"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/bank_icon"
-        android:scaleType="centerInside"
-        tools:background="@drawable/circle_indicator_gray"
-        tools:src="@drawable/ic_btc" />
-</FrameLayout>
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:contentDescription="@string/category_icon"
+        android:src="@drawable/ic_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/icon_tint_color"
+        tools:ignore="ImageContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

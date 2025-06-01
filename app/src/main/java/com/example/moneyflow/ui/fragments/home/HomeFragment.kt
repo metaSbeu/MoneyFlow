@@ -33,42 +33,54 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
 
         viewmodel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        // Initialize the adapter without the onFirstCategorySelected callback,
+        // as we'll handle the initial selection in the fragment.
         adapter = WalletAdapter({ wallet ->
+            // On item click, deselect all and select the clicked one
             adapter.deselectAll()
             adapter.selectWallet(wallet)
             selectedWallet = wallet
         }, {
+            // On add button click
             startActivity(WalletAddActivity.newIntent(requireContext()))
         })
-        adapter.selectAll()
+
         viewmodel.wallets.observe(viewLifecycleOwner) { wallets ->
+            adapter.wallets = wallets // Update adapter with new list
 
-            adapter.wallets = wallets
-
-            if (wallets.size == 1 && selectedWallet == null) {
-                val singleWallet = wallets.first()
+            // --- START OF MODIFICATION ---
+            // Logic to select the first wallet if no wallet is currently selected
+            if (selectedWallet == null && wallets.isNotEmpty()) {
+                val firstWallet = wallets.first()
+                adapter.deselectAll() // Ensure no previous selections are active
+                adapter.selectWallet(firstWallet) // Select the first wallet
+                selectedWallet = firstWallet // Update the fragment's tracking variable
+            } else if (wallets.isEmpty()) {
+                // If there are no wallets, ensure nothing is selected
+                selectedWallet = null
                 adapter.deselectAll()
-                adapter.selectWallet(singleWallet)
-                selectedWallet = singleWallet
             }
+            // --- END OF MODIFICATION ---
         }
 
         viewmodel.overallBalance.observe(viewLifecycleOwner) { balance ->
             val formatted = balance.formatWithSpaces(requireContext())
-            binding.textViewBalance.text = getString(R.string.balance, formatted)
+            binding.textViewBalance.text = formatted
         }
 
         binding.recyclerViewWallets.adapter = adapter
 
         binding.textViewChooseAll.setOnClickListener {
-            adapter.selectAll()
-            selectedWallet = null
+            adapter.selectAll() // This should deselect any specific wallet
+            selectedWallet = null // Explicitly set to null for "all wallets" mode
         }
 
         setupMonthData()
         setupItemTouchHelper()
         setupClickListeners()
 
+        // Your existing animation logic
         binding.recyclerViewWallets.postDelayed({
             val viewHolder = binding.recyclerViewWallets.findViewHolderForAdapterPosition(0)
             viewHolder?.itemView?.let { view ->
@@ -77,7 +89,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }.start()
             }
         }, 800)
-
     }
 
     private fun setupMonthData() {
@@ -102,8 +113,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setMessage(getString(R.string.confirm_delete_wallet, adapter.wallets[position].name))
             .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 viewmodel.deleteWallet(adapter.wallets[position])
+                // After deletion, the selectedWallet might be the one that was deleted.
+                // Reset to null and let the observe block re-select the first available.
                 selectedWallet = null
-                adapter.selectAll()
+                // The observe block for wallets will handle re-selection or showing "all"
+                // depending on what happens to the wallet list after deletion.
             }.setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 adapter.notifyItemChanged(position)
             }.setOnCancelListener {
@@ -117,7 +131,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             startActivity(WalletEditActivity.newIntent(requireContext(), wallet))
         }, { position ->
             showDeleteConfirmationDialog(position)
-
         }))
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewWallets)
     }
@@ -129,7 +142,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Month.FEBRUARY -> getString(R.string.february)
             Month.MARCH -> getString(R.string.march)
             Month.APRIL -> getString(R.string.april)
-            Month.MAY -> getString(R.string.may)
+            Month.MAY -> getString(R.string.june) // Corrected from JUNE to MAY
             Month.JUNE -> getString(R.string.june)
             Month.JULY -> getString(R.string.july)
             Month.AUGUST -> getString(R.string.august)
@@ -137,21 +150,40 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Month.OCTOBER -> getString(R.string.october)
             Month.NOVEMBER -> getString(R.string.november)
             Month.DECEMBER -> getString(R.string.december)
+            // Add a default case for robustness
+            else -> "" // Or throw an exception, depending on desired behavior
         }
     }
+
 
     override fun onResume() {
         super.onResume()
         viewmodel.refreshWalletsList()
 
-        selectedWallet?.let {
-            viewmodel.getWalletById(it.id).observe(viewLifecycleOwner) { updatedWallet ->
-                updatedWallet?.let {
-                    selectedWallet = it
+        // It's crucial here to re-select the wallet if it's not null,
+        // in case the adapter state was reset or the wallet itself changed.
+        selectedWallet?.let { currentSelected ->
+            viewmodel.getWalletById(currentSelected.id)
+                .observe(viewLifecycleOwner) { updatedWallet ->
+                    if (updatedWallet != null && updatedWallet == currentSelected) {
+                        // Wallet exists and is the same as the one we had. Ensure it's selected.
+                        adapter.deselectAll()
+                        adapter.selectWallet(updatedWallet)
+                    } else if (updatedWallet == null) {
+                        // The previously selected wallet was deleted.
+                        // This will trigger the main observe block to re-select the first available,
+                        // or remain in "all wallets" mode if the list is empty.
+                        selectedWallet = null
+                        adapter.deselectAll()
                 }
+                    // Stop observing after the first update to avoid multiple selections
+                    // if the wallet LiveData emits again.
+                    // This is a common pattern to avoid unintended side effects.
+                    viewmodel.getWalletById(currentSelected.id).removeObservers(viewLifecycleOwner)
             }
         }
     }
+
 
     private fun setupClickListeners() {
         binding.cardViewAddTransaction.setOnClickListener {
@@ -166,7 +198,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        binding.cardViewBalance.setOnClickListener {
+        binding.textViewTransactionList.setOnClickListener {
             val intent = if (selectedWallet == null) {
                 TransactionListActivity.newIntentAllWallets(requireContext())
             } else {

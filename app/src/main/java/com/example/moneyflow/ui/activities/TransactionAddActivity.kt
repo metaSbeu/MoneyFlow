@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneyflow.R
@@ -44,7 +46,7 @@ class TransactionAddActivity : AppCompatActivity() {
 
         setupToggleGroup()
         setTodayDate()
-
+        setupInsets()
         val walletId = intent.getIntExtra(EXTRA_WALLET, 1)
         viewModel.getWalletById(walletId)
 
@@ -91,6 +93,18 @@ class TransactionAddActivity : AppCompatActivity() {
         binding.textViewEditCategory.setOnClickListener {
             val intent = CategoryEditActivity.newIntent(this, selectedCategory)
             startActivity(intent)
+        }
+
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
     }
 
@@ -150,11 +164,11 @@ class TransactionAddActivity : AppCompatActivity() {
         viewModel.wallet.observe(this) { wallet ->
             val formatted = wallet.balance.formatWithSpaces(this)
             val iconResId = IconResolver.resolve(wallet.icon)
-            binding.imageViewWalletIcon.setImageResource(iconResId)
-            ImageViewCompat.setImageTintList(
-                binding.imageViewWalletIcon,
-                ContextCompat.getColorStateList(this, R.color.text_color_primary)
-            )
+//            binding.imageViewWalletIcon.setImageResource(iconResId)
+//            ImageViewCompat.setImageTintList(
+//                binding.imageViewWalletIcon,
+//                ContextCompat.getColorStateList(this, R.color.text_color_primary)
+//            )
             binding.textViewWalletNameAndBalance.text = getString(
                 R.string.wallet_name_wallet_balance, wallet.name, formatted
             )

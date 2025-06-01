@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -82,9 +82,8 @@ class WalletAdapter(
         if (holder is WalletViewHolder) {
             val wallet = wallets[position]
             val formatted = wallet.balance.formatWithSpaces(holder.itemView.context)
-            holder.textViewWalletNameAndBalance.text = holder.itemView.context.getString(
-                R.string.wallet_main_info, wallet.name, formatted
-            )
+            holder.textViewWalletName.text = wallet.name
+            holder.textViewWalletBalance.text = formatted
 
             val iconResId = IconResolver.resolve(wallet.icon)
 
@@ -119,8 +118,16 @@ class WalletAdapter(
             }
 
         } else if (holder is AddButtonViewHolder) {
+            holder.textViewBalance.visibility = View.GONE
+            val params = holder.textViewName.layoutParams as LinearLayout.LayoutParams
+            params.height = LinearLayout.LayoutParams.MATCH_PARENT
+            params.weight = 0f
+            holder.textViewName.layoutParams = params
+            holder.textViewName.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            holder.textViewName.gravity = android.view.Gravity.CENTER_VERTICAL
+
             holder.textViewName.text = context.getString(R.string.create_new_wallet)
-            holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
+            holder.imageViewIcon.setImageResource(R.drawable.ic_add)
 
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
 
@@ -135,13 +142,15 @@ class WalletAdapter(
     }
 
     class WalletViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cardRoot: CardView = itemView.findViewById(R.id.cardRoot)
+        val cardRoot: LinearLayout = itemView.findViewById(R.id.cardRoot)
         val imageViewIcon: ImageView = itemView.findViewById(R.id.imageViewWalletIcon)
-        val textViewWalletNameAndBalance: TextView = itemView.findViewById(R.id.textViewWalletName)
+        val textViewWalletName: TextView = itemView.findViewById(R.id.textViewWalletName)
+        val textViewWalletBalance: TextView = itemView.findViewById(R.id.textViewWalletBalance)
     }
 
     class AddButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageViewIcon: ImageView = itemView.findViewById<ImageView>(R.id.imageViewWalletIcon)
         val textViewName: TextView = itemView.findViewById<TextView>(R.id.textViewWalletName)
+        val textViewBalance: TextView = itemView.findViewById<TextView>(R.id.textViewWalletBalance) // Добавили ссылку
     }
 }

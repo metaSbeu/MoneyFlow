@@ -12,7 +12,7 @@
     <string name="auth_negative_button_text">Type password</string>
     <string name="username">User name</string>
     <string name="wallet">Wallet: %s</string>
-    <string name="balance">Overall balance: %s</string>
+    <string name="balance">Total balance</string>
     <string name="all_expenses">Expenses</string>
     <string name="current_month">In %s</string>
     <string name="all_incomes">Incomes</string>
@@ -37,7 +37,7 @@
     <string name="change_wallet">Change wallet</string>
     <string name="name">Name</string>
     <string name="category_create_title">Create a category</string>
-    <string name="edit_category">Change a category</string>
+    <string name="edit_category">Edit a category</string>
     <string name="category_edit_title">Editing a category</string>
     <string name="icon">Icon</string>
     <string name="new_name">New name</string>
@@ -166,9 +166,9 @@
     </string-array>
 
     <string-array name="themes">
+        <item>@string/theme_system_default</item>
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
-        <item>@string/theme_system_default</item>
     </string-array>
 
     <string name="cash">Cash</string>
@@ -190,4 +190,13 @@
     <string name="sum_with_currency">%1$s%2$s</string>
     <string name="overview">Overview</string>
     <string name="notification_settings">Notification settings</string>
+    <string name="wallets">Wallets</string>
+    <string name="total">Total</string>
+    <string name="authorization">Authorization</string>
+    <string name="wallet_single">Wallet</string>
+    <string name="categories">Categories</string>
+    <string name="add_category">Add category</string>
+    <string name="add_wallet">Add wallet</string>
+    <string name="transactions">Transactions</string>
+    <string name="view_history">View History</string>
 </resources>

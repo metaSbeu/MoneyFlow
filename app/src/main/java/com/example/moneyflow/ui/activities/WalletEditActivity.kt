@@ -75,6 +75,10 @@ class WalletEditActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        binding.buttonFinish.setOnClickListener {
+            finish()
+        }
     }
 
     fun setupInsets() {
