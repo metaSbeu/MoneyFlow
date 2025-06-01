@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/public_sans_medium"
-                android:text="@string/total"
+                android:text="@string/month_expenses"
                 android:textSize="16sp" />
 
             <TextView
