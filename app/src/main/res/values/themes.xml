@@ -4,11 +4,10 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
         <item name="android:colorBackground">@color/background</item>
-        <item name="android:textColor">@color/text_color_primary</item>
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorBackgroundFloating">@color/primary</item>
-        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/very_light_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:textColor">@color/text_color_primary</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
         <item name="android:navigationBarColor">@color/primary</item>
     </style>
@@ -29,6 +28,9 @@
     <color name="circle_background">#A4A4A4</color>
     <color name="primary">#38DE77</color>
     <color name="secondary">#E6F0EB</color>
+    <color name="icon_tint_color">#0D1A12</color>
+    <color name="stroke_color">#D1E5D9</color>
+    <color name="auth_button_text_color">#000</color>
 
     <color name="bottom_navigation_background">#FFFFFF</color>
     <color name="bottom_navigation_icon_background">#60DC8F</color>

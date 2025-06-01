@@ -89,10 +89,17 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/textViewCurrentMonthExpenses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/public_sans_medium"
+            android:text="@string/current_month"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/textViewExpenses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="@font/public_sans_bold"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -122,10 +129,17 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/textViewCurrentMonthIncomes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/public_sans_medium"
+            android:text="@string/current_month"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/textViewIncomes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="@font/public_sans_bold"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -186,9 +200,10 @@
         android:contentDescription="@string/add_transaction"
         android:fontFamily="@font/public_sans_bold"
         android:src="@drawable/ic_add_black"
-        android:textColor="@color/black"
+        android:textColor="@color/button_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/button_text_color" />
 
     <Button
         android:id="@+id/textViewTransactionList"
@@ -197,7 +212,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/public_sans_bold"
-        android:text="View History"
+        android:text="@string/view_history"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cardViewAddTransaction"

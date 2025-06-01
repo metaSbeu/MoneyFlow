@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:padding="8dp"
         app:layout_constraintTop_toTopOf="@+id/textViewCategoryName"
-        app:tint="@color/text_color_primary"
+        app:tint="@color/icon_tint_color"
         tools:src="@drawable/ic_cafe" />
 
     <TextView
@@ -52,7 +52,7 @@
         android:maxWidth="250dp"
         android:paddingEnd="4dp"
         android:text="@string/comment_s"
-        android:textColor="@color/text_color_primary"
+        android:textColor="@color/text_color_secondary"
         app:layout_constraintEnd_toStartOf="@+id/textViewSum"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textViewCategoryName"
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/date_s"
-        android:textColor="@color/text_color_primary"
+        android:textColor="@color/text_color_secondary"
         app:layout_constraintStart_toStartOf="@+id/textViewCategoryName"
         app:layout_constraintTop_toBottomOf="@+id/textViewComment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

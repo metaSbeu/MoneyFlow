@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout // Важно: убедитесь, что этот импорт есть
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat // Важно: убедитесь, что этот импорт есть
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyflow.R
@@ -123,10 +121,6 @@ class PlanningAdapter(
 
             holder.textViewName.text = context.getString(R.string.create_new_plan)
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
-            ImageViewCompat.setImageTintList(
-                holder.imageViewIcon,
-                ContextCompat.getColorStateList(context, R.color.black)
-            )
 
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
 

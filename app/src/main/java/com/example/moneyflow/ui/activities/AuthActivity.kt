@@ -111,6 +111,7 @@ class AuthActivity : AppCompatActivity() {
             getString(R.string.theme_system_default) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
+
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleDailyNotification() {
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager

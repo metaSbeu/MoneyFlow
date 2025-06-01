@@ -75,9 +75,9 @@
     <string name="theme_system_default">Системная</string>
 
     <string-array name="themes">
+        <item>@string/theme_system_default</item>
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
-        <item>@string/theme_system_default</item>
     </string-array>
 
     <string-array name="currencies">
@@ -191,4 +191,13 @@
     <string name="cash">Наличные</string>
     <string name="overview">Обзор</string>
     <string name="notification_settings">Настройки уведомлений</string>
+    <string name="wallets">Счета</string>
+    <string name="total">Всего</string>
+    <string name="authorization">Авторизация</string>
+    <string name="wallet_single">Счет</string>
+    <string name="categories">Категории</string>
+    <string name="add_category">Создание категории</string>
+    <string name="add_wallet">Создание счета</string>
+    <string name="transactions">Транзакции</string>
+    <string name="view_history">История транзакций</string>
 </resources>

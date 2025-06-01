@@ -128,11 +128,6 @@ class WalletAdapter(
 
             holder.textViewName.text = context.getString(R.string.create_new_wallet)
             holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
-            ImageViewCompat.setImageTintList(
-                holder.imageViewIcon,
-                ContextCompat.getColorStateList(context, R.color.black)
-            )
-
 
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
 

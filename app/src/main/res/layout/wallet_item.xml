@@ -5,7 +5,7 @@
     android:id="@+id/cardRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F7FAFA"
+    android:background="@color/background"
     android:layout_marginTop="8dp"
     android:orientation="horizontal"
     android:paddingVertical="12dp">
@@ -14,9 +14,10 @@
         android:id="@+id/imageViewWalletIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:contentDescription="@string/bank_icon"
         android:background="@drawable/rounded_card"
         android:padding="8dp"
-        app:tint="@color/black"
+        app:tint="@color/icon_tint_color"
         tools:src="@drawable/ic_cash" />
 
     <LinearLayout
@@ -32,7 +33,7 @@
             tools:text="$123.45"
             android:textSize="16sp"
             android:fontFamily="@font/public_sans_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color_primary"
             android:layout_marginStart="16dp" />
 
         <TextView
@@ -43,7 +44,7 @@
             tools:text="Cash"
             android:textSize="16sp"
             android:fontFamily="@font/public_sans_regular"
-            android:textColor="@color/light_green"
+            android:textColor="@color/text_color_secondary"
             android:layout_marginStart="16dp" />
     </LinearLayout>
 </LinearLayout>

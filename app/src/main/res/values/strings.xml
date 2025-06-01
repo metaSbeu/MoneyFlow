@@ -166,9 +166,9 @@
     </string-array>
 
     <string-array name="themes">
+        <item>@string/theme_system_default</item>
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
-        <item>@string/theme_system_default</item>
     </string-array>
 
     <string name="cash">Cash</string>
@@ -198,4 +198,5 @@
     <string name="add_category">Add category</string>
     <string name="add_wallet">Add wallet</string>
     <string name="transactions">Transactions</string>
+    <string name="view_history">View History</string>
 </resources>
