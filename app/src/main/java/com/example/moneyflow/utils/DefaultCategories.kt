@@ -32,10 +32,14 @@ object DefaultCategories {
 
     val defaultCategoryIcons = listOf(
         "ic_health", "ic_leisure", "ic_home", "ic_cafe", "ic_education", "ic_gift", "ic_grocery", "ic_questionmark",
-        "ic_salary", "ic_investments", "ic_student", "ic_cashback",
+        "ic_salary",
+        "ic_student",
+        "ic_cashback",
         "ic_movie", "ic_game", "ic_sport", "ic_food", "ic_pet", "ic_fruit", "ic_clothes", "ic_shoe",
         "ic_diamond", "ic_furniture", "ic_music", "ic_computer", "ic_bicycle", "ic_wifi", "ic_car",
-        "ic_plane", "ic_tooth", "ic_finance", "ic_family", "ic_train_bus"
+        "ic_plane",
+        "ic_tooth",
+        "ic_train_bus"
     ).distinct().map { iconName ->
         Category(name = "", icon = iconName, isIncome = false)
     }

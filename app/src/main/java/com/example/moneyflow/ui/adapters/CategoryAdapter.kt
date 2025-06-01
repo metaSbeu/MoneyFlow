@@ -104,7 +104,7 @@ class CategoryAdapter(
         val context = holder.itemView.context
 
         holder.textViewName.text = context.getString(R.string.add)
-        holder.icon.setImageResource(R.drawable.ic_add_white)
+        holder.icon.setImageResource(R.drawable.ic_add)
 
         holder.itemView.setOnClickListener { onAddClick() }
     }

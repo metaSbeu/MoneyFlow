@@ -1,1 +1,10 @@
-<!-- drawable/dumbbell.xml --><vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:width="24dp" android:viewportWidth="24" android:viewportHeight="24"><path android:fillColor="#E3E3E3" android:pathData="M20.57,14.86L22,13.43L20.57,12L17,15.57L8.43,7L12,3.43L10.57,2L9.14,3.43L7.71,2L5.57,4.14L4.14,2.71L2.71,4.14L4.14,5.57L2,7.71L3.43,9.14L2,10.57L3.43,12L7,8.43L15.57,17L12,20.57L13.43,22L14.86,20.57L16.29,22L18.43,19.86L19.86,21.29L21.29,19.86L19.86,18.43L22,16.29L20.57,14.86Z" /></vector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="?attr/colorControlNormal"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M543.69,856L507.69,820L649.69,678L282,310.31L140,452.31L104,416.31L161.54,358.31L125.54,322.31L209.54,238.31L153.54,181.85L181.85,153.54L238.31,209.54L322.31,125.54L358.31,161.54L416.31,104L452.31,140L310.31,282L678,649.69L820,507.69L856,543.69L798.46,601.69L834.46,637.69L750.46,721.69L806.46,778.15L778.15,806.46L721.69,750.46L637.69,834.46L601.69,798.46L543.69,856Z" />
+</vector>

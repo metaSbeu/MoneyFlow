@@ -120,7 +120,7 @@ class PlanningAdapter(
             holder.textViewName.gravity = android.view.Gravity.CENTER_VERTICAL
 
             holder.textViewName.text = context.getString(R.string.create_new_plan)
-            holder.imageViewIcon.setImageResource(R.drawable.ic_add_black)
+            holder.imageViewIcon.setImageResource(R.drawable.ic_add)
 
             holder.itemView.setBackgroundResource(R.drawable.bg_wallet_normal)
 

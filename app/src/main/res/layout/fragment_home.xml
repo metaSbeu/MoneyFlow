@@ -199,7 +199,7 @@
         android:backgroundTint="@color/primary"
         android:contentDescription="@string/add_transaction"
         android:fontFamily="@font/public_sans_bold"
-        android:src="@drawable/ic_add_black"
+        android:src="@drawable/ic_add"
         android:textColor="@color/button_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

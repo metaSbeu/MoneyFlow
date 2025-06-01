@@ -22,8 +22,6 @@ object IconsManager {
             Category(name = "", icon = "ic_car", isIncome = false),
             Category(name = "", icon = "ic_plane", isIncome = false),
             Category(name = "", icon = "ic_tooth", isIncome = false),
-            Category(name = "", icon = "ic_finance", isIncome = false),
-            Category(name = "", icon = "ic_family", isIncome = false),
             Category(name = "", icon = "ic_train_bus", isIncome = false),
             Category(name = "", icon = "ic_health", isIncome = false),
             Category(name = "", icon = "ic_leisure", isIncome = false),
