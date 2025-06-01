@@ -68,7 +68,7 @@ object IconResolver {
         "ic_plane" to R.drawable.ic_plane,
         "ic_tooth" to R.drawable.ic_tooth,
         "ic_train_bus" to R.drawable.ic_train_bus,
-
+        "ic_investments" to R.drawable.ic_investments,
         "ic_checkbook" to R.drawable.ic_checkbook,
         "ic_safe" to R.drawable.ic_safe,
         "ic_piggy_bank" to R.drawable.ic_piggy_bank,
