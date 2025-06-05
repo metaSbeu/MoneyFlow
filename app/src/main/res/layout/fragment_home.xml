@@ -168,7 +168,7 @@
         android:fontFamily="@font/public_sans"
         android:paddingTop="32dp"
         android:text="@string/choose_all"
-        android:textColor="@color/light_green"
+        android:textColor="@color/primary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textViewWallets"

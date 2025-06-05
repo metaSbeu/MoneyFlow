@@ -21,26 +21,26 @@
     <style name="Theme.MoneyFlow" parent="Base.Theme.MoneyFlow" />
 
     <!-- Theme colors -->
-    <color name="button_text_color">#122117</color>
-    <color name="background">#122117</color>
-    <color name="secondary_background">#264433</color>
-    <color name="text_color_primary">#FFFFFF</color>
-    <color name="text_color_secondary">#96C4A8</color>
-    <color name="selected_background">#264433</color>
+    <color name="button_text_color">#241F0F</color>
+    <color name="background">#241F0F</color>
+    <color name="secondary_background">#493F21</color>
+    <color name="text_color_primary">#FDFDFD</color>
+    <color name="text_color_secondary">#CABC8E</color>
+    <color name="selected_background">#61593F</color>
     <color name="circle_background">#A4A4A4</color>
-    <color name="primary">#38DE77</color>
-    <color name="secondary">#264433</color>
-    <color name="icon_tint_color">#FFFFFF</color>
-    <color name="stroke_color">#366347</color>
+    <color name="primary">#F8C538</color>
+    <color name="secondary">#61593F</color>
+    <color name="icon_tint_color">#FDFDFD</color>
+    <color name="stroke_color">#6A582E</color>
     <color name="auth_button_text_color">#FFF</color>
 
 
-    <color name="bottom_navigation_background">#1C3024</color>
-    <color name="bottom_navigation_icon_background">#38DE77</color>
+    <color name="bottom_navigation_background">#362E17</color>
+    <color name="bottom_navigation_icon_background">#CABC8E</color>
     <attr name="cardBackgroundColor" format="reference|color" />
 
-    <color name="bottom_navigation_text_color_active">#FFFFFF</color>
-    <color name="bottom_navigation_text_color_inactive">#96C4A8</color>
-    <color name="bottom_navigation_icon_color_active">#FFFFFF</color>
-    <color name="bottom_navigation_icon_color_inactive">#96C4A8</color>
+    <color name="bottom_navigation_text_color_active">#FDFDFD</color>
+    <color name="bottom_navigation_text_color_inactive">#CABC8E</color>
+    <color name="bottom_navigation_icon_color_active">#FDFDFD</color>
+    <color name="bottom_navigation_icon_color_inactive">#BDAF84</color>
 </resources>
